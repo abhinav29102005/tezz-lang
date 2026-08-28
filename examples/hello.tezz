@@ -1,0 +1,23 @@
+-- ⚡ Hello World in Tezz
+-- Run: tezz run examples/hello.tezz
+
+service Hello on 8080 {
+
+  route GET "/" {
+    respond 200 {
+      message: "Welcome to Tezz! ⚡",
+      language: "Tezz (तेज़)",
+      meaning: "Fast, Sharp, Brilliant"
+    }
+  }
+
+  route GET "/hello" {
+    respond 200 { message: "Hello, World!" }
+  }
+
+  route GET "/hello/:name" {
+    let name = params.name
+    respond 200 { message: "Hello, {name}! Welcome to Tezz ⚡" }
+  }
+
+}

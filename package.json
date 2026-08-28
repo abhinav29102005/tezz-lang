@@ -1,0 +1,47 @@
+{
+  "name": "tezz-lang",
+  "version": "0.1.0",
+  "description": "⚡ Tezz (तेज़) — The Fast Backend Language. Write once, deploy everywhere: Cloudflare Workers, Node.js, Deno, Bun.",
+  "main": "src/lexer.js",
+  "bin": {
+    "tezz": "./bin/tezz.js"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "examples/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node bin/tezz.js build examples/hello.tezz --output /dev/null && echo '✅ Tests passed'",
+    "example:hello": "node bin/tezz.js run examples/hello.tezz",
+    "example:api": "node bin/tezz.js run examples/api.tezz",
+    "prepublishOnly": "npm test"
+  },
+  "keywords": [
+    "tezz",
+    "programming-language",
+    "backend",
+    "cloudflare-workers",
+    "edge-computing",
+    "compiler",
+    "transpiler",
+    "http-server",
+    "api",
+    "hinglish"
+  ],
+  "author": "Abhinav",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abhinav29102005/automatic-octo-carnival.git"
+  },
+  "homepage": "https://github.com/abhinav29102005/automatic-octo-carnival#readme",
+  "bugs": {
+    "url": "https://github.com/abhinav29102005/automatic-octo-carnival/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

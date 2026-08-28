@@ -1,0 +1,6 @@
+node_modules/
+.tezz/
+*.js.map
+.DS_Store
+.vscode/
+.idea/

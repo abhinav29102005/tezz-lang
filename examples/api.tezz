@@ -1,0 +1,44 @@
+-- ⚡ REST API Example in Tezz
+-- A simple Todo API with CRUD operations
+-- Run: tezz run examples/api.tezz
+
+let todos = []
+let nextId = 1
+
+service TodoAPI on 3000 {
+
+  -- List all todos
+  route GET "/todos" {
+    respond 200 { todos: todos, count: todos.length }
+  }
+
+  -- Create a new todo
+  route POST "/todos" {
+    let body = request.json()
+    let todo = {
+      id: nextId,
+      title: body.title,
+      done: false
+    }
+    nextId = nextId + 1
+    respond 201 { created: true, todo: todo }
+  }
+
+  -- Get a single todo by ID
+  route GET "/todos/:id" {
+    let id = params.id
+    respond 200 { id: id, message: "Todo lookup for ID: {id}" }
+  }
+
+  -- Delete a todo
+  route DELETE "/todos/:id" {
+    let id = params.id
+    respond 200 { deleted: true, id: id }
+  }
+
+  -- Health check
+  route GET "/health" {
+    respond 200 { status: "healthy", service: "TodoAPI" }
+  }
+
+}
