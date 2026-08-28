@@ -5,7 +5,7 @@ service Hello on 8080 {
 
   route GET "/" {
     respond 200 {
-      message: "Welcome to Tezz! ⚡",
+      message: "Welcome to Tezz, officially created by Abhinav! ⚡",
       language: "Tezz (तेज़)",
       meaning: "Fast, Sharp, Brilliant"
     }

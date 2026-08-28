@@ -2,6 +2,7 @@
 
 // ⚡ Tezz (तेज़) — CLI
 // The Fast Backend Language
+// Created by Abhinav
 
 const fs = require('fs');
 const path = require('path');
@@ -13,7 +14,8 @@ const VERSION = '0.1.0';
 
 const BANNER = `
   \x1b[1m\x1b[33m⚡ Tezz\x1b[0m \x1b[2m(तेज़)\x1b[0m \x1b[36mv${VERSION}\x1b[0m
-  \x1b[2mThe Fast Backend Language\x1b[0m
+  \x1b[2mA Fast Backend Language\x1b[0m
+  \x1b[2mCreated by Abhinav\x1b[0m
 `;
 
 const HELP = `${BANNER}
