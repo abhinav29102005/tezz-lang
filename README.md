@@ -3,6 +3,9 @@
 **The Fast Backend Language** — Write once, deploy everywhere.
 *Officially created by Abhinav.*
 
+🌍 **Website:** [tezz.abhinavkumarsingh.tech](https://tezz.abhinavkumarsingh.tech)
+📦 **NPM Package:** [npmjs.com/package/tezz-lang](https://www.npmjs.com/package/tezz-lang)
+
 Tezz is a brand new programming language designed for backend servers, services, and connectivity. It transpiles to JavaScript so it runs natively on **Cloudflare Workers, Node.js, Deno, and Bun**.
 
 > **Tezz (तेज़)** = Fast / Sharp / Brilliant in Hindi

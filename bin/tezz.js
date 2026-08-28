@@ -10,7 +10,7 @@ const { Lexer } = require('../src/lexer');
 const { Parser } = require('../src/parser');
 const { CodeGenerator } = require('../src/codegen');
 
-const VERSION = '0.1.0';
+const VERSION = '0.1.1';
 
 const BANNER = `
   \x1b[1m\x1b[33m⚡ Tezz\x1b[0m \x1b[2m(तेज़)\x1b[0m \x1b[36mv${VERSION}\x1b[0m
