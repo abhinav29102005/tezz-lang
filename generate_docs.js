@@ -39,7 +39,7 @@ const layout = (title, content, sidebar, toc) => `<!DOCTYPE html>
       </a>
       <div class="npm-header-links">
         <a href="/">Tezz Home</a>
-        <a href="/docs/index.html">Documentation</a>
+        <a href="/docs/introduction.html">Documentation</a>
         <a href="https://www.npmjs.com/package/tezz-lang" target="_blank">npm</a>
         <a href="/#contact">Contact</a>
         <a href="https://github.com/abhinav29102005/automatic-octo-carnival" target="_blank">GitHub</a>
@@ -504,29 +504,38 @@ pages.forEach(page => {
   groups[page.group].push(page);
 });
 
-// Build Sidebar HTML
-for (const [groupName, groupPages] of Object.entries(groups)) {
-  sidebarContent += '<div class="npm-nav-group">' + 
-                    '<h4>' + groupName + '</h4>' + 
-                    '<ul class="npm-nav-list">' + 
-                    groupPages.map(page => '<li><a href="#' + page.slug + '">' + page.title + '</a></li>').join('') + 
-                    '</ul></div>';
+// Build Sidebar HTML function
+function buildSidebar(currentSlug) {
+  let content = '';
+  for (const [groupName, groupPages] of Object.entries(groups)) {
+    content += '<div class="npm-nav-group">' + 
+               '<h4>' + groupName + '</h4>' + 
+               '<ul class="npm-nav-list">' + 
+               groupPages.map(page => {
+                 let activeClass = page.slug === currentSlug ? 'class="active"' : '';
+                 return '<li><a href="/docs/' + page.slug + '.html" ' + activeClass + '>' + page.title + '</a></li>';
+               }).join('') + 
+               '</ul></div>';
+  }
+  return content;
 }
 
-// Build Content & TOC HTML
-pages.forEach(page => {
-  allToc.push(...page.toc);
-  allContent += '<section id="' + page.slug + '" class="doc-section">' + 
-                page.content + 
-                '</section>';
-});
 
 const outDir = path.join('website', 'docs');
 if (!fs.existsSync(outDir)) {
   fs.mkdirSync(outDir, { recursive: true });
 }
 
-// Output single documentation page
-const filePath = path.join(outDir, 'index.html');
-fs.writeFileSync(filePath, layout("Documentation", allContent, sidebarContent, allToc));
-console.log('Created ' + filePath);
+// Output multiple documentation pages
+pages.forEach(page => {
+  let pageContent = '<section id="' + page.slug + '" class="doc-section">' + page.content + '</section>';
+  let pageSidebar = buildSidebar(page.slug);
+  let filePath = path.join(outDir, page.slug + '.html');
+  fs.writeFileSync(filePath, layout(page.title + " | Tezz Docs", pageContent, pageSidebar, page.toc));
+  console.log('Created ' + filePath);
+});
+
+// Create an index.html that redirects to introduction.html
+fs.writeFileSync(path.join(outDir, 'index.html'), '<meta http-equiv="refresh" content="0; url=/docs/introduction.html" />');
+console.log('Created index redirect');
+
