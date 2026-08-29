@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hinglish Support | Tezz Docs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <meta name="view-transition" content="same-origin" />
+  <script>
+    if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark-theme');
+  </script>
+</head>
+  <body class="npm-theme">
+    
+    <header class="npm-header">
+      <a href="#" class="npm-brand">
+        <img src="/favicon.svg" alt="Tezz Logo" style="height: 30px; margin-right: 10px;" class="animated-logo" />
+        <span style="border-left: 1px solid #e1e4e8; padding-left: 15px;">tezz</span>
+      </a>
+      <div class="npm-header-links">
+        <a href="/docs/introduction.html">Documentation</a>
+        <a href="https://www.npmjs.com/package/tezz-lang" target="_blank">npm</a>
+        <a href="#contact">Contact</a>
+        <a href="https://github.com/abhinav29102005/automatic-octo-carnival" target="_blank">GitHub</a>
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">🌙</button>
+      </div>
+    </header>
+
+    
+
+    <div class="npm-subheader">
+      <div class="npm-subheader-title">Tezz Documentation</div>
+    </div>
+    <div class="npm-container">
+      <aside class="npm-sidebar">
+        <div class="npm-nav-group"><h4>Getting Started</h4><ul class="npm-nav-list"><li><a href="/docs/introduction.html" >Introduction</a></li><li><a href="/docs/installation-and-cli.html" >Installation & CLI</a></li></ul></div><div class="npm-nav-group"><h4>Core Language</h4><ul class="npm-nav-list"><li><a href="/docs/syntax.html" >Language Syntax</a></li><li><a href="/docs/hinglish.html" class="active">Hinglish Support</a></li></ul></div><div class="npm-nav-group"><h4>Backend APIs</h4><ul class="npm-nav-list"><li><a href="/docs/services-and-routes.html" >Services & Routes</a></li><li><a href="/docs/deployment.html" >Deployment Guide</a></li></ul></div><div class="npm-nav-group"><h4>Ecosystem</h4><ul class="npm-nav-list"><li><a href="/docs/ecosystem.html" >Standard Libraries</a></li></ul></div>
+      </aside>
+      <main class="npm-main">
+        <section id="hinglish" class="doc-section">
+      <h1 id="hinglish-support">Hinglish Support</h1>
+      <p>Tezz allows you to write backend code in Hinglish. Keywords map exactly 1:1 with English.</p>
+      <h2 id="keywords-map">Keywords Map</h2>
+      <table>
+        <thead><tr><th>English</th><th>Hinglish</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>let</code></td><td><code>rakho</code></td><td>Keep / Declare</td></tr>
+          <tr><td><code>fn</code></td><td><code>kaam</code></td><td>Work / Function</td></tr>
+          <tr><td><code>if</code></td><td><code>agar</code></td><td>If</td></tr>
+          <tr><td><code>else</code></td><td><code>warna</code></td><td>Else / Otherwise</td></tr>
+          <tr><td><code>return</code></td><td><code>vapas</code></td><td>Return / Give back</td></tr>
+          <tr><td><code>print</code></td><td><code>dikha</code></td><td>Show / Print</td></tr>
+          <tr><td><code>route</code></td><td><code>rasta</code></td><td>Path / Route</td></tr>
+          <tr><td><code>service</code></td><td><code>seva</code></td><td>Service</td></tr>
+          <tr><td><code>respond</code></td><td><code>jawab</code></td><td>Reply / Respond</td></tr>
+          <tr><td><code>true</code></td><td><code>sahi</code></td><td>Right / True</td></tr>
+          <tr><td><code>false</code></td><td><code>galat</code></td><td>Wrong / False</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="example">Example: A Pure Hinglish API</h2>
+      <pre><code>pakka version = "0.2.0"
+
+kaam generateGreeting(name) {
+  agar name == "Abhinav" {
+    vapas "Namaste Creator! "
+  } warna {
+    vapas "Namaste, {name}! "
+  }
+}
+
+seva HinglishAPI on 3000 {
+  rasta GET "/" {
+    rakho user = request.query.name || "Duniya"
+    dikha("Request from: " + user)
+    jawab 200 { 
+      message: generateGreeting(user),
+      status: sahi
+    }
+  }
+}</code></pre>
+    </section>
+      </main>
+      <aside class="npm-toc">
+        <h4>In this article</h4>
+        <ul>
+          <li><a href="#hinglish-support">Hinglish Support</a></li><li><a href="#keywords-map">Keywords Map</a></li><li><a href="#example">Example</a></li>
+        </ul>
+      </aside>
+    </div>
+  
+
+
+    
+    <div id="docs-view" style="display: none;">
+      
+    </div>
+
+    <footer class="npm-footer">
+      <p>Built with by Abhinav. Tezz v0.2.0.</p>
+    </footer>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

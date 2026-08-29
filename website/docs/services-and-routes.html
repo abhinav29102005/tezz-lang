@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Services & Routes | Tezz Docs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <meta name="view-transition" content="same-origin" />
+  <script>
+    if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark-theme');
+  </script>
+</head>
+  <body class="npm-theme">
+    
+    <header class="npm-header">
+      <a href="#" class="npm-brand">
+        <img src="/favicon.svg" alt="Tezz Logo" style="height: 30px; margin-right: 10px;" class="animated-logo" />
+        <span style="border-left: 1px solid #e1e4e8; padding-left: 15px;">tezz</span>
+      </a>
+      <div class="npm-header-links">
+        <a href="/docs/introduction.html">Documentation</a>
+        <a href="https://www.npmjs.com/package/tezz-lang" target="_blank">npm</a>
+        <a href="#contact">Contact</a>
+        <a href="https://github.com/abhinav29102005/automatic-octo-carnival" target="_blank">GitHub</a>
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">🌙</button>
+      </div>
+    </header>
+
+    
+
+    <div class="npm-subheader">
+      <div class="npm-subheader-title">Tezz Documentation</div>
+    </div>
+    <div class="npm-container">
+      <aside class="npm-sidebar">
+        <div class="npm-nav-group"><h4>Getting Started</h4><ul class="npm-nav-list"><li><a href="/docs/introduction.html" >Introduction</a></li><li><a href="/docs/installation-and-cli.html" >Installation & CLI</a></li></ul></div><div class="npm-nav-group"><h4>Core Language</h4><ul class="npm-nav-list"><li><a href="/docs/syntax.html" >Language Syntax</a></li><li><a href="/docs/hinglish.html" >Hinglish Support</a></li></ul></div><div class="npm-nav-group"><h4>Backend APIs</h4><ul class="npm-nav-list"><li><a href="/docs/services-and-routes.html" class="active">Services & Routes</a></li><li><a href="/docs/deployment.html" >Deployment Guide</a></li></ul></div><div class="npm-nav-group"><h4>Ecosystem</h4><ul class="npm-nav-list"><li><a href="/docs/ecosystem.html" >Standard Libraries</a></li></ul></div>
+      </aside>
+      <main class="npm-main">
+        <section id="services-and-routes" class="doc-section">
+      <h1 id="services-routes-header">Services & Routes</h1>
+      <p>Tezz abstracts away HTTP server boilerplate.</p>
+      <h2 id="service-block">The Service Block</h2>
+      <pre><code>service UserAPI on 8080 {
+  // Routes go here
+}</code></pre>
+
+      <h2 id="routing">Routing</h2>
+      <pre><code>route GET "/users" { }
+route POST "/users" { }</code></pre>
+
+      <h2 id="path-parameters">Dynamic Path Parameters</h2>
+      <pre><code>route GET "/users/:id" {
+  let userId = params.id
+}</code></pre>
+
+      <h2 id="request-object">The Request Object</h2>
+      <ul>
+        <li><code>request.method</code> - HTTP method</li>
+        <li><code>request.url</code> - URL path</li>
+        <li><code>request.query</code> - Query params</li>
+        <li><code>request.json()</code> - JSON body</li>
+      </ul>
+
+      <h2 id="sending-responses">Sending Responses</h2>
+      <pre><code>route POST "/login" {
+  respond 200 { success: true }
+}</code></pre>
+    </section>
+      </main>
+      <aside class="npm-toc">
+        <h4>In this article</h4>
+        <ul>
+          <li><a href="#services-routes-header">Services & Routes</a></li><li><a href="#service-block">The Service Block</a></li><li><a href="#routing">Routing</a></li><li><a href="#path-parameters">Path Parameters</a></li><li><a href="#request-object">Request Object</a></li><li><a href="#sending-responses">Sending Responses</a></li>
+        </ul>
+      </aside>
+    </div>
+  
+
+
+    
+    <div id="docs-view" style="display: none;">
+      
+    </div>
+
+    <footer class="npm-footer">
+      <p>Built with by Abhinav. Tezz v0.2.0.</p>
+    </footer>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

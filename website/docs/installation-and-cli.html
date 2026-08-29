@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Installation & CLI | Tezz Docs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <meta name="view-transition" content="same-origin" />
+  <script>
+    if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark-theme');
+  </script>
+</head>
+  <body class="npm-theme">
+    
+    <header class="npm-header">
+      <a href="#" class="npm-brand">
+        <img src="/favicon.svg" alt="Tezz Logo" style="height: 30px; margin-right: 10px;" class="animated-logo" />
+        <span style="border-left: 1px solid #e1e4e8; padding-left: 15px;">tezz</span>
+      </a>
+      <div class="npm-header-links">
+        <a href="/docs/introduction.html">Documentation</a>
+        <a href="https://www.npmjs.com/package/tezz-lang" target="_blank">npm</a>
+        <a href="#contact">Contact</a>
+        <a href="https://github.com/abhinav29102005/automatic-octo-carnival" target="_blank">GitHub</a>
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">🌙</button>
+      </div>
+    </header>
+
+    
+
+    <div class="npm-subheader">
+      <div class="npm-subheader-title">Tezz Documentation</div>
+    </div>
+    <div class="npm-container">
+      <aside class="npm-sidebar">
+        <div class="npm-nav-group"><h4>Getting Started</h4><ul class="npm-nav-list"><li><a href="/docs/introduction.html" >Introduction</a></li><li><a href="/docs/installation-and-cli.html" class="active">Installation & CLI</a></li></ul></div><div class="npm-nav-group"><h4>Core Language</h4><ul class="npm-nav-list"><li><a href="/docs/syntax.html" >Language Syntax</a></li><li><a href="/docs/hinglish.html" >Hinglish Support</a></li></ul></div><div class="npm-nav-group"><h4>Backend APIs</h4><ul class="npm-nav-list"><li><a href="/docs/services-and-routes.html" >Services & Routes</a></li><li><a href="/docs/deployment.html" >Deployment Guide</a></li></ul></div><div class="npm-nav-group"><h4>Ecosystem</h4><ul class="npm-nav-list"><li><a href="/docs/ecosystem.html" >Standard Libraries</a></li></ul></div>
+      </aside>
+      <main class="npm-main">
+        <section id="installation-and-cli" class="doc-section">
+      <h1 id="installation-and-cli">Installation & CLI</h1>
+      <p>Install Tezz globally using npm:</p>
+      <pre><code>npm install -g tezz-lang</code></pre>
+      <h2 id="cli-commands">CLI Commands</h2>
+      <ul>
+        <li><code>tezz run app.tezz</code> - Runs your server locally with hot-reloading.</li>
+        <li><code>tezz build app.tezz</code> - Compiles to production-ready JS.</li>
+        <li><code>tezz deploy app.tezz</code> - Deploys straight to Cloudflare Workers.</li>
+      </ul>
+    </section>
+      </main>
+      <aside class="npm-toc">
+        <h4>In this article</h4>
+        <ul>
+          <li><a href="#installation-and-cli">Installation</a></li><li><a href="#cli-commands">CLI Commands</a></li>
+        </ul>
+      </aside>
+    </div>
+  
+
+
+    
+    <div id="docs-view" style="display: none;">
+      
+    </div>
+
+    <footer class="npm-footer">
+      <p>Built with by Abhinav. Tezz v0.2.0.</p>
+    </footer>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
