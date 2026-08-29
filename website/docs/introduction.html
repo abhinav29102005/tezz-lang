@@ -4,77 +4,281 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/jpeg" href="/tezz-logo.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Introduction | Tezz Documentation</title>
+    <title>Introduction | npm Docs (Tezz Edition)</title>
     <meta name="description" content="Documentation for Tezz, the blazing fast backend language.">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../style.css">
-  </head>
-  <body>
-    <div id="app">
-      <!-- Navbar -->
-      <nav class="navbar">
-        <div class="nav-brand">
-          <a href="/" style="display:flex; align-items:center; gap:1rem; text-decoration:none; color:inherit;">
-            <img src="/tezz-logo.jpg" alt="Tezz Logo" class="logo">
-            <span>Tezz</span>
-          </a>
-        </div>
-        <div class="nav-links">
-          <a href="/">Home</a>
-          <a href="https://www.npmjs.com/package/tezz-lang" target="_blank" class="nav-icon">npm</a>
-          <a href="https://github.com/abhinav29102005/automatic-octo-carnival" target="_blank" class="btn-outline">GitHub</a>
-        </div>
-      </nav>
-
-      <div class="full-docs">
-        <div class="docs-container">
-          <!-- Sidebar -->
-          <aside class="docs-sidebar">
-            <ul class="sticky-nav">
-              <li><a href="introduction.html">Introduction</a></li>
-              <li><a href="installation-and-cli.html">Installation & CLI</a></li>
-              <li><a href="syntax.html">Language Syntax</a></li>
-              <li><a href="hinglish.html">Hinglish Support 🇮🇳</a></li>
-              <li><a href="services-and-routes.html">Services & Routes</a></li>
-              <li><a href="deployment.html">Deployment Guide</a></li>
-            </ul>
-          </aside>
-
-          <!-- Main Content -->
-          <main class="docs-content fade-in">
-            
-      <div class="doc-section">
-        <h3>Introduction to Tezz</h3>
-        <p class="lead-text">Tezz (तेज़) is a blazing fast programming language designed specifically for building backend servers and serverless APIs.</p>
-        
-        <p>Created by Abhinav, Tezz focuses on extreme simplicity and developer experience. It compiles down to highly optimized JavaScript that can run anywhere: on Node.js or directly on the edge with Cloudflare Workers.</p>
-        
-        <h4>Why Tezz?</h4>
-        <p>Traditional backend languages have complex setups, bloated package managers, and steep learning curves. Tezz cuts through the noise.</p>
-        
-        <ul>
-          <li style="margin-bottom:0.5rem"><strong>Zero Configuration:</strong> No Webpack, no Babel, no TSConfig. Just write and run.</li>
-          <li style="margin-bottom:0.5rem"><strong>Native Hinglish Support:</strong> The world's first language that natively parses Hinglish keywords (like <code>kaam</code>, <code>rakho</code>, <code>agar</code>) alongside standard English.</li>
-          <li style="margin-bottom:0.5rem"><strong>Declarative Routing:</strong> Building APIs is a first-class citizen in Tezz. Use <code>service</code> and <code>route</code> blocks to spin up a backend instantly.</li>
-          <li style="margin-bottom:0.5rem"><strong>Blazing Fast Compilation:</strong> Compiles source code to JS in milliseconds with hot-reloading built into the CLI.</li>
-        </ul>
-        
-        <h4>Next Steps</h4>
-        <p>Ready to jump in? Head over to the <a href="installation-and-cli.html" style="color:var(--accent-cyan)">Installation Guide</a> to set up Tezz on your machine.</p>
-      </div>
-    
-          </main>
-        </div>
-      </div>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+      /* NPM Docs Specific CSS */
+      :root {
+        --npm-red: #cb3837;
+        --npm-black: #333333;
+        --npm-gray: #f9f9f9;
+        --npm-border: #e1e4e8;
+        --npm-text: #24292e;
+        --npm-link: #0366d6;
+        --npm-link-hover: #005cc5;
+        --npm-code-bg: #f6f8fa;
+      }
       
-      <footer>
-        <p>Built with ⚡ by Abhinav</p>
-        <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem;">
-          <a href="https://github.com/abhinav29102005" target="_blank" style="color: var(--text-muted); text-decoration: none;">GitHub</a>
-          <a href="https://linkedin.com/in/bigboyaks" target="_blank" style="color: var(--text-muted); text-decoration: none;">LinkedIn</a>
-          <a href="https://abhinavkumarsingh.tech" target="_blank" style="color: var(--text-muted); text-decoration: none;">Portfolio</a>
-        </div>
-      </footer>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      
+      body.npm-theme {
+        font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        background-color: #ffffff;
+        color: var(--npm-text);
+        line-height: 1.6;
+        font-size: 16px;
+      }
+
+      /* Top Header */
+      .npm-header {
+        background-color: #ffffff;
+        border-top: 5px solid var(--npm-red);
+        border-bottom: 1px solid var(--npm-border);
+        padding: 0 1.5rem;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .npm-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        text-decoration: none;
+        color: var(--npm-black);
+        font-weight: 700;
+        font-size: 1.2rem;
+      }
+      .npm-brand img { height: 32px; width: 32px; border-radius: 4px; }
+      .npm-header-links { display: flex; gap: 1.5rem; }
+      .npm-header-links a { text-decoration: none; color: var(--npm-black); font-weight: 600; font-size: 0.9rem;}
+      .npm-header-links a:hover { color: var(--npm-red); }
+
+      /* Sub header (Search bar area in npm) */
+      .npm-subheader {
+        background-color: var(--npm-gray);
+        border-bottom: 1px solid var(--npm-border);
+        padding: 1rem 1.5rem;
+        display: flex;
+        align-items: center;
+      }
+      .npm-subheader-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #586069;
+      }
+
+      /* Layout */
+      .npm-container {
+        display: flex;
+        max-width: 1400px;
+        margin: 0 auto;
+        min-height: calc(100vh - 120px);
+      }
+
+      /* Left Sidebar */
+      .npm-sidebar {
+        width: 280px;
+        border-right: 1px solid var(--npm-border);
+        padding: 2rem 1.5rem;
+        background: var(--npm-gray);
+      }
+      .npm-nav-group { margin-bottom: 1.5rem; }
+      .npm-nav-group h4 {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #586069;
+        margin-bottom: 0.8rem;
+      }
+      .npm-nav-list { list-style: none; }
+      .npm-nav-list li { margin-bottom: 0.5rem; }
+      .npm-nav-list a {
+        text-decoration: none;
+        color: var(--npm-black);
+        font-size: 0.95rem;
+        display: block;
+        padding: 0.3rem 0;
+      }
+      .npm-nav-list a:hover { color: var(--npm-red); }
+      .npm-nav-list a.active { color: var(--npm-red); font-weight: 600; }
+
+      /* Main Content */
+      .npm-main {
+        flex: 1;
+        padding: 3rem 4rem;
+        max-width: 860px;
+      }
+      
+      /* Typography */
+      .npm-main h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 1.5rem; color: #24292e; }
+      .npm-main h2 { font-size: 1.75rem; font-weight: 600; margin-top: 2.5rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--npm-border); }
+      .npm-main h3 { font-size: 1.25rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 1rem; }
+      .npm-main p { margin-bottom: 1rem; font-size: 1.05rem; color: #24292e; }
+      .npm-main ul { margin-left: 1.5rem; margin-bottom: 1.5rem; }
+      .npm-main li { margin-bottom: 0.5rem; }
+      
+      .npm-main a { color: var(--npm-link); text-decoration: none; }
+      .npm-main a:hover { text-decoration: underline; }
+
+      /* Code Blocks */
+      .npm-main code {
+        font-family: 'Fira Code', monospace;
+        background-color: rgba(27,31,35,0.05);
+        padding: 0.2em 0.4em;
+        border-radius: 3px;
+        font-size: 85%;
+      }
+      .npm-main pre {
+        background-color: var(--npm-code-bg);
+        padding: 1rem;
+        border-radius: 6px;
+        overflow: auto;
+        margin-bottom: 1.5rem;
+        border: 1px solid var(--npm-border);
+      }
+      .npm-main pre code {
+        background-color: transparent;
+        padding: 0;
+        font-size: 0.9rem;
+        color: #24292e;
+      }
+
+      /* Tables */
+      .npm-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1.5rem;
+      }
+      .npm-table th, .npm-table td {
+        padding: 0.75rem 1rem;
+        border: 1px solid var(--npm-border);
+        text-align: left;
+      }
+      .npm-table th { background-color: var(--npm-gray); font-weight: 600; }
+
+      /* Right TOC */
+      .npm-toc {
+        width: 250px;
+        padding: 3rem 1.5rem;
+        border-left: 1px solid var(--npm-border);
+        display: none;
+      }
+      @media (min-width: 1200px) {
+        .npm-toc { display: block; }
+      }
+      .npm-toc h4 {
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: #586069;
+        margin-bottom: 1rem;
+      }
+      .npm-toc ul { list-style: none; }
+      .npm-toc li { margin-bottom: 0.5rem; }
+      .npm-toc a {
+        text-decoration: none;
+        color: #586069;
+        font-size: 0.85rem;
+      }
+      .npm-toc a:hover { color: var(--npm-link); }
+
+      .npm-footer {
+        text-align: center;
+        padding: 2rem;
+        background: #ffffff;
+        border-top: 1px solid var(--npm-border);
+        color: #586069;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body class="npm-theme">
+    
+    <header class="npm-header">
+      <a href="/" class="npm-brand">
+        <svg viewBox="0 0 780 250" style="height: 30px; margin-right: 10px;"><path fill="#cb3837" d="M240,250h100v-50h100V0H240V250z M340,50h50v100h-50V50z M480,0v200h100V50h50v150h50V50h50v150h50V0H480z M0,200h100V50h50v150h50V0H0V200z"></path></svg>
+        <span style="border-left: 1px solid #e1e4e8; padding-left: 15px;">docs</span>
+      </a>
+      <div class="npm-header-links">
+        <a href="/">Tezz Home</a>
+        <a href="https://www.npmjs.com/package/tezz-lang" target="_blank">npm</a>
+        <a href="https://github.com/abhinav29102005/automatic-octo-carnival" target="_blank">GitHub</a>
+      </div>
+    </header>
+
+    <div class="npm-subheader">
+      <div class="npm-subheader-title">Tezz Documentation &nbsp;/&nbsp; Introduction</div>
     </div>
+
+    <div class="npm-container">
+      
+      <!-- Left Sidebar -->
+      <aside class="npm-sidebar">
+        <div class="npm-nav-group">
+          <h4>Getting Started</h4>
+          <ul class="npm-nav-list">
+            <li><a href="introduction.html" class="active">Introduction</a></li>
+            <li><a href="installation-and-cli.html" class="">Installation & CLI</a></li>
+          </ul>
+        </div>
+        
+        <div class="npm-nav-group">
+          <h4>Core Language</h4>
+          <ul class="npm-nav-list">
+            <li><a href="syntax.html" class="">Language Syntax</a></li>
+            <li><a href="hinglish.html" class="">Hinglish Support</a></li>
+          </ul>
+        </div>
+        
+        <div class="npm-nav-group">
+          <h4>Backend APIs</h4>
+          <ul class="npm-nav-list">
+            <li><a href="services-and-routes.html" class="">Services & Routes</a></li>
+            <li><a href="deployment.html" class="">Deployment Guide</a></li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="npm-main">
+        
+      <h1 id="introduction">Introduction to Tezz</h1>
+      <p>Tezz (तेज़) is a blazing fast programming language designed specifically for building backend servers and serverless APIs.</p>
+      
+      <p>Created by Abhinav, Tezz focuses on extreme simplicity and developer experience. It compiles down to highly optimized JavaScript that can run anywhere: on Node.js or directly on the edge with Cloudflare Workers.</p>
+      
+      <h2 id="why-tezz">Why Tezz?</h2>
+      <p>Traditional backend languages have complex setups, bloated package managers, and steep learning curves. Tezz cuts through the noise.</p>
+      
+      <ul>
+        <li><strong>Zero Configuration:</strong> No Webpack, no Babel, no TSConfig. Just write and run.</li>
+        <li><strong>Native Hinglish Support:</strong> The world's first language that natively parses Hinglish keywords (like <code>kaam</code>, <code>rakho</code>, <code>agar</code>) alongside standard English.</li>
+        <li><strong>Declarative Routing:</strong> Building APIs is a first-class citizen in Tezz. Use <code>service</code> and <code>route</code> blocks to spin up a backend instantly.</li>
+        <li><strong>Blazing Fast Compilation:</strong> Compiles source code to JS in milliseconds with hot-reloading built into the CLI.</li>
+      </ul>
+      
+      <h2 id="next-steps">Next Steps</h2>
+      <p>Ready to jump in? Head over to the <a href="installation-and-cli.html">Installation Guide</a> to set up Tezz on your machine.</p>
+    
+      </main>
+
+      <!-- Right Sidebar (TOC) -->
+      <aside class="npm-toc">
+        <h4>In this article</h4>
+        <ul>
+          <li><a href="#introduction">Introduction to Tezz</a></li><li><a href="#why-tezz">Why Tezz?</a></li><li><a href="#next-steps">Next Steps</a></li>
+        </ul>
+      </aside>
+    </div>
+
+    <footer class="npm-footer">
+      <p>Built with ⚡ by Abhinav. Tezz v0.2.0.</p>
+    </footer>
+
   </body>
 </html>
