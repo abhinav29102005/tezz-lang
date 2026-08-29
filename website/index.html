@@ -13,7 +13,14 @@
     <header class="npm-header">
       <a href="/" class="npm-brand">
         <svg viewBox="0 0 675 250" style="height: 30px; margin-right: 10px;" class="animated-logo">
-          <g fill="#cb3837">
+          <defs>
+            <linearGradient id="speedster-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#D32F2F" />
+              <stop offset="50%" stop-color="#FFC107" />
+              <stop offset="100%" stop-color="#D32F2F" />
+            </linearGradient>
+          </defs>
+          <g fill="url(#speedster-grad)">
             <!-- T -->
             <rect x="0" y="0" width="150" height="50" />
             <rect x="50" y="50" width="50" height="200" />
@@ -42,13 +49,21 @@
         <a href="/docs/introduction.html">Documentation</a>
         <a href="https://www.npmjs.com/package/tezz-lang" target="_blank">npm</a>
         <a href="https://github.com/abhinav29102005/automatic-octo-carnival" target="_blank">GitHub</a>
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">🌙</button>
       </div>
     </header>
 
     <main class="npm-home-main">
       <section class="npm-hero fade-in-up">
         <svg viewBox="0 0 675 250" class="hero-logo floating">
-          <g fill="#cb3837">
+          <defs>
+            <linearGradient id="speedster-grad-hero" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#D32F2F" />
+              <stop offset="50%" stop-color="#FFC107" />
+              <stop offset="100%" stop-color="#D32F2F" />
+            </linearGradient>
+          </defs>
+          <g fill="url(#speedster-grad-hero)">
             <!-- T -->
             <rect x="0" y="0" width="150" height="50" />
             <rect x="50" y="50" width="50" height="200" />
@@ -130,5 +145,35 @@
       <p>Built with ⚡ by Abhinav. Tezz v0.2.0.</p>
     </footer>
 
+    <script>
+      const themeToggle = document.getElementById('themeToggle');
+      const body = document.body;
+      if (localStorage.getItem('theme') === 'dark') body.classList.add('dark-theme');
+      
+      themeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-theme');
+        localStorage.setItem('theme', body.classList.contains('dark-theme') ? 'dark' : 'light');
+      });
+
+      // Handle copy for pre blocks and hero-code-box
+      document.querySelectorAll('pre, .hero-code-box').forEach(block => {
+        const btn = document.createElement('button');
+        btn.className = 'copy-btn';
+        btn.innerHTML = 'Copy';
+        block.appendChild(btn);
+        
+        btn.addEventListener('click', async () => {
+          const code = block.querySelector('code');
+          const text = code ? code.innerText : block.innerText.replace('Copy', '');
+          await navigator.clipboard.writeText(text.trim());
+          btn.innerHTML = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.innerHTML = 'Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        });
+      });
+    </script>
   </body>
 </html>
