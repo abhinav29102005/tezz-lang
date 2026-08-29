@@ -442,15 +442,14 @@ pages.forEach(page => {
 });
 
 // Build Sidebar HTML function
-function buildSidebar(currentSlug) {
+function buildSidebar() {
   let content = '';
   for (const [groupName, groupPages] of Object.entries(groups)) {
     content += '<div class="npm-nav-group">' + 
                '<h4>' + groupName + '</h4>' + 
                '<ul class="npm-nav-list">' + 
                groupPages.map(page => {
-                 let activeClass = page.slug === currentSlug ? 'class="active"' : '';
-                 return '<li><a href="/docs/' + page.slug + '.html" ' + activeClass + '>' + page.title + '</a></li>';
+                 return '<li><a href="#' + page.slug + '">' + page.title + '</a></li>';
                }).join('') + 
                '</ul></div>';
   }
@@ -458,21 +457,53 @@ function buildSidebar(currentSlug) {
 }
 
 
-const outDir = path.join('website', 'docs');
-if (!fs.existsSync(outDir)) {
-  fs.mkdirSync(outDir, { recursive: true });
-}
+let docsHTML = `
+    <div class="npm-subheader">
+      <div class="npm-subheader-title">Tezz Documentation</div>
+    </div>
+    <div class="npm-container">
+      <aside class="npm-sidebar">
+        ${buildSidebar('')}
+      </aside>
+      <main class="npm-main">
+`;
 
-// Output multiple documentation pages
 pages.forEach(page => {
-  let pageContent = '<section id="' + page.slug + '" class="doc-section">' + page.content + '</section>';
-  let pageSidebar = buildSidebar(page.slug);
-  let filePath = path.join(outDir, page.slug + '.html');
-  fs.writeFileSync(filePath, layout(page.title + " | Tezz Docs", pageContent, pageSidebar, page.toc));
-  console.log('Created ' + filePath);
+  docsHTML += '<section id="' + page.slug + '" class="doc-section">' + page.content + '</section>';
 });
 
-// Create an index.html that redirects to introduction.html
-fs.writeFileSync(path.join(outDir, 'index.html'), '<meta http-equiv="refresh" content="0; url=/docs/introduction.html" />');
-console.log('Created index redirect');
+docsHTML += `
+      </main>
+      <aside class="npm-toc">
+        <h4>In this article</h4>
+        <ul>
+          ${allToc.map(item => '<li><a href="#' + item.id + '">' + item.text + '</a></li>').join('')}
+        </ul>
+      </aside>
+    </div>
+`;
+
+// Read index.html
+const indexPath = path.join('website', 'index.html');
+let indexHTML = fs.readFileSync(indexPath, 'utf-8');
+
+// Inject docs
+const startMarker = '<!-- DOCS INJECT START -->';
+const endMarker = '<!-- DOCS INJECT END -->';
+
+if (indexHTML.includes(startMarker) && indexHTML.includes(endMarker)) {
+  const startIdx = indexHTML.indexOf(startMarker) + startMarker.length;
+  const endIdx = indexHTML.indexOf(endMarker);
+  indexHTML = indexHTML.substring(0, startIdx) + '\n' + docsHTML + '\n      ' + indexHTML.substring(endIdx);
+} else {
+  indexHTML = indexHTML.replace('<!-- DOCS INJECT -->', startMarker + '\n' + docsHTML + '\n      ' + endMarker);
+}
+
+fs.writeFileSync(indexPath, indexHTML);
+console.log('Injected docs into website/index.html');
+
+// We can optionally delete the old docs folder
+if (fs.existsSync(path.join('website', 'docs'))) {
+    fs.rmSync(path.join('website', 'docs'), { recursive: true, force: true });
+}
 
