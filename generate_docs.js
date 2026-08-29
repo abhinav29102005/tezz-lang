@@ -25,7 +25,11 @@ const layout = (title, content, sidebar, toc) => `<!DOCTYPE html>
         padding-bottom: 3rem;
       }
     </style>
-  </head>
+    <meta name="view-transition" content="same-origin" />
+  <script>
+    if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark-theme');
+  </script>
+</head>
   <body class="npm-theme">
     
     <header class="npm-header">
@@ -73,12 +77,12 @@ const layout = (title, content, sidebar, toc) => `<!DOCTYPE html>
 
     <script>
       const themeToggle = document.getElementById('themeToggle');
-      const body = document.body;
-      if (localStorage.getItem('theme') === 'dark') body.classList.add('dark-theme');
+      const root = document.documentElement;
+      
       
       themeToggle.addEventListener('click', () => {
-        body.classList.toggle('dark-theme');
-        localStorage.setItem('theme', body.classList.contains('dark-theme') ? 'dark' : 'light');
+        root.classList.toggle('dark-theme');
+        localStorage.setItem('theme', root.classList.contains('dark-theme') ? 'dark' : 'light');
       });
 
       document.querySelectorAll('pre').forEach(block => {

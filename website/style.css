@@ -19,7 +19,7 @@
   --logo-fill: url(#speedster-grad);
 }
 
-.dark-theme {
+html.dark-theme {
   /* Dark Theme */
   --bg-main: #0d1117;
   --bg-sub: #161b22;
@@ -288,9 +288,9 @@ body.npm-theme {
 .keyword { color: var(--speed-red); font-weight: 600; }
 .entity { color: var(--speed-blue); font-weight: 600; }
 .string { color: #032f62; }
-.dark-theme .string { color: #a5d6ff; }
+html.dark-theme .string { color: #a5d6ff; }
 .number { color: var(--speed-blue); }
-.dark-theme .number { color: #79c0ff; }
+html.dark-theme .number { color: #79c0ff; }
 
 /* Responsive */
 @media (max-width: 900px) {

@@ -7,7 +7,11 @@
     <title>⚡ Tezz | The Blazing Fast Backend Language</title>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/style.css">
-  </head>
+    <meta name="view-transition" content="same-origin" />
+  <script>
+    if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark-theme');
+  </script>
+</head>
   <body class="npm-theme">
     
     <header class="npm-header">
@@ -16,7 +20,7 @@
         <span style="border-left: 1px solid #e1e4e8; padding-left: 15px;">tezz</span>
       </a>
       <div class="npm-header-links">
-        <a href="/docs/index.html">Documentation</a>
+        <a href="//docs/">Documentation</a>
         <a href="https://www.npmjs.com/package/tezz-lang" target="_blank">npm</a>
         <a href="https://github.com/abhinav29102005/automatic-octo-carnival" target="_blank">GitHub</a>
         <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">🌙</button>

@@ -1,11 +1,11 @@
 
       const themeToggle = document.getElementById('themeToggle');
-      const body = document.body;
-      if (localStorage.getItem('theme') === 'dark') body.classList.add('dark-theme');
+      const root = document.documentElement;
+      
       
       themeToggle.addEventListener('click', () => {
-        body.classList.toggle('dark-theme');
-        localStorage.setItem('theme', body.classList.contains('dark-theme') ? 'dark' : 'light');
+        root.classList.toggle('dark-theme');
+        localStorage.setItem('theme', root.classList.contains('dark-theme') ? 'dark' : 'light');
       });
 
       // Handle copy for pre blocks and hero-code-box
