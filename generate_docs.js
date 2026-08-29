@@ -30,37 +30,7 @@ const layout = (title, content, sidebar, toc) => `<!DOCTYPE html>
     
     <header class="npm-header">
       <a href="/" class="npm-brand">
-        <svg viewBox="0 0 675 250" style="height: 30px; margin-right: 10px;" class="animated-logo">
-          <defs>
-            <linearGradient id="speedster-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#D32F2F" />
-              <stop offset="50%" stop-color="#FFC107" />
-              <stop offset="100%" stop-color="#D32F2F" />
-            </linearGradient>
-          </defs>
-          <g fill="url(#speedster-grad)">
-            <!-- T -->
-            <rect x="0" y="0" width="150" height="50" />
-            <rect x="50" y="50" width="50" height="200" />
-            <!-- E -->
-            <rect x="175" y="0" width="50" height="250" />
-            <rect x="225" y="0" width="100" height="50" />
-            <rect x="225" y="100" width="75" height="50" />
-            <rect x="225" y="200" width="100" height="50" />
-            <!-- Z 1 -->
-            <rect x="350" y="0" width="150" height="50" />
-            <rect x="450" y="50" width="50" height="50" />
-            <rect x="400" y="100" width="50" height="50" />
-            <rect x="350" y="150" width="50" height="50" />
-            <rect x="350" y="200" width="150" height="50" />
-            <!-- Z 2 -->
-            <rect x="525" y="0" width="150" height="50" />
-            <rect x="625" y="50" width="50" height="50" />
-            <rect x="575" y="100" width="50" height="50" />
-            <rect x="525" y="150" width="50" height="50" />
-            <rect x="525" y="200" width="150" height="50" />
-          </g>
-        </svg>
+        <img src="/favicon.svg" alt="Tezz Logo" style="height: 30px; margin-right: 10px;" class="animated-logo" />
         <span style="border-left: 1px solid var(--border-color); padding-left: 15px;">docs</span>
       </a>
       <div class="npm-header-links">
