@@ -38,6 +38,7 @@ const pages = [
     ],
     content: `
       <h1 id="macros">Deep Metaprogramming with Macros</h1>
+      <div style="text-align:center; margin: 2rem 0;"><img src="/docs/jadoo.png" alt="Jadoo" style="max-width:400px; border-radius: 8px;"/></div>
       <p>Tezz allows you to write Rust-like macros that manipulate the AST at compile time for zero-overhead execution.</p>
       <pre><code>macro log_status(status) {
   print("Status:")
@@ -57,6 +58,7 @@ log_status!(Status.ACTIVE)</code></pre>
     ],
     content: `
       <h1 id="spawn">Parallelism with spawn</h1>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/L4R-_Z4rY88AAAAC/akshay-kumar-21-din-mein-paisa-double.gif" alt="21 din mein paisa double" style="max-width:400px; border-radius: 8px;"/></div>
       <p>Tezz automatically compiles <code>spawn</code> blocks into <code>worker_threads</code> in Node.js, and background isolates in Cloudflare Workers!</p>
       <pre><code>spawn {
   print("Calculating prime numbers in parallel!")
@@ -77,6 +79,7 @@ log_status!(Status.ACTIVE)</code></pre>
     ],
     content: `
       <h1 id="comparisons">Tezz vs Other Frameworks</h1>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/N7wD2J2uXfAAAAAd/jalwa-hai-hamara.gif" alt="Jalwa hai hamara" style="max-width:400px; border-radius: 8px;"/></div>
       <p>Tezz is designed to bring the speed of compiled languages with the ease of JavaScript and Python. Here is how Tezz compares with other popular backend ecosystems.</p>
 
       <h2 id="nodejs">Node.js (Express / Fastify)</h2>
