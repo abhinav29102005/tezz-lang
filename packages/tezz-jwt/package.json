@@ -1,0 +1,9 @@
+{
+  "name": "tezz-jwt",
+  "version": "0.1.0",
+  "description": "Native JWT library for the Tezz programming language.",
+  "main": "index.js",
+  "type": "module",
+  "author": "Abhinav",
+  "license": "MIT"
+}

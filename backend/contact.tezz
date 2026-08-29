@@ -1,0 +1,34 @@
+import createClient from "tezz-database"
+
+service ContactAPI on 8787 {
+  route GET "/" {
+    respond 200 { status: "healthy", service: "Contact API" }
+  }
+
+  route POST "/api/contact" {
+    let body = request.json()
+    let name = body.name
+    let email = body.email
+    let message = body.message
+
+    if !name || !email || !message {
+      respond 400 { success: false, error: "Missing required fields" }
+      return
+    }
+
+    let db = createClient({
+      url: env.TURSO_URL,
+      token: env.TURSO_TOKEN
+    })
+
+    try {
+      let result = await db.execute("INSERT INTO contacts (name, email, message) VALUES (?, ?, ?)", [name, email, message])
+
+      if result.ok {
+        respond 200 { success: true }
+      }
+    } catch err {
+      respond 500 { success: false, error: "Database error" }
+    }
+  }
+}

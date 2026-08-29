@@ -4,3 +4,12 @@ node_modules/
 .DS_Store
 .vscode/
 .idea/
+
+# Secrets
+.env
+.env.*
+.dev.vars
+
+# Build
+dist/
+.wrangler/

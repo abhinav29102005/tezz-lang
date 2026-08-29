@@ -1,0 +1,9 @@
+{
+  "name": "tezz-database",
+  "version": "0.1.0",
+  "description": "Native database client for the Tezz programming language.",
+  "main": "index.js",
+  "type": "module",
+  "author": "Abhinav",
+  "license": "MIT"
+}

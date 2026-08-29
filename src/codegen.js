@@ -338,7 +338,7 @@ class CodeGenerator {
   genWorkerServer(svcName) {
     this.line(`export default {`);
     this.indent++;
-    this.line(`async fetch(req) {`);
+    this.line(`async fetch(req, env) {`);
     this.indent++;
 
     // CORS preflight

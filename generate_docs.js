@@ -435,18 +435,42 @@ route POST "/users" {
       </ol>
 
       <h2 id="cloudflare-workers">Deploying to Cloudflare Workers</h2>
-      <p>Tezz has first-class support for Cloudflare Workers, allowing you to run your backend on the edge with 0ms cold starts globally.</p>
-      <ol>
-        <li>Compile targeting the Worker runtime (this generates an ES Module with a <code>fetch</code> handler instead of a Node HTTP server):
-          <pre><code>tezz build app.tezz --target worker --output dist/worker.js</code></pre>
-        </li>
-        <li>Use Wrangler to deploy the compiled file:
-          <pre><code>npx wrangler deploy dist/worker.js --name tezz-api --compatibility-date 2024-01-01</code></pre>
-        </li>
-      </ol>
+      <p>Tezz has native, first-class support for Cloudflare Workers. You can deploy your backend to the edge worldwide in just one command. Tezz handles the intermediate compilation and deployment automatically so you never have to look at a <code>.js</code> file.</p>
+      <pre><code>tezz deploy app.tezz --name my-super-fast-api</code></pre>
+      <p>This command compiles your code securely in-memory, publishes it to Cloudflare, and ensures 0ms cold starts globally.</p>
 
       <h2 id="why-target">Why Target-Based Compilation?</h2>
-      <p>When you write a <code>service</code> block in Tezz, the language doesn't just evaluate it—it fundamentally transforms it. If you target <code>node</code>, the codegen outputs <code>http.createServer</code>. If you target <code>worker</code>, it outputs an <code>export default { fetch() }</code> object. Your source code never changes.</p>
+      <p>When you write a <code>service</code> block in Tezz, the language doesn't just evaluate it—it fundamentally transforms it. If you target <code>node</code>, the codegen outputs <code>http.createServer</code>. If you target <code>worker</code> (which <code>tezz deploy</code> does under the hood), it outputs an <code>export default { fetch() }</code> object. Your source code never changes.</p>
+    `
+  },
+  {
+    slug: 'ecosystem',
+    group: 'Ecosystem',
+    title: 'Standard Libraries',
+    toc: [
+      { id: 'ecosystem-header', text: 'Ecosystem Packages' },
+      { id: 'tezz-database', text: 'tezz-database' },
+      { id: 'tezz-jwt', text: 'tezz-jwt' }
+    ],
+    content: `
+      <h1 id="ecosystem-header">Standard Libraries</h1>
+      <p>To avoid "double code" and standardize development, Tezz publishes official packages to the NPM registry that can be imported directly into your <code>.tezz</code> files.</p>
+
+      <h2 id="tezz-database">tezz-database</h2>
+      <p>A native database client for Tezz, officially supporting Turso LibSQL over HTTP. Ideal for Edge/Worker environments.</p>
+      <pre><code>npm install tezz-database</code></pre>
+      <pre><code>import createClient from "tezz-database"
+
+let db = createClient({ url: "YOUR_TURSO_URL", token: "YOUR_TOKEN" })
+let result = await db.execute("SELECT * FROM users")
+print(result.rows)</code></pre>
+
+      <h2 id="tezz-jwt">tezz-jwt</h2>
+      <p>Native JSON Web Token support for signing and verifying tokens.</p>
+      <pre><code>npm install tezz-jwt</code></pre>
+      <pre><code>import { sign, verify } from "tezz-jwt"
+
+let token = sign({ user: "abhinav" }, "secret-key")</code></pre>
     `
   }
 ];

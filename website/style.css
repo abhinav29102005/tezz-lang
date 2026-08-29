@@ -472,3 +472,65 @@ pre:hover .copy-btn, .hero-code-box:hover .copy-btn {
   font-size: 0.85rem;
 }
 .npm-toc a:hover { color: var(--link-color); }
+
+/* Contact Form */
+.npm-contact-section {
+  padding: 40px 20px;
+  background: var(--surface-color);
+  margin-top: 40px;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.npm-contact-section h2 {
+  font-size: 2em;
+  margin-bottom: 10px;
+  color: var(--text-color);
+}
+
+.npm-contact-section p {
+  color: var(--text-color);
+  opacity: 0.8;
+  margin-bottom: 30px;
+}
+
+.contact-form {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--bg-color);
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--npm-red);
+  box-shadow: 0 0 0 3px rgba(203, 56, 55, 0.1);
+}
+
+.contact-form button {
+  padding: 12px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.contact-form button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}

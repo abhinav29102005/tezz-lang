@@ -47,7 +47,7 @@
       
       <!-- Left Sidebar -->
       <aside class="npm-sidebar">
-        <div class="npm-nav-group"><h4>Getting Started</h4><ul class="npm-nav-list"><li><a href="#introduction">Introduction</a></li><li><a href="#installation-and-cli">Installation & CLI</a></li></ul></div><div class="npm-nav-group"><h4>Core Language</h4><ul class="npm-nav-list"><li><a href="#syntax">Language Syntax</a></li><li><a href="#hinglish">Hinglish Support</a></li></ul></div><div class="npm-nav-group"><h4>Backend APIs</h4><ul class="npm-nav-list"><li><a href="#services-and-routes">Services & Routes</a></li><li><a href="#deployment">Deployment Guide</a></li></ul></div>
+        <div class="npm-nav-group"><h4>Getting Started</h4><ul class="npm-nav-list"><li><a href="#introduction">Introduction</a></li><li><a href="#installation-and-cli">Installation & CLI</a></li></ul></div><div class="npm-nav-group"><h4>Core Language</h4><ul class="npm-nav-list"><li><a href="#syntax">Language Syntax</a></li><li><a href="#hinglish">Hinglish Support</a></li></ul></div><div class="npm-nav-group"><h4>Backend APIs</h4><ul class="npm-nav-list"><li><a href="#services-and-routes">Services & Routes</a></li><li><a href="#deployment">Deployment Guide</a></li></ul></div><div class="npm-nav-group"><h4>Ecosystem</h4><ul class="npm-nav-list"><li><a href="#ecosystem">Standard Libraries</a></li></ul></div>
       </aside>
 
       <!-- Main Content -->
@@ -291,18 +291,31 @@ route POST "/users" {
       </ol>
 
       <h2 id="cloudflare-workers">Deploying to Cloudflare Workers</h2>
-      <p>Tezz has first-class support for Cloudflare Workers, allowing you to run your backend on the edge with 0ms cold starts globally.</p>
-      <ol>
-        <li>Compile targeting the Worker runtime (this generates an ES Module with a <code>fetch</code> handler instead of a Node HTTP server):
-          <pre><code>tezz build app.tezz --target worker --output dist/worker.js</code></pre>
-        </li>
-        <li>Use Wrangler to deploy the compiled file:
-          <pre><code>npx wrangler deploy dist/worker.js --name tezz-api --compatibility-date 2024-01-01</code></pre>
-        </li>
-      </ol>
+      <p>Tezz has native, first-class support for Cloudflare Workers. You can deploy your backend to the edge worldwide in just one command. Tezz handles the intermediate compilation and deployment automatically so you never have to look at a <code>.js</code> file.</p>
+      <pre><code>tezz deploy app.tezz --name my-super-fast-api</code></pre>
+      <p>This command compiles your code securely in-memory, publishes it to Cloudflare, and ensures 0ms cold starts globally.</p>
 
       <h2 id="why-target">Why Target-Based Compilation?</h2>
-      <p>When you write a <code>service</code> block in Tezz, the language doesn't just evaluate it—it fundamentally transforms it. If you target <code>node</code>, the codegen outputs <code>http.createServer</code>. If you target <code>worker</code>, it outputs an <code>export default { fetch() }</code> object. Your source code never changes.</p>
+      <p>When you write a <code>service</code> block in Tezz, the language doesn't just evaluate it—it fundamentally transforms it. If you target <code>node</code>, the codegen outputs <code>http.createServer</code>. If you target <code>worker</code> (which <code>tezz deploy</code> does under the hood), it outputs an <code>export default { fetch() }</code> object. Your source code never changes.</p>
+    </section><section id="ecosystem" class="doc-section">
+      <h1 id="ecosystem-header">Standard Libraries</h1>
+      <p>To avoid "double code" and standardize development, Tezz publishes official packages to the NPM registry that can be imported directly into your <code>.tezz</code> files.</p>
+
+      <h2 id="tezz-database">tezz-database</h2>
+      <p>A native database client for Tezz, officially supporting Turso LibSQL over HTTP. Ideal for Edge/Worker environments.</p>
+      <pre><code>npm install tezz-database</code></pre>
+      <pre><code>import createClient from "tezz-database"
+
+let db = createClient({ url: "YOUR_TURSO_URL", token: "YOUR_TOKEN" })
+let result = await db.execute("SELECT * FROM users")
+print(result.rows)</code></pre>
+
+      <h2 id="tezz-jwt">tezz-jwt</h2>
+      <p>Native JSON Web Token support for signing and verifying tokens.</p>
+      <pre><code>npm install tezz-jwt</code></pre>
+      <pre><code>import { sign, verify } from "tezz-jwt"
+
+let token = sign({ user: "abhinav" }, "secret-key")</code></pre>
     </section>
       </main>
 
@@ -310,7 +323,7 @@ route POST "/users" {
       <aside class="npm-toc">
         <h4>In this article</h4>
         <ul>
-          <li><a href="#introduction">Introduction to Tezz</a></li><li><a href="#why-tezz">Why Tezz?</a></li><li><a href="#next-steps">Next Steps</a></li><li><a href="#installation">Installation</a></li><li><a href="#cli-commands">CLI Commands</a></li><li><a href="#hot-reloading">Hot-Reloading in Action</a></li><li><a href="#syntax-header">Syntax Overview</a></li><li><a href="#variables">Variables</a></li><li><a href="#functions">Functions</a></li><li><a href="#control-flow">Control Flow</a></li><li><a href="#error-handling">Error Handling</a></li><li><a href="#hinglish-support">Hinglish Support</a></li><li><a href="#keyword-mapping">Keyword Mapping</a></li><li><a href="#example">Example API</a></li><li><a href="#services-routes-header">Services & Routes</a></li><li><a href="#service-block">The Service Block</a></li><li><a href="#routing">Routing</a></li><li><a href="#path-parameters">Path Parameters</a></li><li><a href="#request-object">Request Object</a></li><li><a href="#sending-responses">Sending Responses</a></li><li><a href="#deployment-header">Deployment</a></li><li><a href="#nodejs">Deploying to Node.js</a></li><li><a href="#cloudflare-workers">Deploying to Cloudflare</a></li><li><a href="#why-target">Why Target-Based Compilation?</a></li>
+          <li><a href="#introduction">Introduction to Tezz</a></li><li><a href="#why-tezz">Why Tezz?</a></li><li><a href="#next-steps">Next Steps</a></li><li><a href="#installation">Installation</a></li><li><a href="#cli-commands">CLI Commands</a></li><li><a href="#hot-reloading">Hot-Reloading in Action</a></li><li><a href="#syntax-header">Syntax Overview</a></li><li><a href="#variables">Variables</a></li><li><a href="#functions">Functions</a></li><li><a href="#control-flow">Control Flow</a></li><li><a href="#error-handling">Error Handling</a></li><li><a href="#hinglish-support">Hinglish Support</a></li><li><a href="#keyword-mapping">Keyword Mapping</a></li><li><a href="#example">Example API</a></li><li><a href="#services-routes-header">Services & Routes</a></li><li><a href="#service-block">The Service Block</a></li><li><a href="#routing">Routing</a></li><li><a href="#path-parameters">Path Parameters</a></li><li><a href="#request-object">Request Object</a></li><li><a href="#sending-responses">Sending Responses</a></li><li><a href="#deployment-header">Deployment</a></li><li><a href="#nodejs">Deploying to Node.js</a></li><li><a href="#cloudflare-workers">Deploying to Cloudflare</a></li><li><a href="#why-target">Why Target-Based Compilation?</a></li><li><a href="#ecosystem-header">Ecosystem Packages</a></li><li><a href="#tezz-database">tezz-database</a></li><li><a href="#tezz-jwt">tezz-jwt</a></li>
         </ul>
       </aside>
     </div>

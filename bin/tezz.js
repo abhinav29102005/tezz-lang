@@ -35,7 +35,7 @@ const HELP = `${BANNER}
   \x1b[1mCommands:\x1b[0m
     run   <file.tezz>           Compile and run a Tezz file
     dev   <file.tezz>           Run with hot-reload (watches for changes)
-    build <file.tezz>           Compile to JavaScript
+    deploy <file.tezz>          Deploy natively to Cloudflare Edge\n    build <file.tezz>           Compile to JavaScript
     init                        Create a new Tezz project
     repl                        Start the interactive Tezz REPL
 
@@ -48,6 +48,7 @@ const HELP = `${BANNER}
   \x1b[1mExamples:\x1b[0m
     tezz run app.tezz
     tezz dev app.tezz
+    tezz deploy app.tezz
     tezz build app.tezz --target worker
     tezz init
     tezz repl
@@ -204,6 +205,58 @@ function cmdBuild(file, options) {
   }
 }
 
+
+function cmdDeploy(file, options) {
+  if (!fs.existsSync(file)) {
+    console.error(`\x1b[31m  ✗ File not found: ${file}\x1b[0m`);
+    process.exit(1);
+  }
+
+  const source = fs.readFileSync(file, 'utf-8');
+  const target = 'worker';
+  const name = options.name || path.basename(file, '.tezz');
+  
+  try {
+    const jsCode = compile(source, { target });
+    
+    // Create hidden directory
+    const tmpDir = path.join(path.dirname(path.resolve(file)), '.tezz');
+    if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true });
+    
+    const outputFile = path.join(tmpDir, 'worker.js');
+    fs.writeFileSync(outputFile, jsCode);
+    
+    console.log(BANNER);
+    console.log(`  \x1b[32m✓\x1b[0m Compiled \x1b[1m${file}\x1b[0m globally in memory`);
+    console.log(`  \x1b[32m✓\x1b[0m Target: \x1b[36mcloudflare-worker\x1b[0m`);
+    console.log(`  \x1b[32m✓\x1b[0m Size: ${(Buffer.byteLength(jsCode) / 1024).toFixed(1)} KB\n`);
+    
+    console.log(`  \x1b[36m🚀 Deploying ${name} to Cloudflare Edge...\x1b[0m\n`);
+    
+    const child = spawn('npx', ['-y', 'wrangler', 'deploy', outputFile, '--name', name, '--compatibility-date', '2024-01-01'], {
+      stdio: 'inherit',
+      cwd: process.cwd()
+    });
+    
+    child.on('exit', (code) => {
+      // Cleanup
+      if (fs.existsSync(tmpDir)) {
+        fs.rmSync(tmpDir, { recursive: true, force: true });
+      }
+      if (code === 0) {
+        console.log(`\n  \x1b[32m✓ Successfully deployed ${name} worldwide!\x1b[0m\n`);
+      } else {
+        console.error(`\n  \x1b[31m✗ Deployment failed.\x1b[0m\n`);
+      }
+      process.exit(code || 0);
+    });
+    
+  } catch (err) {
+    printError(err, source, file);
+    process.exit(1);
+  }
+}
+
 function cmdInit() {
   console.log(BANNER);
 
@@ -279,6 +332,26 @@ function cmdRepl() {
 
 const args = process.argv.slice(2);
 
+// Load .env silently
+try {
+  if (fs.existsSync('.env')) {
+    if (process.loadEnvFile) {
+      process.loadEnvFile();
+    } else {
+      const envFile = fs.readFileSync('.env', 'utf-8');
+      envFile.split('\n').forEach(line => {
+        const match = line.match(/^\s*([^#=\s]+)\s*=\s*(.*)$/);
+        if (match) {
+          let val = match[2].trim();
+          if (val.startsWith('"') && val.endsWith('"')) val = val.slice(1, -1);
+          else if (val.startsWith("'") && val.endsWith("'")) val = val.slice(1, -1);
+          process.env[match[1]] = val;
+        }
+      });
+    }
+  }
+} catch (e) {}
+
 if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
   console.log(HELP);
   process.exit(0);
@@ -293,7 +366,9 @@ const command = args[0];
 const options = {};
 
 for (let i = 1; i < args.length; i++) {
-  if (args[i] === '--target' && args[i + 1]) {
+  if (args[i] === '--name' && args[i + 1]) {
+    options.name = args[++i];
+  } else if (args[i] === '--target' && args[i + 1]) {
     options.target = args[++i];
   } else if (args[i] === '--output' && args[i + 1]) {
     options.output = args[++i];
@@ -310,6 +385,10 @@ switch (command) {
   case 'dev':
     if (!options.file) { console.error('Usage: tezz dev <file.tezz>'); process.exit(1); }
     cmdRun(options.file, options, true);
+    break;
+  case 'deploy':
+    if (!options.file) { console.error('Usage: tezz deploy <file.tezz>'); process.exit(1); }
+    cmdDeploy(options.file, options);
     break;
   case 'build':
     if (!options.file) { console.error('Usage: tezz build <file.tezz>'); process.exit(1); }
