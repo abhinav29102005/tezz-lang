@@ -29,6 +29,8 @@
   --text-muted: #8b949e;
   --link-color: #58a6ff;
   --btn-text: #ffffff;
+  --table-head-bg: #21262d;
+  --active-bg: #1f2428;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -390,10 +392,12 @@ pre:hover .copy-btn, .hero-code-box:hover .copy-btn {
   color: var(--text-main);
   font-size: 0.95rem;
   display: block;
-  padding: 0.3rem 0;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
 }
-.npm-nav-list a:hover { color: var(--speed-red); }
-.npm-nav-list a.active { color: var(--speed-red); font-weight: 600; }
+.npm-nav-list a:hover { color: var(--speed-red); background: var(--bg-main); }
+.npm-nav-list a.active { color: var(--speed-red); font-weight: 600; background: var(--active-bg, rgba(211, 47, 47, 0.1)); }
 
 .npm-main {
   flex: 1;
@@ -442,7 +446,7 @@ pre:hover .copy-btn, .hero-code-box:hover .copy-btn {
   border: 1px solid var(--border-color);
   text-align: left;
 }
-.npm-table th { background-color: var(--bg-sub); font-weight: 600; }
+.npm-table th { background-color: var(--table-head-bg, var(--bg-sub)); font-weight: 600; }
 
 .npm-toc {
   width: 250px;

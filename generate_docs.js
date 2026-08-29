@@ -1,0 +1,520 @@
+const fs = require('fs');
+const path = require('path');
+
+const layout = (title, content, sidebar, toc) => `<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/tezz-logo.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${title} | npm Docs (Tezz Edition)</title>
+    <meta name="description" content="Documentation for Tezz, the blazing fast backend language.">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+      .doc-section {
+        padding-top: 80px; /* Offset for sticky header */
+        margin-top: -80px;
+        margin-bottom: 3rem;
+      }
+      .doc-section:not(:last-child) {
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 3rem;
+      }
+    </style>
+  </head>
+  <body class="npm-theme">
+    
+    <header class="npm-header">
+      <a href="/" class="npm-brand">
+        <svg viewBox="0 0 675 250" style="height: 30px; margin-right: 10px;" class="animated-logo">
+          <defs>
+            <linearGradient id="speedster-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#D32F2F" />
+              <stop offset="50%" stop-color="#FFC107" />
+              <stop offset="100%" stop-color="#D32F2F" />
+            </linearGradient>
+          </defs>
+          <g fill="url(#speedster-grad)">
+            <!-- T -->
+            <rect x="0" y="0" width="150" height="50" />
+            <rect x="50" y="50" width="50" height="200" />
+            <!-- E -->
+            <rect x="175" y="0" width="50" height="250" />
+            <rect x="225" y="0" width="100" height="50" />
+            <rect x="225" y="100" width="75" height="50" />
+            <rect x="225" y="200" width="100" height="50" />
+            <!-- Z 1 -->
+            <rect x="350" y="0" width="150" height="50" />
+            <rect x="450" y="50" width="50" height="50" />
+            <rect x="400" y="100" width="50" height="50" />
+            <rect x="350" y="150" width="50" height="50" />
+            <rect x="350" y="200" width="150" height="50" />
+            <!-- Z 2 -->
+            <rect x="525" y="0" width="150" height="50" />
+            <rect x="625" y="50" width="50" height="50" />
+            <rect x="575" y="100" width="50" height="50" />
+            <rect x="525" y="150" width="50" height="50" />
+            <rect x="525" y="200" width="150" height="50" />
+          </g>
+        </svg>
+        <span style="border-left: 1px solid var(--border-color); padding-left: 15px;">docs</span>
+      </a>
+      <div class="npm-header-links">
+        <a href="/">Tezz Home</a>
+        <a href="/docs/index.html">Documentation</a>
+        <a href="https://www.npmjs.com/package/tezz-lang" target="_blank">npm</a>
+        <a href="https://github.com/abhinav29102005/automatic-octo-carnival" target="_blank">GitHub</a>
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">🌙</button>
+      </div>
+    </header>
+
+    <div class="npm-subheader">
+      <div class="npm-subheader-title">Tezz Documentation</div>
+    </div>
+
+    <div class="npm-container">
+      
+      <!-- Left Sidebar -->
+      <aside class="npm-sidebar">
+        ${sidebar}
+      </aside>
+
+      <!-- Main Content -->
+      <main class="npm-main">
+        ${content}
+      </main>
+
+      <!-- Right Sidebar (TOC) -->
+      <aside class="npm-toc">
+        <h4>In this article</h4>
+        <ul>
+          ${toc.map(item => '<li><a href="#' + item.id + '">' + item.text + '</a></li>').join('')}
+        </ul>
+      </aside>
+    </div>
+
+    <footer class="npm-footer">
+      <p>Built with ⚡ by Abhinav. Tezz v0.2.0.</p>
+    </footer>
+
+    <script>
+      const themeToggle = document.getElementById('themeToggle');
+      const body = document.body;
+      if (localStorage.getItem('theme') === 'dark') body.classList.add('dark-theme');
+      
+      themeToggle.addEventListener('click', () => {
+        body.classList.toggle('dark-theme');
+        localStorage.setItem('theme', body.classList.contains('dark-theme') ? 'dark' : 'light');
+      });
+
+      document.querySelectorAll('pre').forEach(block => {
+        const btn = document.createElement('button');
+        btn.className = 'copy-btn';
+        btn.innerHTML = 'Copy';
+        block.appendChild(btn);
+        
+        btn.addEventListener('click', async () => {
+          const code = block.querySelector('code');
+          const text = code ? code.innerText : block.innerText.replace('Copy', '');
+          await navigator.clipboard.writeText(text.trim());
+          btn.innerHTML = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(() => {
+            btn.innerHTML = 'Copy';
+            btn.classList.remove('copied');
+          }, 2000);
+        });
+      });
+      
+      // Update active state in sidebar on scroll
+      const sections = document.querySelectorAll('.doc-section');
+      const navLinks = document.querySelectorAll('.npm-sidebar a');
+      
+      window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          if (scrollY >= sectionTop - 100) {
+            current = section.getAttribute('id');
+          }
+        });
+        
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + current) {
+            link.classList.add('active');
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
+`;
+
+const pages = [
+  {
+    slug: 'introduction',
+    group: 'Getting Started',
+    title: 'Introduction',
+    toc: [
+      { id: 'introduction', text: 'Introduction to Tezz' },
+      { id: 'why-tezz', text: 'Why Tezz?' },
+      { id: 'next-steps', text: 'Next Steps' }
+    ],
+    content: `
+      <h1 id="introduction">Introduction to Tezz</h1>
+      <p>Tezz (तेज़) is a blazing fast programming language designed specifically for building backend servers and serverless APIs.</p>
+      
+      <p>Created by Abhinav, Tezz focuses on extreme simplicity and developer experience. It compiles down to highly optimized JavaScript that can run anywhere: on Node.js or directly on the edge with Cloudflare Workers.</p>
+      
+      <h2 id="why-tezz">Why Tezz?</h2>
+      <p>Traditional backend languages have complex setups, bloated package managers, and steep learning curves. Tezz cuts through the noise.</p>
+      
+      <ul>
+        <li><strong>Zero Configuration:</strong> No Webpack, no Babel, no TSConfig. Just write and run.</li>
+        <li><strong>Native Hinglish Support:</strong> The world's first language that natively parses Hinglish keywords (like <code>kaam</code>, <code>rakho</code>, <code>agar</code>) alongside standard English.</li>
+        <li><strong>Declarative Routing:</strong> Building APIs is a first-class citizen in Tezz. Use <code>service</code> and <code>route</code> blocks to spin up a backend instantly.</li>
+        <li><strong>Blazing Fast Compilation:</strong> Compiles source code to JS in milliseconds with hot-reloading built into the CLI.</li>
+      </ul>
+      
+      <h2 id="next-steps">Next Steps</h2>
+      <p>Ready to jump in? Head over to the <a href="#installation-and-cli">Installation Guide</a> to set up Tezz on your machine.</p>
+    `
+  },
+  {
+    slug: 'installation-and-cli',
+    group: 'Getting Started',
+    title: 'Installation & CLI',
+    toc: [
+      { id: 'installation', text: 'Installation' },
+      { id: 'cli-commands', text: 'CLI Commands' },
+      { id: 'hot-reloading', text: 'Hot-Reloading in Action' }
+    ],
+    content: `
+      <h1 id="installation">Installation & CLI</h1>
+      <p>Everything you need to install Tezz and manage your projects from the terminal.</p>
+      
+      <h2>Installation</h2>
+      <p>Tezz is distributed via the npm registry. Install it globally on your machine using npm:</p>
+      <pre><code>npm install -g tezz-lang</code></pre>
+      <p>Verify the installation by checking the version:</p>
+      <pre><code>tezz --version</code></pre>
+
+      <h2 id="cli-commands">CLI Commands</h2>
+      <p>The <code>tezz</code> CLI is your all-in-one tool for development and production.</p>
+      
+      <table class="npm-table">
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>tezz init</code></td>
+            <td>Scaffolds a new <code>app.tezz</code> file with a starter template.</td>
+          </tr>
+          <tr>
+            <td><code>tezz dev &lt;file&gt;</code></td>
+            <td>Starts the development server with <strong>hot-reloading</strong> enabled. Saving your file instantly restarts the server.</td>
+          </tr>
+          <tr>
+            <td><code>tezz run &lt;file&gt;</code></td>
+            <td>Compiles and runs a Tezz file directly in Node.js.</td>
+          </tr>
+          <tr>
+            <td><code>tezz build &lt;file&gt;</code></td>
+            <td>Compiles your Tezz code into raw JavaScript. Use <code>--target worker</code> to compile for Cloudflare Workers.</td>
+          </tr>
+          <tr>
+            <td><code>tezz repl</code></td>
+            <td>Starts an interactive Read-Eval-Print Loop for testing snippets on the fly.</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <h2 id="hot-reloading">Hot-Reloading in Action</h2>
+      <p>When running <code>tezz dev app.tezz</code>, the CLI watches your file for changes. When a change is detected, it intercepts the signal, kills the current server, recompiles the AST, and spawns a new server instance—all in less than 300ms.</p>
+    `
+  },
+  {
+    slug: 'syntax',
+    group: 'Core Language',
+    title: 'Language Syntax',
+    toc: [
+      { id: 'syntax-header', text: 'Syntax Overview' },
+      { id: 'variables', text: 'Variables' },
+      { id: 'functions', text: 'Functions' },
+      { id: 'control-flow', text: 'Control Flow' },
+      { id: 'error-handling', text: 'Error Handling' }
+    ],
+    content: `
+      <h1 id="syntax-header">Language Syntax</h1>
+      <p>Tezz syntax is designed to be highly readable, borrowing the best parts of modern JavaScript, Swift, and Rust.</p>
+      
+      <h2 id="variables">Variables</h2>
+      <p>Declare mutable variables with <code>let</code> and immutable variables with <code>const</code>.</p>
+      <pre><code>let age = 21
+const name = "Abhinav"
+
+// Reassignment
+age = 22</code></pre>
+      
+      <h2 id="functions">Functions</h2>
+      <p>Functions are declared using the <code>fn</code> keyword. For asynchronous operations, prefix the function with <code>async</code>.</p>
+      <pre><code>fn calculateTotal(price, tax) {
+  return price + (price * tax)
+}
+
+async fn fetchUserData(id) {
+  let response = await fetch("https://api.example.com/users/" + id)
+  return await response.json()
+}</code></pre>
+
+      <h2 id="control-flow">Control Flow</h2>
+      <p>Standard branching and looping constructs are fully supported.</p>
+      <pre><code>// If / Else
+if age >= 18 {
+  print("Adult")
+} else {
+  print("Minor")
+}
+
+// While Loop
+let count = 0
+while count &lt; 5 {
+  print(count)
+  count += 1
+}
+
+// For Loop
+let numbers = [1, 2, 3]
+for n in numbers {
+  print(n)
+}</code></pre>
+
+      <h2 id="error-handling">Error Handling</h2>
+      <p>Use <code>try</code> and <code>catch</code> to gracefully handle exceptions.</p>
+      <pre><code>try {
+  let data = parseJSON(invalidString)
+} catch err {
+  print("Failed to parse data!")
+}</code></pre>
+    `
+  },
+  {
+    slug: 'hinglish',
+    group: 'Core Language',
+    title: 'Hinglish Support',
+    toc: [
+      { id: 'hinglish-support', text: 'Hinglish Support' },
+      { id: 'keyword-mapping', text: 'Keyword Mapping' },
+      { id: 'example', text: 'Example API' }
+    ],
+    content: `
+      <h1 id="hinglish-support">Hinglish Support 🇮🇳</h1>
+      <p>Tezz is the world's first backend language that natively supports Hinglish (Hindi + English) keywords interchangeably.</p>
+      
+      <p>Whether you are learning to code or want to express logic in a more culturally familiar way, Tezz maps Hinglish keywords directly to their English counterparts at the AST level. There is <strong>zero performance penalty</strong>.</p>
+      
+      <h2 id="keyword-mapping">Keyword Mapping</h2>
+      <table class="npm-table">
+        <thead>
+          <tr>
+            <th>English</th>
+            <th>Hinglish</th>
+            <th>Meaning</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>let</code></td><td><code>rakho</code></td><td>Keep / Store</td></tr>
+          <tr><td><code>const</code></td><td><code>pakka</code></td><td>Permanent / Fixed</td></tr>
+          <tr><td><code>fn</code></td><td><code>kaam</code></td><td>Work / Task</td></tr>
+          <tr><td><code>service</code></td><td><code>seva</code></td><td>Service</td></tr>
+          <tr><td><code>route</code></td><td><code>rasta</code></td><td>Path / Route</td></tr>
+          <tr><td><code>respond</code></td><td><code>jawab</code></td><td>Answer / Respond</td></tr>
+          <tr><td><code>if</code></td><td><code>agar</code></td><td>If</td></tr>
+          <tr><td><code>else</code></td><td><code>warna</code></td><td>Otherwise</td></tr>
+          <tr><td><code>while</code></td><td><code>jabtak</code></td><td>As long as</td></tr>
+          <tr><td><code>try</code></td><td><code>koshish</code></td><td>Attempt</td></tr>
+          <tr><td><code>catch</code></td><td><code>pakad</code></td><td>Grab / Catch</td></tr>
+          <tr><td><code>return</code></td><td><code>vapas</code></td><td>Return / Back</td></tr>
+          <tr><td><code>print</code></td><td><code>dikha</code></td><td>Show</td></tr>
+          <tr><td><code>async</code></td><td><code>baadmein</code></td><td>Later (Asynchronous)</td></tr>
+          <tr><td><code>await</code></td><td><code>ruko</code></td><td>Wait</td></tr>
+          <tr><td><code>true</code></td><td><code>sahi</code></td><td>Correct / True</td></tr>
+          <tr><td><code>false</code></td><td><code>galat</code></td><td>Wrong / False</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="example">Example: A Pure Hinglish API</h2>
+      <p>You can write an entire backend service using only Hinglish keywords.</p>
+      <pre><code>pakka version = "0.2.0"
+
+kaam generateGreeting(name) {
+  agar name == "Abhinav" {
+    vapas "Namaste Creator! 🙏"
+  } warna {
+    vapas "Namaste, {name}! ⚡"
+  }
+}
+
+seva HinglishAPI on 3000 {
+  rasta GET "/" {
+    rakho user = request.query.name || "Duniya"
+    dikha("Request from: " + user)
+    jawab 200 { 
+      message: generateGreeting(user),
+      status: sahi
+    }
+  }
+}</code></pre>
+    `
+  },
+  {
+    slug: 'services-and-routes',
+    group: 'Backend APIs',
+    title: 'Services & Routes',
+    toc: [
+      { id: 'services-routes-header', text: 'Services & Routes' },
+      { id: 'service-block', text: 'The Service Block' },
+      { id: 'routing', text: 'Routing' },
+      { id: 'path-parameters', text: 'Path Parameters' },
+      { id: 'request-object', text: 'Request Object' },
+      { id: 'sending-responses', text: 'Sending Responses' }
+    ],
+    content: `
+      <h1 id="services-routes-header">Services & Routes</h1>
+      <p>Tezz abstracts away HTTP server boilerplate, allowing you to focus purely on business logic.</p>
+      
+      <h2 id="service-block">The Service Block</h2>
+      <p>A <code>service</code> block declares an HTTP server and binds it to a specific port.</p>
+      <pre><code>service UserAPI on 8080 {
+  // Routes go here
+}</code></pre>
+
+      <h2 id="routing">Routing</h2>
+      <p>Inside a service, you define endpoints using the <code>route</code> block. You specify the HTTP method (GET, POST, PUT, DELETE) and the path.</p>
+      <pre><code>route GET "/users" {
+  // ...
+}
+
+route POST "/users" {
+  // ...
+}</code></pre>
+
+      <h2 id="path-parameters">Dynamic Path Parameters</h2>
+      <p>You can capture variables from the URL path using a colon (<code>:</code>). The captured values are available in the implicitly provided <code>params</code> object.</p>
+      <pre><code>route GET "/users/:id" {
+  let userId = params.id
+  print("Fetching user: " + userId)
+}</code></pre>
+
+      <h2 id="request-object">The Request Object</h2>
+      <p>Every route automatically injects a <code>request</code> object containing the incoming HTTP data.</p>
+      <ul>
+        <li><code>request.method</code> - The HTTP method (e.g., "GET").</li>
+        <li><code>request.url</code> - The request URL path.</li>
+        <li><code>request.query</code> - An object containing parsed query parameters.</li>
+        <li><code>request.json()</code> - Parses and returns the JSON body payload.</li>
+      </ul>
+
+      <h2 id="sending-responses">Sending Responses</h2>
+      <p>Use the <code>respond</code> keyword to instantly send a JSON response to the client. You provide an HTTP status code followed by an object.</p>
+      <pre><code>route POST "/login" {
+  let body = request.json()
+  
+  if body.username == "admin" && body.password == "123" {
+    respond 200 { success: true, token: "abc-123" }
+  } else {
+    respond 401 { success: false, error: "Invalid credentials" }
+  }
+}</code></pre>
+    `
+  },
+  {
+    slug: 'deployment',
+    group: 'Backend APIs',
+    title: 'Deployment Guide',
+    toc: [
+      { id: 'deployment-header', text: 'Deployment' },
+      { id: 'nodejs', text: 'Deploying to Node.js' },
+      { id: 'cloudflare-workers', text: 'Deploying to Cloudflare' },
+      { id: 'why-target', text: 'Why Target-Based Compilation?' }
+    ],
+    content: `
+      <h1 id="deployment-header">Deployment Guide</h1>
+      <p>Take your Tezz applications to production seamlessly.</p>
+      
+      <p>Tezz compiles directly to highly optimized JavaScript. Because it handles the server abstraction at the compilation phase, you can compile for different target environments using a simple flag.</p>
+
+      <h2 id="nodejs">Deploying to Node.js (Default)</h2>
+      <p>By default, Tezz compiles to a standard Node.js HTTP server. This is perfect for deploying on VPS (DigitalOcean, Linode), AWS EC2, Heroku, or Render.</p>
+      <ol>
+        <li>Compile your code:
+          <pre><code>tezz build app.tezz --target node --output dist/server.js</code></pre>
+        </li>
+        <li>Run it in production:
+          <pre><code>node dist/server.js</code></pre>
+        </li>
+      </ol>
+
+      <h2 id="cloudflare-workers">Deploying to Cloudflare Workers</h2>
+      <p>Tezz has first-class support for Cloudflare Workers, allowing you to run your backend on the edge with 0ms cold starts globally.</p>
+      <ol>
+        <li>Compile targeting the Worker runtime (this generates an ES Module with a <code>fetch</code> handler instead of a Node HTTP server):
+          <pre><code>tezz build app.tezz --target worker --output dist/worker.js</code></pre>
+        </li>
+        <li>Use Wrangler to deploy the compiled file:
+          <pre><code>npx wrangler deploy dist/worker.js --name tezz-api --compatibility-date 2024-01-01</code></pre>
+        </li>
+      </ol>
+
+      <h2 id="why-target">Why Target-Based Compilation?</h2>
+      <p>When you write a <code>service</code> block in Tezz, the language doesn't just evaluate it—it fundamentally transforms it. If you target <code>node</code>, the codegen outputs <code>http.createServer</code>. If you target <code>worker</code>, it outputs an <code>export default { fetch() }</code> object. Your source code never changes.</p>
+    `
+  }
+];
+
+let allContent = '';
+let allToc = [];
+let sidebarContent = '';
+
+// Group the pages by their "group" property for the sidebar
+const groups = {};
+pages.forEach(page => {
+  if (!groups[page.group]) groups[page.group] = [];
+  groups[page.group].push(page);
+});
+
+// Build Sidebar HTML
+for (const [groupName, groupPages] of Object.entries(groups)) {
+  sidebarContent += '<div class="npm-nav-group">' + 
+                    '<h4>' + groupName + '</h4>' + 
+                    '<ul class="npm-nav-list">' + 
+                    groupPages.map(page => '<li><a href="#' + page.slug + '">' + page.title + '</a></li>').join('') + 
+                    '</ul></div>';
+}
+
+// Build Content & TOC HTML
+pages.forEach(page => {
+  allToc.push(...page.toc);
+  allContent += '<section id="' + page.slug + '" class="doc-section">' + 
+                page.content + 
+                '</section>';
+});
+
+const outDir = path.join('website', 'docs');
+if (!fs.existsSync(outDir)) {
+  fs.mkdirSync(outDir, { recursive: true });
+}
+
+// Output single documentation page
+const filePath = path.join(outDir, 'index.html');
+fs.writeFileSync(filePath, layout("Documentation", allContent, sidebarContent, allToc));
+console.log('Created ' + filePath);
