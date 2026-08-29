@@ -20,29 +20,18 @@ npm install -g tezz-lang
 # Create a new project
 tezz init
 
-# Run your first service
+# Run your first service (Fileless JIT Execution - No JS files created!)
 tezz run app.tezz
 ```
 
 ## Language Syntax
 
-### Variables
+### Variables & Data Types
 ```tezz
 let name = "Tezz"
 let port = 8080
 let users = ["Alice", "Bob"]
 let config = { debug: true, version: "1.0" }
-```
-
-### Functions
-```tezz
-fn greet(name: string) -> string {
-  return "Hello, {name}!"
-}
-
-fn add(a: number, b: number) -> number {
-  return a + b
-}
 ```
 
 ### Services & Routes (The Killer Feature)
@@ -57,53 +46,62 @@ service API on 3000 {
     let body = request.json()
     respond 201 { created: true, user: body.name }
   }
-
-  route GET "/users/:id" {
-    let id = params.id
-    respond 200 { id: id }
-  }
 }
 ```
 
-### Control Flow
+### Advanced Types: Enums & Traits
+Tezz features static-typing constructs (similar to Rust) that compile with zero-overhead.
 ```tezz
-if score > 90 {
-  respond 200 { grade: "A" }
-} else if score > 70 {
-  respond 200 { grade: "B" }
-} else {
-  respond 200 { grade: "C" }
-}
+enum Status { PENDING, ACTIVE, DELETED }
 
-for item in items {
-  console.log(item)
+trait UserProvider {
+  fn getUser(id)
+  fn saveUser(user)
 }
 ```
 
-### String Interpolation
+### Compile-Time Macros
+Deep metaprogramming without runtime overhead. Macros are expanded safely at compile time via the AST.
 ```tezz
-let name = "World"
-let greeting = "Hello, {name}!"
--- Result: "Hello, World!"
+macro log_status(status) {
+  print("The current status is:")
+  print(status)
+}
+
+// In your route:
+log_status!(Status.ACTIVE)
 ```
 
-### Built-in Fetch
+### Concurrency: Goroutines (`spawn` / `paida_kar`)
+Run heavy CPU-bound tasks in parallel! Tezz automatically compiles `spawn` blocks to OS-level `worker_threads` in Node.js, and non-blocking isolates on Cloudflare Edge.
 ```tezz
-let response = fetch("https://api.example.com/data")
-let data = response.json()
+spawn {
+  print("Running in parallel!")
+}
+```
+
+### Standard Library Packages
+Tezz comes with officially supported decoupled packages. No duplicate code.
+```tezz
+import auth from "tezz-auth"
+import validator from "tezz-validator"
+import openapi from "tezz-openapi"
 ```
 
 ## 🛠 CLI Commands
 
 | Command | Description |
 |---|---|
-| `tezz run <file.tezz>` | Compile and run |
+| `tezz run <file.tezz>` | Execute fileless in memory |
+| `tezz dev <file.tezz>` | Run with instant hot-reloading |
 | `tezz build <file.tezz>` | Compile to JavaScript |
+| `tezz build <file> --static` | Bundle into a standalone portable binary! |
 | `tezz build <file> --target worker` | Compile for Cloudflare Workers |
+| `tezz deploy <file.tezz>` | One-click deploy natively to Cloudflare Edge |
 | `tezz init` | Create a new project |
-| `tezz --help` | Show help |
+| `tezz repl` | Start the interactive Tezz shell |
 
-## ☁Deploy to Cloudflare Workers
+## ☁ Deploy to Cloudflare Workers
 
 ```bash
 # Build for Cloudflare Workers
@@ -118,33 +116,10 @@ npx wrangler deploy dist/worker.js
 | From | What Tezz Takes |
 |---|---|
 | **Python** | Clean syntax, no semicolons |
-| **Go** | Built-in HTTP server, simplicity |
-| **Rust** | Type annotations, safety |
+| **Go** | Built-in HTTP server, goroutines (`spawn`) |
+| **Rust** | Type annotations, Enums, Macros (`!`) |
 | **TypeScript** | Runs on JS runtimes, npm ecosystem |
 | **Workers** | Edge-first, request/response model |
 
-## Project Structure
-
-```
-your-project/
-├── app.tezz          # Your Tezz source code
-├── package.json
-└── dist/
-    └── worker.js     # Compiled output (for Workers)
-```
-
-## Built-in Objects
-
-Inside route handlers, you have access to:
-
-- `request.method` — HTTP method
-- `request.url` — Request URL path
-- `request.headers` — Request headers
-- `request.json()` — Parse JSON body
-- `request.text()` — Raw body text
-- `request.query` — Query parameters
-- `params.name` — URL path parameters (from `:name`)
-
 ---
-
 **Made with and तेज़ी (speed)**

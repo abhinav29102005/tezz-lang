@@ -2,6 +2,68 @@ const fs = require('fs');
 const path = require('path');
 
 const pages = [
+
+  {
+    slug: 'advanced-types',
+    group: 'Advanced Features',
+    title: 'Types & Enums',
+    toc: [
+      { id: 'enums', text: 'Enums (vikalp)' },
+      { id: 'traits', text: 'Traits (lakshan)' }
+    ],
+    content: `
+      <h1 id="enums">Advanced Types</h1>
+      <p>Tezz natively supports Rust-like Enums and Traits which compile directly into zero-overhead JS equivalents.</p>
+      <pre><code>enum Status {
+  PENDING,
+  ACTIVE,
+  DELETED
+}
+// Compiles to Object.freeze({ ... })</code></pre>
+
+      <h2 id="traits">Traits</h2>
+      <p>Define interfaces for compile-time structure verification.</p>
+      <pre><code>trait UserProvider {
+  fn getUser(id)
+  fn saveUser(user)
+}</code></pre>
+    `
+  },
+  {
+    slug: 'macros',
+    group: 'Advanced Features',
+    title: 'Macros (jadoo)',
+    toc: [
+      { id: 'macros', text: 'Compile-Time Macros' }
+    ],
+    content: `
+      <h1 id="macros">Deep Metaprogramming with Macros</h1>
+      <p>Tezz allows you to write Rust-like macros that manipulate the AST at compile time for zero-overhead execution.</p>
+      <pre><code>macro log_status(status) {
+  print("Status:")
+  print(status)
+}
+
+// Expands safely into an IIFE at compile time
+log_status!(Status.ACTIVE)</code></pre>
+    `
+  },
+  {
+    slug: 'concurrency',
+    group: 'Advanced Features',
+    title: 'Goroutines (spawn)',
+    toc: [
+      { id: 'spawn', text: 'OS-Level Concurrency' }
+    ],
+    content: `
+      <h1 id="spawn">Parallelism with spawn</h1>
+      <p>Tezz automatically compiles <code>spawn</code> blocks into <code>worker_threads</code> in Node.js, and background isolates in Cloudflare Workers!</p>
+      <pre><code>spawn {
+  print("Calculating prime numbers in parallel!")
+}</code></pre>
+    `
+  },
+
   {
     slug: 'comparisons',
     group: 'Comparisons',

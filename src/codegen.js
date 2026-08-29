@@ -1,5 +1,4 @@
 // Tezz Language — Code Generator
-const stdlib = require('./stdlib.js');
 
 // Walks the AST and emits JavaScript code
 // Supports two targets: 'node' (Node.js) and 'worker' (Cloudflare Workers)
