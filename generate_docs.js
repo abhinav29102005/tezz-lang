@@ -41,6 +41,7 @@ const layout = (title, content, sidebar, toc) => `<!DOCTYPE html>
         <a href="/">Tezz Home</a>
         <a href="/docs/index.html">Documentation</a>
         <a href="https://www.npmjs.com/package/tezz-lang" target="_blank">npm</a>
+        <a href="/#contact">Contact</a>
         <a href="https://github.com/abhinav29102005/automatic-octo-carnival" target="_blank">GitHub</a>
         <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">🌙</button>
       </div>
