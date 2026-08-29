@@ -1,12 +1,25 @@
 
+
       const themeToggle = document.getElementById('themeToggle');
       const root = document.documentElement;
       
+      const updateIcon = () => {
+        if (themeToggle) {
+          themeToggle.innerHTML = root.classList.contains('dark-theme') ? '☀️' : '🌙';
+        }
+      };
       
-      themeToggle.addEventListener('click', () => {
-        root.classList.toggle('dark-theme');
-        localStorage.setItem('theme', root.classList.contains('dark-theme') ? 'dark' : 'light');
-      });
+      updateIcon();
+      
+      if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+          root.classList.toggle('dark-theme');
+          const isDark = root.classList.contains('dark-theme');
+          localStorage.setItem('theme', isDark ? 'dark' : 'light');
+          updateIcon();
+        });
+      }
+
 
       // Handle copy for pre blocks and hero-code-box
       document.querySelectorAll('pre, .hero-code-box').forEach(block => {
