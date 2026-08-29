@@ -546,3 +546,5 @@ html, body, header, main, section, footer, div, h1, h2, h3, p, a, button, pre, c
 .theme-toggle:active {
   transform: scale(0.9);
 }
+
+html { scroll-behavior: smooth; }
