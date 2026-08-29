@@ -13,7 +13,7 @@ const pages = [
     ],
     content: `
       <h1 id="enums">Advanced Types</h1>
-      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/2s4-1Q_kLNgAAAAC/dekh-raha-hai-binod-panchayat.gif" style="max-width:400px; border-radius: 8px;"/></div>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://i.imgflip.com/1g8my4.jpg" style="max-width:400px; border-radius: 8px;"/></div>
       
       <p>Tezz natively supports Rust-like Enums and Traits which compile directly into zero-overhead JS equivalents.</p>
       <pre><code>enum Status {
@@ -61,7 +61,7 @@ log_status!(Status.ACTIVE)</code></pre>
     ],
     content: `
       <h1 id="spawn">Parallelism with spawn</h1>
-      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/L4R-_Z4rY88AAAAC/akshay-kumar-21-din-mein-paisa-double.gif" style="max-width:400px; border-radius: 8px;"/></div>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://i.imgflip.com/gk5el.jpg" style="max-width:400px; border-radius: 8px;"/></div>
       
       <p>Tezz automatically compiles <code>spawn</code> blocks into <code>worker_threads</code> in Node.js, and background isolates in Cloudflare Workers!</p>
       <pre><code>spawn {
@@ -83,7 +83,7 @@ log_status!(Status.ACTIVE)</code></pre>
     ],
     content: `
       <h1 id="comparisons">Tezz vs Other Frameworks</h1>
-      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/4F5wWd4h9XgAAAAC/kya-gunda-banega-re-tu-baburao-ganpatrao-apte.gif" style="max-width:400px; border-radius: 8px;"/></div>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://i.imgflip.com/9ehk.jpg" style="max-width:400px; border-radius: 8px;"/></div>
       
       <p>Tezz is designed to bring the speed of compiled languages with the ease of JavaScript and Python. Here is how Tezz compares with other popular backend ecosystems.</p>
 
@@ -141,7 +141,7 @@ log_status!(Status.ACTIVE)</code></pre>
     toc: [{ id: 'installation-and-cli', text: 'Installation' }, { id: 'cli-commands', text: 'CLI Commands' }],
     content: `
       <h1 id="installation-and-cli">Installation & CLI</h1>
-      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/tZ2X5k0J7aAAAAAC/bade-aaram-se-chunky-pandey.gif" style="max-width:400px; border-radius: 8px;"/></div>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://i.imgflip.com/30b1gx.jpg" style="max-width:400px; border-radius: 8px;"/></div>
       
       <p>Install Tezz globally using npm:</p>
       <pre><code>npm install -g tezz-lang</code></pre>
@@ -151,7 +151,7 @@ log_status!(Status.ACTIVE)</code></pre>
         <li><code>tezz build app.tezz</code> - Compiles to production-ready JS.</li>
         <li><code>tezz deploy app.tezz</code> - Deploys straight to Cloudflare Workers.</li>
       </ul>
-      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/bIHWOMefmHkAAAAC/hackerman.gif" style="max-width:400px; border-radius: 8px;"/></div>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://i.imgflip.com/1bhm.jpg" style="max-width:400px; border-radius: 8px;"/></div>
     `
   },
   {
@@ -165,7 +165,7 @@ log_status!(Status.ACTIVE)</code></pre>
     ],
     content: `
       <h1 id="syntax">Language Syntax</h1>
-      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/XwItyh36d5IAAAAC/baburao-utha-le.gif" style="max-width:400px; border-radius: 8px;"/></div>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://i.imgflip.com/1jwhww.jpg" style="max-width:400px; border-radius: 8px;"/></div>
       
       <p>Tezz syntax is designed to be instantly familiar if you know JavaScript or TypeScript.</p>
       <h2 id="variables">Variables</h2>
@@ -190,7 +190,7 @@ let config = { debug: true, version: "1.0" }</code></pre>
     ],
     content: `
       <h1 id="hinglish-support">Hinglish Support</h1>
-      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/V7U5F-5m4F4AAAAC/samajh-rahe-ho-zakir-khan.gif" style="max-width:400px; border-radius: 8px;"/></div>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://i.imgflip.com/1ur9b0.jpg" style="max-width:400px; border-radius: 8px;"/></div>
       
       <p>Tezz allows you to write backend code in Hinglish. Keywords map exactly 1:1 with English.</p>
       <h2 id="keywords-map">Keywords Map</h2>
@@ -210,7 +210,7 @@ let config = { debug: true, version: "1.0" }</code></pre>
           <tr><td><code>false</code></td><td><code>galat</code></td><td>Wrong / False</td></tr>
         </tbody>
       </table>
-      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/N74uCqUo7aQAAAAC/dicaprio.gif" style="max-width:400px; border-radius: 8px;"/></div>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://i.imgflip.com/1c1uej.jpg" style="max-width:400px; border-radius: 8px;"/></div>
 
       <h2 id="example">Example: A Pure Hinglish API</h2>
       <pre><code>pakka version = "0.2.0"
@@ -249,7 +249,7 @@ seva HinglishAPI on 3000 {
     ],
     content: `
       <h1 id="services-routes-header">Services & Routes</h1>
-      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/e2s4R1Wb4gAAAAAC/hera-pheri-akshay-kumar.gif" style="max-width:400px; border-radius: 8px;"/></div>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://i.imgflip.com/1otk96.jpg" style="max-width:400px; border-radius: 8px;"/></div>
       
       <p>Tezz abstracts away HTTP server boilerplate.</p>
       <h2 id="service-block">The Service Block</h2>
@@ -292,7 +292,7 @@ route POST "/users" { }</code></pre>
     ],
     content: `
       <h1 id="deployment-header">Deployment Guide</h1>
-      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/7p40PZONi2UAAAAC/paisa-hi-paisa-hoga-akshay-kumar.gif" style="max-width:400px; border-radius: 8px;"/></div>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://i.imgflip.com/1bh3.jpg" style="max-width:400px; border-radius: 8px;"/></div>
       
       <h2 id="nodejs">Deploying to Node.js (Default)</h2>
       <pre><code>tezz build app.tezz --target node --output dist/server.js
@@ -317,7 +317,7 @@ node dist/server.js</code></pre>
     ],
     content: `
       <h1 id="ecosystem-header">Standard Libraries</h1>
-      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/uR2gW7p4x9sAAAAC/ye-baburao-ka-style-hai-baburao.gif" style="max-width:400px; border-radius: 8px;"/></div>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://i.imgflip.com/28j0te.jpg" style="max-width:400px; border-radius: 8px;"/></div>
       
       <h2 id="tezz-database">tezz-database</h2>
       <pre><code>npm install tezz-database</code></pre>
@@ -341,7 +341,7 @@ let token = sign({ user: "abhinav" }, "secret-key")</code></pre>
     ],
     content: `
       <h1 id="roadmap">Roadmap & Future Goals</h1>
-      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/N7wD2J2uXfAAAAAC/jalwa-hai-hamara.gif" style="max-width:400px; border-radius: 8px;"/></div>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://i.imgflip.com/2kbn1e.jpg" style="max-width:400px; border-radius: 8px;"/></div>
       
       <p>Tezz has rapidly grown from a simple transpiler into a robust ecosystem featuring advanced metaprogramming, OS-level concurrency, and native standard libraries.</p>
       
