@@ -1,4 +1,6 @@
 // Tezz Language — Code Generator
+const stdlib = require('./stdlib.js');
+
 // Walks the AST and emits JavaScript code
 // Supports two targets: 'node' (Node.js) and 'worker' (Cloudflare Workers)
 
@@ -9,6 +11,8 @@ class CodeGenerator {
     this.indent = 0;
     this.output = '';
     this.services = [];
+    this.macros = {};
+    this.usedStdLibs = new Set();
   }
 
   // --- Output helpers ---
@@ -39,7 +43,7 @@ class CodeGenerator {
       this.genService(svc);
     }
 
-    return this.output;
+    return { code: this.output, stdLibs: Array.from(this.usedStdLibs) };
   }
 
   // === STATEMENTS ===
@@ -59,6 +63,12 @@ class CodeGenerator {
       case 'ExpressionStatement':  return this.line(this.genExpr(node.expression) + ';');
       case 'ImportStatement':      return this.genImport(node);
       case 'ExportStatement':      return this.genExport(node);
+      case 'BackgroundStatement':  return this.genBackground(node);
+      case 'SpawnStatement':       return this.genSpawn(node);
+      case 'EnumDeclaration':      return this.genEnum(node);
+      case 'TraitDeclaration':     return this.genTrait(node);
+      case 'MacroDeclaration':     return this.genMacro(node);
+
       default: throw new Error(`[Tezz Codegen] Unknown statement: ${node.type}`);
     }
   }
@@ -147,11 +157,98 @@ class CodeGenerator {
     this.line(`console.log(${args});`);
   }
 
-  genImport(node) {
+genImport(node) {
+    if (node.source.startsWith('tezz:')) {
+      const lib = node.source.substring(5);
+      if (['auth', 'validator', 'openapi', 'upload'].includes(lib)) {
+        this.usedStdLibs.add(lib);
+        const pkgName = 'tezz-' + lib;
+        if (this.target === 'worker') {
+          this.line(`import ${node.name} from '${pkgName}';`);
+        } else {
+          this.line(`const ${node.name} = require('${pkgName}');`);
+        }
+      } else {
+        throw new Error(`[Tezz Codegen] Unknown standard library: ${node.source}`);
+      }
+      return;
+    }
+
     if (this.target === 'worker') {
       this.line(`import ${node.name} from '${node.source}';`);
     } else {
       this.line(`const ${node.name} = require('${node.source}');`);
+    }
+  }
+
+
+
+
+  genEnum(node) {
+    const obj = node.variants.map(v => `${v}: "${v}"`).join(', ');
+    this.line(`const ${node.name} = Object.freeze({ ${obj} });`);
+  }
+
+  genTrait(node) {
+    this.line(`// Trait: ${node.name} (Compile-time only)`);
+  }
+
+  genMacro(node) {
+    this.macros[node.name] = node;
+    this.line(`// Macro: ${node.name} (Compile-time only)`);
+  }
+
+  expandMacro(macro, args) {
+    const env = {};
+    macro.params.forEach((p, i) => { env[p] = args[i]; });
+    
+    const walk = (n) => {
+      if (!n) return n;
+      if (Array.isArray(n)) return n.map(walk);
+      if (typeof n !== 'object') return n;
+      
+      if (n.type === 'Identifier' && env[n.name]) {
+        return env[n.name];
+      }
+      
+      const copy = {};
+      for (const key in n) copy[key] = walk(n[key]);
+      return copy;
+    };
+    return walk(macro.body);
+  }
+
+  genSpawn(node) {
+    if (this.target === 'worker') {
+      this.line(`((async () => {`);
+      this.indent++;
+      for (const s of node.body) this.genStmt(s);
+      this.indent--;
+      this.line(`})());`);
+    } else {
+      this.line(`const { Worker } = require('worker_threads');`);
+      this.line(`new Worker(\`const { parentPort } = require('worker_threads');`);
+      this.line(`(async () => {`);
+      this.indent++;
+      for (const s of node.body) this.genStmt(s);
+      this.indent--;
+      this.line(`})();\`, { eval: true });`);
+    }
+  }
+
+  genBackground(node) {
+    if (this.target === 'worker') {
+      this.line(`ctx.waitUntil((async () => {`);
+      this.indent++;
+      for (const s of node.body) this.genStmt(s);
+      this.indent--;
+      this.line(`})());`);
+    } else {
+      this.line(`Promise.resolve().then(async () => {`);
+      this.indent++;
+      for (const s of node.body) this.genStmt(s);
+      this.indent--;
+      this.line(`});`);
     }
   }
 
@@ -338,7 +435,7 @@ class CodeGenerator {
   genWorkerServer(svcName) {
     this.line(`export default {`);
     this.indent++;
-    this.line(`async fetch(req, env) {`);
+    this.line(`async fetch(req, env, ctx) {`);
     this.indent++;
 
     // CORS preflight
@@ -437,6 +534,25 @@ class CodeGenerator {
   // === EXPRESSIONS ===
 
   genExpr(node) {
+
+    if (node.type === 'MacroInvocation') {
+      const macro = this.macros[node.callee.name];
+      if (!macro) throw new Error(`[Tezz Codegen] Macro not found: ${node.callee.name}`);
+      const expandedBody = this.expandMacro(macro, node.arguments);
+      
+      const oldOutput = this.output;
+      this.output = '';
+      this.emit('(() => {\n');
+      this.indent++;
+      for (const s of expandedBody) this.genStmt(s);
+      this.indent--;
+      this.emit(''.padEnd(this.indent * 2, ' ') + '})()');
+      
+      const result = this.output;
+      this.output = oldOutput;
+      return result;
+    }
+
     switch (node.type) {
       case 'NumberLiteral':        return String(node.value);
       case 'BooleanLiteral':       return String(node.value);

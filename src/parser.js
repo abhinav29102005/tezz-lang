@@ -13,10 +13,12 @@ class Parser {
   // --- Utility methods ---
 
   peek()    { return this.tokens[this.pos]; }
+  peekNext() { return this.tokens[this.pos + 1]; }
   advance() { return this.tokens[this.pos++]; }
   isAtEnd() { return this.peek().type === TokenType.EOF; }
 
   check(type) { return this.peek().type === type; }
+  match(type) { if (this.check(type)) { this.advance(); return true; } return false; }
 
   expect(type) {
     if (!this.check(type)) {
@@ -60,6 +62,12 @@ class Parser {
       case TokenType.PRINT:   return this.parsePrintStmt();
       case TokenType.IMPORT:  return this.parseImportStmt();
       case TokenType.EXPORT:  return this.parseExportStmt();
+      case TokenType.BACKGROUND: return this.parseBackgroundStmt();
+      case TokenType.SPAWN:   return this.parseSpawnStmt();
+      case TokenType.ENUM:    return this.parseEnumDecl();
+      case TokenType.TRAIT:   return this.parseTraitDecl();
+      case TokenType.MACRO:   return this.parseMacroDecl();
+
       default:                return this.parseExprStmt();
     }
   }
@@ -275,6 +283,82 @@ class Parser {
   }
 
   // { statements }
+
+
+  // spawn { body }
+  parseSpawnStmt() {
+    const line = this.peek().line;
+    this.expect(TokenType.SPAWN);
+    const body = this.parseBlock();
+    return { type: 'SpawnStatement', body, line };
+  }
+
+
+  // enum Name { A, B }
+  parseEnumDecl() {
+    const line = this.peek().line;
+    this.expect(TokenType.ENUM);
+    const name = this.expect(TokenType.IDENTIFIER).value;
+    this.expect(TokenType.LBRACE);
+    const variants = [];
+    if (!this.check(TokenType.RBRACE)) {
+      do { variants.push(this.expect(TokenType.IDENTIFIER).value); }
+      while (this.check(TokenType.COMMA) && this.advance());
+    }
+    this.expect(TokenType.RBRACE);
+    return { type: 'EnumDeclaration', name, variants, line };
+  }
+
+  // trait Name { fn method() }
+  parseTraitDecl() {
+    const line = this.peek().line;
+    this.expect(TokenType.TRAIT);
+    const name = this.expect(TokenType.IDENTIFIER).value;
+    this.expect(TokenType.LBRACE);
+    const methods = [];
+    while (!this.check(TokenType.RBRACE) && !this.isAtEnd()) {
+      if (this.match(TokenType.FN)) {
+        const mName = this.expect(TokenType.IDENTIFIER).value;
+        this.expect(TokenType.LPAREN);
+        const params = [];
+        if (!this.check(TokenType.RPAREN)) {
+          do { params.push(this.expect(TokenType.IDENTIFIER).value); }
+          while (this.check(TokenType.COMMA) && this.advance());
+        }
+        this.expect(TokenType.RPAREN);
+        methods.push({ name: mName, params });
+      } else {
+        this.error("Traits can only contain function signatures");
+      }
+    }
+    this.expect(TokenType.RBRACE);
+    return { type: 'TraitDeclaration', name, methods, line };
+  }
+
+  // macro name(param) { body }
+  parseMacroDecl() {
+    const line = this.peek().line;
+    this.expect(TokenType.MACRO);
+    const name = this.expect(TokenType.IDENTIFIER).value;
+    this.expect(TokenType.LPAREN);
+    const params = [];
+    if (!this.check(TokenType.RPAREN)) {
+      do { params.push(this.expect(TokenType.IDENTIFIER).value); }
+      while (this.check(TokenType.COMMA) && this.advance());
+    }
+    this.expect(TokenType.RPAREN);
+    const body = this.parseBlock();
+    return { type: 'MacroDeclaration', name, params, body, line };
+  }
+
+  // background { body }
+  parseBackgroundStmt() {
+    const line = this.peek().line;
+    this.expect(TokenType.BACKGROUND);
+    const body = this.parseBlock();
+    return { type: 'BackgroundStatement', body, line };
+  }
+
   parseBlock() {
     this.expect(TokenType.LBRACE);
     const body = [];
@@ -389,7 +473,17 @@ class Parser {
   parseCall() {
     let expr = this.parsePrimary();
     while (true) {
-      if (this.check(TokenType.LPAREN)) {
+      if (this.check(TokenType.NOT) && this.peekNext() && this.peekNext().type === TokenType.LPAREN) {
+        this.advance(); // !
+        this.advance(); // (
+        const args = [];
+        if (!this.check(TokenType.RPAREN)) {
+          do { args.push(this.parseExpression()); }
+          while (this.check(TokenType.COMMA) && this.advance());
+        }
+        this.expect(TokenType.RPAREN);
+        expr = { type: 'MacroInvocation', callee: expr, arguments: args };
+      } else if (this.check(TokenType.LPAREN)) {
         this.advance();
         const args = [];
         if (!this.check(TokenType.RPAREN)) {

@@ -1,0 +1,24 @@
+import auth from "tezz:auth"
+import validator from "tezz:validator"
+import openapi from "tezz:openapi"
+import upload from "tezz:upload"
+
+service AdvancedApp on 3000 {
+  
+  route GET "/docs" {
+    respond 200 { swagger: "This is swagger docs placeholder" }
+  }
+
+  route POST "/login" {
+    let token = auth.sign({ user: "admin" }, "supersecret")
+    respond 200 { token: token }
+  }
+
+  route POST "/upload" {
+    background {
+      print("Processing upload in background!")
+    }
+    respond 200 { status: "upload started" }
+  }
+
+}

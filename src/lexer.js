@@ -15,6 +15,8 @@ const TokenType = {
   IMPORT: 'IMPORT', FROM: 'FROM', EXPORT: 'EXPORT',
   WHILE: 'WHILE', TRY: 'TRY', CATCH: 'CATCH',
   PRINT: 'PRINT', ASYNC: 'ASYNC', AWAIT: 'AWAIT',
+  BACKGROUND: 'BACKGROUND', SPAWN: 'SPAWN',
+  ENUM: 'ENUM', TRAIT: 'TRAIT', MACRO: 'MACRO',
 
   // Operators
   PLUS: 'PLUS', MINUS: 'MINUS', STAR: 'STAR', SLASH: 'SLASH', PERCENT: 'PERCENT',
@@ -48,6 +50,11 @@ const KEYWORDS = {
   'export': TokenType.EXPORT,
   'while': TokenType.WHILE, 'try': TokenType.TRY, 'catch': TokenType.CATCH,
   'print': TokenType.PRINT, 'async': TokenType.ASYNC, 'await': TokenType.AWAIT,
+  'background': TokenType.BACKGROUND,
+  'spawn': TokenType.SPAWN,
+  'enum': TokenType.ENUM,
+  'trait': TokenType.TRAIT,
+  'macro': TokenType.MACRO,
 
   // Hinglish keywords — same token types, different words
   'rakho': TokenType.LET,        // let = rakho (keep/store)
@@ -72,6 +79,11 @@ const KEYWORDS = {
   'dikha': TokenType.PRINT,      // print = dikha (show)
   'baadmein': TokenType.ASYNC,   // async = baadmein (later)
   'ruko': TokenType.AWAIT,       // await = ruko (wait)
+  'piche_kam': TokenType.BACKGROUND, // background = piche_kam
+  'paida_kar': TokenType.SPAWN,      // spawn = paida_kar
+  'vikalp': TokenType.ENUM,          // enum = vikalp
+  'lakshan': TokenType.TRAIT,        // trait = lakshan
+  'jadoo': TokenType.MACRO,          // macro = jadoo
 };
 
 class Token {

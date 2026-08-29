@@ -177,7 +177,8 @@ function cmdBuild(file, options) {
   const target = options.target || 'node';
 
   try {
-    const jsCode = compile(source, { target });
+    const result = compile(source, { target });
+    const jsCode = typeof result === 'string' ? result : result.code;
 
     const outputFile = options.output || file.replace(/\.tezz$/, '.js');
 
@@ -186,11 +187,25 @@ function cmdBuild(file, options) {
 
     fs.writeFileSync(outputFile, jsCode);
 
-    console.log(BANNER);
-    console.log(`  \x1b[32m✓\x1b[0m Compiled \x1b[1m${file}\x1b[0m → \x1b[1m${outputFile}\x1b[0m`);
-    console.log(`  \x1b[32m✓\x1b[0m Target: \x1b[36m${target}\x1b[0m`);
-    console.log(`  \x1b[32m✓\x1b[0m Size: ${(Buffer.byteLength(jsCode) / 1024).toFixed(1)} KB\n`);
+    
 
+
+    console.log(BANNER);
+    console.log(`\x1b[32m✓\x1b[0m Compiled \x1b[1m${file}\x1b[0m → \x1b[1m${outputFile}\x1b[0m`);
+    console.log(`\x1b[32m✓\x1b[0m Target: \x1b[36m${target}\x1b[0m`);
+    console.log(`\x1b[32m✓\x1b[0m Size: ${(Buffer.byteLength(jsCode) / 1024).toFixed(1)} KB\n`);
+
+
+    if (options.static) {
+      console.log(`  \x1b[36mCompiling static binary using Bun...\x1b[0m`);
+      const exeName = outputFile.replace(/\.js$/, '');
+      try {
+        require('child_process').execSync(`bun build ${outputFile} --compile --outfile ${exeName}`, { stdio: 'inherit' });
+        console.log(`  \x1b[32m✓\x1b[0m Static binary generated: \x1b[1m${exeName}\x1b[0m\n`);
+      } catch (e) {
+        console.error(`\x1b[31m  ✗ Static compilation failed. Ensure Bun is installed (https://bun.sh).\x1b[0m\n`);
+      }
+    }
     if (target === 'worker') {
       console.log(`  \x1b[2mDeploy to Cloudflare Workers:\x1b[0m`);
       console.log(`    npx wrangler deploy ${outputFile}\n`);
@@ -217,7 +232,8 @@ function cmdDeploy(file, options) {
   const name = options.name || path.basename(file, '.tezz');
   
   try {
-    const jsCode = compile(source, { target });
+    const result = compile(source, { target });
+    const jsCode = typeof result === 'string' ? result : result.code;
     
     // Create hidden directory
     const tmpDir = path.join(path.dirname(path.resolve(file)), '.tezz');
@@ -225,11 +241,14 @@ function cmdDeploy(file, options) {
     
     const outputFile = path.join(tmpDir, 'worker.js');
     fs.writeFileSync(outputFile, jsCode);
+
+    
+
     
     console.log(BANNER);
-    console.log(`  \x1b[32m✓\x1b[0m Compiled \x1b[1m${file}\x1b[0m globally in memory`);
-    console.log(`  \x1b[32m✓\x1b[0m Target: \x1b[36mcloudflare-worker\x1b[0m`);
-    console.log(`  \x1b[32m✓\x1b[0m Size: ${(Buffer.byteLength(jsCode) / 1024).toFixed(1)} KB\n`);
+    console.log(`\x1b[32m✓\x1b[0m Compiled \x1b[1m${file}\x1b[0m globally in memory`);
+    console.log(`\x1b[32m✓\x1b[0m Target: \x1b[36mcloudflare-worker\x1b[0m`);
+    console.log(`\x1b[32m✓\x1b[0m Size: ${(Buffer.byteLength(jsCode) / 1024).toFixed(1)} KB\n`);
     
     console.log(`  \x1b[36mDeploying ${name} to Cloudflare Edge...\x1b[0m\n`);
     
@@ -372,9 +391,23 @@ for (let i = 1; i < args.length; i++) {
     options.target = args[++i];
   } else if (args[i] === '--output' && args[i + 1]) {
     options.output = args[++i];
+  } else if (args[i] === '--static') {
+    options.static = true;
   } else if (!args[i].startsWith('-')) {
     options.file = options.file || args[i];
   }
+}
+
+
+if (command === '--internal-run') {
+  const fileToRun = args[1];
+  require.extensions['.tezz'] = function(module, filename) {
+    const content = fs.readFileSync(filename, 'utf8');
+    const result = compile(content, { target: 'node' });
+    module._compile(typeof result === 'string' ? result : result.code, filename);
+  };
+  require(path.resolve(fileToRun));
+  return;
 }
 
 switch (command) {

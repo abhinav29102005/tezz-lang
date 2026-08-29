@@ -1,0 +1,8 @@
+service ConcurrencyApp on 4000 {
+  route GET "/" {
+    spawn {
+      print("I am running in a true background thread!")
+    }
+    respond 200 { message: "Thread spawned" }
+  }
+}

@@ -1,0 +1,24 @@
+enum Status {
+  PENDING,
+  ACTIVE,
+  DELETED
+}
+
+trait UserProvider {
+  fn getUser(id)
+  fn saveUser(user)
+}
+
+macro log_status(status) {
+  print("The current status is:")
+  print(status)
+  return true
+}
+
+service TypesApp on 5000 {
+  route GET "/" {
+    let s = Status.ACTIVE
+    let success = log_status!(s)
+    respond 200 { status: s, success: success }
+  }
+}
