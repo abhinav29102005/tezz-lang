@@ -13,6 +13,7 @@ const pages = [
     ],
     content: `
       <h1 id="enums">Advanced Types</h1>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/2s4-1Q_kLNgAAAAd/dekh-raha-hai-binod-panchayat.gif" style="max-width:400px; border-radius: 8px;"/></div>
       <p>Tezz natively supports Rust-like Enums and Traits which compile directly into zero-overhead JS equivalents.</p>
       <pre><code>enum Status {
   PENDING,
@@ -79,7 +80,7 @@ log_status!(Status.ACTIVE)</code></pre>
     ],
     content: `
       <h1 id="comparisons">Tezz vs Other Frameworks</h1>
-      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/N7wD2J2uXfAAAAAd/jalwa-hai-hamara.gif" alt="Jalwa hai hamara" style="max-width:400px; border-radius: 8px;"/></div>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/4F5wWd4h9XgAAAAd/kya-gunda-banega-re-tu-baburao-ganpatrao-apte.gif" alt="Kya gunda banega re tu" style="max-width:400px; border-radius: 8px;"/></div>
       <p>Tezz is designed to bring the speed of compiled languages with the ease of JavaScript and Python. Here is how Tezz compares with other popular backend ecosystems.</p>
 
       <h2 id="nodejs">Node.js (Express / Fastify)</h2>
@@ -122,6 +123,7 @@ log_status!(Status.ACTIVE)</code></pre>
     toc: [{ id: 'introduction', text: 'Introduction' }, { id: 'why-tezz', text: 'Why Tezz?' }],
     content: `
       <h1 id="introduction">Introduction</h1>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/CkbhWfeHt0AAAAAd/abhi-maja-ayga-na-bhidu-hera-pheri.gif" style="max-width:400px; border-radius: 8px;"/></div>
       <p>Tezz is a blazing fast backend programming language that compiles directly into highly optimized JavaScript.</p>
       <h2 id="why-tezz">Why Tezz?</h2>
       <p>Most backend frameworks require massive configuration... Tezz gives you zero config by default.</p>
@@ -134,6 +136,7 @@ log_status!(Status.ACTIVE)</code></pre>
     toc: [{ id: 'installation-and-cli', text: 'Installation' }, { id: 'cli-commands', text: 'CLI Commands' }],
     content: `
       <h1 id="installation-and-cli">Installation & CLI</h1>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/tZ2X5k0J7aAAAAAd/bade-aaram-se-chunky-pandey.gif" style="max-width:400px; border-radius: 8px;"/></div>
       <p>Install Tezz globally using npm:</p>
       <pre><code>npm install -g tezz-lang</code></pre>
       <h2 id="cli-commands">CLI Commands</h2>
@@ -155,6 +158,7 @@ log_status!(Status.ACTIVE)</code></pre>
     ],
     content: `
       <h1 id="syntax">Language Syntax</h1>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/XwItyh36d5IAAAAd/baburao-utha-le.gif" style="max-width:400px; border-radius: 8px;"/></div>
       <p>Tezz syntax is designed to be instantly familiar if you know JavaScript or TypeScript.</p>
       <h2 id="variables">Variables</h2>
       <pre><code>let name = "Tezz"
@@ -178,6 +182,7 @@ let config = { debug: true, version: "1.0" }</code></pre>
     ],
     content: `
       <h1 id="hinglish-support">Hinglish Support</h1>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/V7U5F-5m4F4AAAAd/samajh-rahe-ho-zakir-khan.gif" style="max-width:400px; border-radius: 8px;"/></div>
       <p>Tezz allows you to write backend code in Hinglish. Keywords map exactly 1:1 with English.</p>
       <h2 id="keywords-map">Keywords Map</h2>
       <table>
@@ -234,6 +239,7 @@ seva HinglishAPI on 3000 {
     ],
     content: `
       <h1 id="services-routes-header">Services & Routes</h1>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/e2s4R1Wb4gAAAAAd/hera-pheri-akshay-kumar.gif" style="max-width:400px; border-radius: 8px;"/></div>
       <p>Tezz abstracts away HTTP server boilerplate.</p>
       <h2 id="service-block">The Service Block</h2>
       <pre><code>service UserAPI on 8080 {
@@ -275,6 +281,7 @@ route POST "/users" { }</code></pre>
     ],
     content: `
       <h1 id="deployment-header">Deployment Guide</h1>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/7p40PZONi2UAAAAd/paisa-hi-paisa-hoga-akshay-kumar.gif" style="max-width:400px; border-radius: 8px;"/></div>
       <h2 id="nodejs">Deploying to Node.js (Default)</h2>
       <pre><code>tezz build app.tezz --target node --output dist/server.js
 node dist/server.js</code></pre>
@@ -298,6 +305,7 @@ node dist/server.js</code></pre>
     ],
     content: `
       <h1 id="ecosystem-header">Standard Libraries</h1>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/uR2gW7p4x9sAAAAd/ye-baburao-ka-style-hai-baburao.gif" style="max-width:400px; border-radius: 8px;"/></div>
       <h2 id="tezz-database">tezz-database</h2>
       <pre><code>npm install tezz-database</code></pre>
       <pre><code>import createClient from "tezz-database"
@@ -320,6 +328,7 @@ let token = sign({ user: "abhinav" }, "secret-key")</code></pre>
     ],
     content: `
       <h1 id="roadmap">Roadmap & Future Goals</h1>
+      <div style="text-align:center; margin: 2rem 0;"><img src="https://media.tenor.com/N7wD2J2uXfAAAAAd/jalwa-hai-hamara.gif" style="max-width:400px; border-radius: 8px;"/></div>
       <p>Tezz has rapidly grown from a simple transpiler into a robust ecosystem featuring advanced metaprogramming, OS-level concurrency, and native standard libraries.</p>
       
       <p>Our upcoming focus areas include:</p>
@@ -349,7 +358,15 @@ pages.forEach(page => {
 // Build Sidebar HTML function
 function buildSidebar(currentSlug) {
   let content = '';
-  for (const [groupName, groupPages] of Object.entries(groups)) {
+  const order = ['Getting Started', 'Language Guide', 'Backend APIs', 'Advanced Features', 'Ecosystem', 'Comparisons'];
+  const orderedGroups = Object.keys(groups).sort((a, b) => {
+    let ia = order.indexOf(a); let ib = order.indexOf(b);
+    if(ia === -1) ia = 99; if(ib === -1) ib = 99;
+    return ia - ib;
+  });
+  
+  for (const groupName of orderedGroups) {
+    const groupPages = groups[groupName];
     content += '<div class="npm-nav-group">' + 
                '<h4>' + groupName + '</h4>' + 
                '<ul class="npm-nav-list">' + 
