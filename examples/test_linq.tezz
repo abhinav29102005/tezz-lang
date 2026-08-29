@@ -1,0 +1,5 @@
+
+import tezz_linq from "../../packages/tezz-linq/index.js"
+rakho numbers = [1, 5, 2, 8, 3, 9, 4]
+rakho res = tezz_linq.From(numbers).Where((x) => x > 4).OrderBy((x) => x).Select((x) => "Num: " + x).ToList()
+console.log("LINQ result:", res)

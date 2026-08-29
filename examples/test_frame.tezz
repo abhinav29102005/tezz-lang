@@ -1,0 +1,9 @@
+
+import tezz_frame from "../../packages/tezz-frame/index.js"
+rakho df = tezz_frame.createDataFrame([
+  { id: 1, name: "Alice", age: 25 },
+  { id: 2, name: "Bob", age: 30 },
+  { id: 3, name: "Charlie", age: 35 }
+])
+rakho filtered = df.filter((row) => row.age > 28).select(["name", "age"]).data
+console.log("DataFrame filtered:", filtered)

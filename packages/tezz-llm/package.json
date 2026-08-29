@@ -1,0 +1,17 @@
+{
+  "name": "tezz-llm",
+  "version": "0.1.0",
+  "description": "Standardized interactions with Generative AI models and chains",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Abhinav",
+  "license": "MIT",
+  "dependencies": {
+    "@langchain/core": "^1.2.9",
+    "@langchain/google-genai": "^2.3.0",
+    "@langchain/openai": "^1.5.10",
+    "dotenv": "^17.4.2"
+  }
+}

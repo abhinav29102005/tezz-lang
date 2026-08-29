@@ -1,0 +1,43 @@
+-- This is an example of Tezz utilizing tezz-orm
+-- A complete Active-Record implementation in zero-overhead JS
+
+import { Model, connect } from '../packages/tezz-orm/index.js'
+
+-- Connect to SQLite (creates tezz.db file in root)
+connect('tezz.db');
+
+-- Define our model
+class User extends Model {}
+
+seva DatabaseService on 8080 {
+  
+  -- Create a new user (automatically creates the 'users' table if missing!)
+  route POST "/users" {
+    rakho name = request.body.name;
+    rakho email = request.body.email;
+    
+    if (!name || !email) {
+      jawab 400 { error: "name and email are required" }
+      return;
+    }
+    
+    rakho user = User.create({ name: name, email: email });
+    jawab 201 { message: "User created", user: user }
+  }
+
+  -- Fetch a user by ID
+  route GET "/users/:id" {
+    rakho user = User.find(request.params.id);
+    if (!user) {
+      jawab 404 { error: "User not found" }
+      return;
+    }
+    jawab 200 { user: user }
+  }
+
+  -- Get all users
+  route GET "/users" {
+    rakho users = User.all();
+    jawab 200 { users: users, count: users.length }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "tezz-orm",
+  "version": "0.1.0",
+  "description": "Active-Record style ORM for dead-simple database interactions",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Abhinav",
+  "license": "MIT",
+  "dependencies": {
+    "better-sqlite3": "^13.0.3"
+  }
+}

@@ -1,0 +1,6 @@
+
+import tezz_tensor from "../../packages/tezz-tensor/index.js"
+rakho t1 = tezz_tensor.Tensor.fromArray([1, 2, 3])
+rakho t2 = tezz_tensor.Tensor.fromArray([10, 20, 30])
+rakho t3 = t1.add(t2)
+console.log("Tensor addition result:", t3.data)

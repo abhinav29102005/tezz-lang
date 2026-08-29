@@ -1,0 +1,14 @@
+{
+  "name": "tezz-vision",
+  "version": "0.1.0",
+  "description": "OpenCV-inspired lightweight computer vision utilities",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Abhinav",
+  "license": "MIT",
+  "dependencies": {
+    "sharp": "^0.35.4"
+  }
+}

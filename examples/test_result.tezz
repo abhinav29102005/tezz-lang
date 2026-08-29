@@ -1,0 +1,9 @@
+
+import tezz_result from "../../packages/tezz-result/index.js"
+rakho ok = tezz_result.Result.Ok("Success!")
+rakho err = tezz_result.Result.Err({message: "Failed!"})
+console.log(ok.unwrap())
+try { err.unwrap() } catch e { console.log("Caught unwrapped error: " + e.message) }
+
+rakho some = tezz_result.Option.Some(42)
+console.log(some.unwrap())

@@ -1,0 +1,11 @@
+{
+  "name": "tezz-linq",
+  "version": "0.1.0",
+  "description": "C#-style language-integrated queries for array manipulation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Abhinav",
+  "license": "MIT"
+}

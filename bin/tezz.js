@@ -15,19 +15,15 @@ const { CodeGenerator } = require('../src/codegen');
 const VERSION = '0.2.0';
 
 const ASCII_LOGO = `
-  \x1b[1m\x1b[33m  ████████╗███████╗███████╗███████╗\x1b[0m
-  \x1b[1m\x1b[33m  ╚══██╔══╝██╔════╝╚══███╔╝╚══███╔╝\x1b[0m
-  \x1b[1m\x1b[36m     ██║   █████╗    ███╔╝   ███╔╝ \x1b[0m
-  \x1b[1m\x1b[36m     ██║   ██╔══╝   ███╔╝   ███╔╝  \x1b[0m
-  \x1b[1m\x1b[36m     ██║   ███████╗███████╗███████╗\x1b[0m
-  \x1b[1m\x1b[36m     ╚═╝   ╚══════╝╚══════╝╚══════╝\x1b[0m
+  \x1b[1m\x1b[93m  ████████╗███████╗███████╗███████╗\x1b[0m
+  \x1b[1m\x1b[93m  ╚══██╔══╝██╔════╝╚══███╔╝╚══███╔╝\x1b[0m
+  \x1b[1m\x1b[33m     ██║   █████╗    ███╔╝   ███╔╝ \x1b[0m
+  \x1b[1m\x1b[31m     ██║   ██╔══╝   ███╔╝   ███╔╝  \x1b[0m
+  \x1b[1m\x1b[91m     ██║   ███████╗███████╗███████╗\x1b[0m
+  \x1b[1m\x1b[91m     ╚═╝   ╚══════╝╚══════╝╚══════╝\x1b[0m
 `;
 
-const BANNER = `${ASCII_LOGO}
-  \x1b[1m\x1b[33mTezz\x1b[0m \x1b[2m(तेज़)\x1b[0m \x1b[36mv${VERSION}\x1b[0m
-  \x1b[2mA Fast Backend Language\x1b[0m
-  \x1b[2mOfficially created by Abhinav\x1b[0m
-`;
+const BANNER = `${ASCII_LOGO}\n  \x1b[1m\x1b[91m⚡\x1b[0m \x1b[1m\x1b[93mTezz (तेज़)\x1b[0m \x1b[33mv${VERSION}\x1b[0m\n  \x1b[90mThe Blazing Fast Zero-Overhead Language\x1b[0m\n  \x1b[90mOfficially created by Abhinav\x1b[0m\n`;
 
 const HELP = `${BANNER}
   \x1b[1mUsage:\x1b[0m  tezz <command> [options] <file>
@@ -108,7 +104,8 @@ function cmdRun(file, options, isDev = false) {
     const source = fs.readFileSync(file, 'utf-8');
 
     try {
-      const jsCode = compile(source, { target: 'node' });
+      const result = compile(source, { target: 'node' });
+      const jsCode = typeof result === 'string' ? result : result.code;
 
       const tmpDir = path.join(path.dirname(path.resolve(file)), '.tezz');
       if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true });
@@ -117,8 +114,8 @@ function cmdRun(file, options, isDev = false) {
 
       if (!isDev) {
         console.log(BANNER);
-        console.log(`  \x1b[32m✓\x1b[0m Compiled \x1b[1m${file}\x1b[0m`);
-        console.log(`  \x1b[32m✓\x1b[0m Starting server...\n`);
+        console.log(`  \x1b[91m⚡\x1b[0m Compiled \x1b[1m${file}\x1b[0m`);
+        console.log(`  \x1b[91m⚡\x1b[0m Starting server...\n`);
       } else {
         console.log(`\x1b[32m[Tezz Dev]\x1b[0m Restarting server...`);
       }
@@ -147,7 +144,7 @@ function cmdRun(file, options, isDev = false) {
   
   if (isDev) {
     console.log(BANNER);
-    console.log(`  \x1b[36m⟳\x1b[0m Hot-reload enabled for \x1b[1m${file}\x1b[0m\n`);
+    console.log(`  \x1b[93m⟳\x1b[0m Hot-reload enabled for \x1b[1m${file}\x1b[0m\n`);
     start();
     
     let debounce;
@@ -191,17 +188,17 @@ function cmdBuild(file, options) {
 
 
     console.log(BANNER);
-    console.log(`\x1b[32m✓\x1b[0m Compiled \x1b[1m${file}\x1b[0m → \x1b[1m${outputFile}\x1b[0m`);
-    console.log(`\x1b[32m✓\x1b[0m Target: \x1b[36m${target}\x1b[0m`);
-    console.log(`\x1b[32m✓\x1b[0m Size: ${(Buffer.byteLength(jsCode) / 1024).toFixed(1)} KB\n`);
+    console.log(`\x1b[91m⚡\x1b[0m Compiled \x1b[1m${file}\x1b[0m → \x1b[1m${outputFile}\x1b[0m`);
+    console.log(`\x1b[91m⚡\x1b[0m Target: \x1b[93m${target}\x1b[0m`);
+    console.log(`\x1b[91m⚡\x1b[0m Size: ${(Buffer.byteLength(jsCode) / 1024).toFixed(1)} KB\n`);
 
 
     if (options.static) {
-      console.log(`  \x1b[36mCompiling static binary using Bun...\x1b[0m`);
+      console.log(`  \x1b[93mCompiling static binary using Bun...\x1b[0m`);
       const exeName = outputFile.replace(/\.js$/, '');
       try {
         require('child_process').execSync(`bun build ${outputFile} --compile --outfile ${exeName}`, { stdio: 'inherit' });
-        console.log(`  \x1b[32m✓\x1b[0m Static binary generated: \x1b[1m${exeName}\x1b[0m\n`);
+        console.log(`  \x1b[91m⚡\x1b[0m Static binary generated: \x1b[1m${exeName}\x1b[0m\n`);
       } catch (e) {
         console.error(`\x1b[31m  ✗ Static compilation failed. Ensure Bun is installed (https://bun.sh).\x1b[0m\n`);
       }
@@ -246,11 +243,11 @@ function cmdDeploy(file, options) {
 
     
     console.log(BANNER);
-    console.log(`\x1b[32m✓\x1b[0m Compiled \x1b[1m${file}\x1b[0m globally in memory`);
-    console.log(`\x1b[32m✓\x1b[0m Target: \x1b[36mcloudflare-worker\x1b[0m`);
-    console.log(`\x1b[32m✓\x1b[0m Size: ${(Buffer.byteLength(jsCode) / 1024).toFixed(1)} KB\n`);
+    console.log(`\x1b[91m⚡\x1b[0m Compiled \x1b[1m${file}\x1b[0m globally in memory`);
+    console.log(`\x1b[91m⚡\x1b[0m Target: \x1b[93mcloudflare-worker\x1b[0m`);
+    console.log(`\x1b[91m⚡\x1b[0m Size: ${(Buffer.byteLength(jsCode) / 1024).toFixed(1)} KB\n`);
     
-    console.log(`  \x1b[36mDeploying ${name} to Cloudflare Edge...\x1b[0m\n`);
+    console.log(`  \x1b[93mDeploying ${name} to Cloudflare Edge...\x1b[0m\n`);
     
     const child = spawn('npx', ['-y', 'wrangler', 'deploy', outputFile, '--name', name, '--compatibility-date', '2024-01-01'], {
       stdio: 'inherit',
@@ -301,7 +298,7 @@ seva App on 3000 {
 `;
 
   fs.writeFileSync('app.tezz', appContent);
-  console.log(`  \x1b[32m✓\x1b[0m Created \x1b[1mapp.tezz\x1b[0m\n`);
+  console.log(`  \x1b[91m⚡\x1b[0m Created \x1b[1mapp.tezz\x1b[0m\n`);
   console.log(`  \x1b[2mGet started:\x1b[0m`);
   console.log(`    tezz dev app.tezz`);
   console.log(`    tezz build app.tezz --target worker\n`);
@@ -309,7 +306,7 @@ seva App on 3000 {
 
 function cmdRepl() {
   console.log(BANNER);
-  console.log(`  \x1b[36mType 'exit' to quit.\x1b[0m\n`);
+  console.log(`  \x1b[93mType 'exit' to quit.\x1b[0m\n`);
   
   const rl = readline.createInterface({
     input: process.stdin,

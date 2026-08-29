@@ -1,0 +1,9 @@
+
+import tezz_actor from "../../packages/tezz-actor/index.js"
+rakho actor = tezz_actor.spawnActor((msg) => {
+  console.log("Actor received:", msg)
+})
+actor.send("Message 1")
+actor.send("Message 2")
+setTimeout(() => { actor.stop()
+console.log("Actor stopped.") }, 100)

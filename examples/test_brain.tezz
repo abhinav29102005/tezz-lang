@@ -1,0 +1,8 @@
+
+import tezz_brain from "../../packages/tezz-brain/index.js"
+rakho X = [1, 2, 3, 4, 5]
+rakho y = [2, 4, 5, 4, 5]
+rakho model = tezz_brain.createSimpleLinearRegression()
+model.fit(X, y)
+console.log("Linear Regression formula: y = " + model.m + "x + " + model.b)
+console.log("Predict for X=6:", model.predict([6])[0])

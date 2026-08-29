@@ -42,22 +42,69 @@
       <h1 id="ecosystem-header">Standard Libraries</h1>
       <div style="text-align:center; margin: 2rem 0;"><img src="https://i.imgflip.com/28j0te.jpg" style="max-width:400px; border-radius: 8px;"/></div>
       
-      <h2 id="tezz-database">tezz-database</h2>
-      <pre><code>npm install tezz-database</code></pre>
-      <pre><code>import createClient from "tezz-database"
-let db = createClient({ url: "YOUR_TURSO_URL", token: "YOUR_TOKEN" })
-let result = await db.execute("SELECT * FROM users")</code></pre>
+      <p>Tezz comes with a rich set of 0-overhead standard libraries built to give you the best features from all other languages.</p>
 
-      <h2 id="tezz-jwt">tezz-jwt</h2>
-      <pre><code>npm install tezz-jwt</code></pre>
-      <pre><code>import { sign, verify } from "tezz-jwt"
-let token = sign({ user: "abhinav" }, "secret-key")</code></pre>
+      <h2 id="tezz-channels">tezz-channels (Go-style Concurrency)</h2>
+      <pre><code>npm install tezz-channels</code></pre>
+      <pre><code>import tezz_channels from "tezz-channels"
+rakho ch = tezz_channels.createChannel()
+async fn run() {
+  await ch.push("Message")
+}
+rakho msg = await ch.pop()</code></pre>
+
+      <h2 id="tezz-result">tezz-result (Rust-style Safety)</h2>
+      <pre><code>npm install tezz-result</code></pre>
+      <pre><code>import tezz_result from "tezz-result"
+rakho ok = tezz_result.Result.Ok("Success!")
+console.log(ok.unwrap())</code></pre>
+
+      <h2 id="tezz-actor">tezz-actor (Elixir-style Actors)</h2>
+      <pre><code>npm install tezz-actor</code></pre>
+      <pre><code>import tezz_actor from "tezz-actor"
+rakho actor = tezz_actor.spawnActor((msg) => { console.log(msg) })
+actor.send("Hello")</code></pre>
+
+      <h2 id="tezz-linq">tezz-linq (C#-style Queries)</h2>
+      <pre><code>npm install tezz-linq</code></pre>
+      <pre><code>import tezz_linq from "tezz-linq"
+rakho res = tezz_linq.From([1,5,2]).Where((x) => x > 2).ToList()</code></pre>
+
+      <h2 id="tezz-tensor">tezz-tensor (NumPy/PyTorch-style Math)</h2>
+      <pre><code>npm install tezz-tensor</code></pre>
+      <pre><code>import tezz_tensor from "tezz-tensor"
+rakho t1 = tezz_tensor.createTensor([1, 2, 3])</code></pre>
+
+      <h2 id="tezz-frame">tezz-frame (Pandas-style DataFrames)</h2>
+      <pre><code>npm install tezz-frame</code></pre>
+      <pre><code>import tezz_frame from "tezz-frame"
+rakho df = tezz_frame.createDataFrame([{id: 1, name: "Alice"}])</code></pre>
+
+      <h2 id="tezz-brain">tezz-brain (Embedded ML)</h2>
+      <pre><code>npm install tezz-brain</code></pre>
+      <pre><code>import tezz_brain from "tezz-brain"
+rakho model = tezz_brain.createSimpleLinearRegression()
+model.fit(X, y)</code></pre>
+
+      <h2 id="tezz-vision">tezz-vision (High-performance Image Processing)</h2>
+      <pre><code>npm install tezz-vision</code></pre>
+      <pre><code>import tezz_vision from "tezz-vision"
+rakho processor = tezz_vision.createImageProcessor()</code></pre>
+
     </section>
       </main>
       <aside class="npm-toc">
         <h4>In this article</h4>
         <ul>
-          <li><a href="#ecosystem-header">Ecosystem Packages</a></li><li><a href="#tezz-database">tezz-database</a></li><li><a href="#tezz-jwt">tezz-jwt</a></li>
+          <li><a href="#ecosystem-header">Ecosystem Packages</a></li>
+          <li><a href="#tezz-channels">tezz-channels</a></li>
+          <li><a href="#tezz-result">tezz-result</a></li>
+          <li><a href="#tezz-actor">tezz-actor</a></li>
+          <li><a href="#tezz-linq">tezz-linq</a></li>
+          <li><a href="#tezz-tensor">tezz-tensor</a></li>
+          <li><a href="#tezz-frame">tezz-frame</a></li>
+          <li><a href="#tezz-brain">tezz-brain</a></li>
+          <li><a href="#tezz-vision">tezz-vision</a></li>
         </ul>
       </aside>
     </div>

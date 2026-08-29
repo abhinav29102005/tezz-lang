@@ -1,0 +1,41 @@
+-- This is an example of Tezz utilizing tezz-llm
+-- We import the massive power of LangChain via a zero-config wrapper
+
+import { askGemini, askOpenAI } from '../packages/tezz-llm/index.js'
+
+seva LLMService on 8080 {
+  
+  -- Route to talk to Gemini
+  route POST "/ask-gemini" {
+    rakho prompt = request.body.prompt;
+    if (!prompt) {
+      jawab 400 { error: "prompt is required" }
+      return;
+    }
+    
+    console.log("Asking Gemini: " + prompt);
+    rakho response = wait askGemini(prompt);
+    
+    jawab 200 { 
+      model: "gemini-1.5-flash",
+      answer: response 
+    }
+  }
+
+  -- Route to talk to OpenAI
+  route POST "/ask-openai" {
+    rakho prompt = request.body.prompt;
+    if (!prompt) {
+      jawab 400 { error: "prompt is required" }
+      return;
+    }
+    
+    console.log("Asking GPT-3.5: " + prompt);
+    rakho response = wait askOpenAI(prompt);
+    
+    jawab 200 { 
+      model: "gpt-3.5-turbo",
+      answer: response 
+    }
+  }
+}

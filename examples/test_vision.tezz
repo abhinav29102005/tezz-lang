@@ -1,0 +1,3 @@
+
+import tezz_vision from "../../packages/tezz-vision/index.js"
+console.log("ImageProcessor class loaded successfully:", tezz_vision.ImageProcessor != null)

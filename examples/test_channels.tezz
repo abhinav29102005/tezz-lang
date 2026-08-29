@@ -1,0 +1,13 @@
+
+import tezz_channels from "../../packages/tezz-channels/index.js"
+rakho ch = tezz_channels.createChannel()
+fn run() {
+  setTimeout(() => ch.push("Hello from Go-style channel!"), 500)
+}
+run()
+console.log("Waiting for message on channel...")
+async fn main() {
+  rakho msg = await ch.pop()
+  console.log(msg)
+}
+main()
