@@ -244,7 +244,7 @@ function cmdDeploy(file, options) {
         fs.rmSync(tmpDir, { recursive: true, force: true });
       }
       if (code === 0) {
-        console.log(`\n  \x1b[32m✓ Successfully deployed ${name} worldwide!\x1b[0m\n`);
+        console.log(`\n  \x1b[32m✓ ✓ Successfully deployed ⚡ ${name} worldwide!\x1b[0m\n`);
       } else {
         console.error(`\n  \x1b[31m✗ Deployment failed.\x1b[0m\n`);
       }

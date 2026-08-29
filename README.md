@@ -1,11 +1,11 @@
-# Tezz (तेज़)
+# Tezz (तेज़) ⚡
 
 **The Fast Backend Language** — Write once, deploy everywhere.
 *Officially created by Abhinav.*
 
 **Website:** [tezz.abhinavkumarsingh.tech](https://tezz.abhinavkumarsingh.tech)  
 **NPM Package:** [npmjs.com/package/tezz-lang](https://www.npmjs.com/package/tezz-lang)  
-👨‍**Creator:** [Portfolio](https://abhinavkumarsingh.tech) | [LinkedIn](https://linkedin.com/in/bigboyaks) | [GitHub](https://github.com/abhinav29102005)
+**Creator:** [Portfolio](https://abhinavkumarsingh.tech) | [LinkedIn](https://linkedin.com/in/bigboyaks) | [GitHub](https://github.com/abhinav29102005)
 
 Tezz is a brand new programming language designed for backend servers, services, and connectivity. It transpiles to JavaScript so it runs natively on **Cloudflare Workers, Node.js, Deno, and Bun**.
 
@@ -24,7 +24,7 @@ tezz init
 tezz run app.tezz
 ```
 
-## 📖 Language Syntax
+## Language Syntax
 
 ### Variables
 ```tezz
@@ -123,7 +123,7 @@ npx wrangler deploy dist/worker.js
 | **TypeScript** | Runs on JS runtimes, npm ecosystem |
 | **Workers** | Edge-first, request/response model |
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 your-project/
@@ -133,7 +133,7 @@ your-project/
     └── worker.js     # Compiled output (for Workers)
 ```
 
-## 🔧 Built-in Objects
+## Built-in Objects
 
 Inside route handlers, you have access to:
 
@@ -145,10 +145,6 @@ Inside route handlers, you have access to:
 - `request.query` — Query parameters
 - `params.name` — URL path parameters (from `:name`)
 
-## 📄 License
-
-MIT
-
 ---
 
-**Made with ❤and तेज़ी (speed)**
+**Made with and तेज़ी (speed)**
