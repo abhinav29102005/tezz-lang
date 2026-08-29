@@ -83,7 +83,7 @@ log_status!(Status.ACTIVE)</code></pre>
     ],
     content: `
       <h1 id="comparisons">Tezz vs Other Frameworks</h1>
-      <div style="text-align:center; margin: 2rem 0;"><img src="https://i.imgflip.com/9ehk.jpg" style="max-width:400px; border-radius: 8px;"/></div>
+      <div style="text-align:center; margin: 2rem 0;"><img src="/docs/assets/batman.jpg" style="max-width:400px; border-radius: 8px;"/></div>
       
       <p>Tezz is designed to bring the speed of compiled languages with the ease of JavaScript and Python. Here is how Tezz compares with other popular backend ecosystems.</p>
 
@@ -141,7 +141,7 @@ log_status!(Status.ACTIVE)</code></pre>
     toc: [{ id: 'installation-and-cli', text: 'Installation' }, { id: 'cli-commands', text: 'CLI Commands' }],
     content: `
       <h1 id="installation-and-cli">Installation & CLI</h1>
-      <div style="text-align:center; margin: 2rem 0;"><img src="https://i.imgflip.com/30b1gx.jpg" style="max-width:400px; border-radius: 8px;"/></div>
+      <div style="text-align:center; margin: 2rem 0;"><img src="/docs/assets/drake.jpg" style="max-width:400px; border-radius: 8px;"/></div>
       
       <p>Install Tezz globally using npm:</p>
       <pre><code>npm install -g tezz-lang</code></pre>
@@ -165,7 +165,7 @@ log_status!(Status.ACTIVE)</code></pre>
     ],
     content: `
       <h1 id="syntax">Language Syntax</h1>
-      <div style="text-align:center; margin: 2rem 0;"><img src="https://i.imgflip.com/1jwhww.jpg" style="max-width:400px; border-radius: 8px;"/></div>
+      <div style="text-align:center; margin: 2rem 0;"><img src="/docs/assets/brain.jpg" style="max-width:400px; border-radius: 8px;"/></div>
       
       <p>Tezz syntax is designed to be instantly familiar if you know JavaScript or TypeScript.</p>
       <h2 id="variables">Variables</h2>
@@ -341,7 +341,7 @@ let token = sign({ user: "abhinav" }, "secret-key")</code></pre>
     ],
     content: `
       <h1 id="roadmap">Roadmap & Future Goals</h1>
-      <div style="text-align:center; margin: 2rem 0;"><img src="https://i.imgflip.com/2kbn1e.jpg" style="max-width:400px; border-radius: 8px;"/></div>
+      <div style="text-align:center; margin: 2rem 0;"><img src="/docs/assets/pikachu.jpg" style="max-width:400px; border-radius: 8px;"/></div>
       
       <p>Tezz has rapidly grown from a simple transpiler into a robust ecosystem featuring advanced metaprogramming, OS-level concurrency, and native standard libraries.</p>
       
