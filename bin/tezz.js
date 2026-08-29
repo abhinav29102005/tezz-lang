@@ -6,16 +6,27 @@
 
 const fs = require('fs');
 const path = require('path');
+const readline = require('readline');
+const { spawn } = require('child_process');
 const { Lexer } = require('../src/lexer');
 const { Parser } = require('../src/parser');
 const { CodeGenerator } = require('../src/codegen');
 
-const VERSION = '0.1.2';
+const VERSION = '0.2.0';
 
-const BANNER = `
+const ASCII_LOGO = `
+  \x1b[1m\x1b[33m  ████████╗███████╗███████╗███████╗\x1b[0m
+  \x1b[1m\x1b[33m  ╚══██╔══╝██╔════╝╚══███╔╝╚══███╔╝\x1b[0m
+  \x1b[1m\x1b[36m     ██║   █████╗    ███╔╝   ███╔╝ \x1b[0m
+  \x1b[1m\x1b[36m     ██║   ██╔══╝   ███╔╝   ███╔╝  \x1b[0m
+  \x1b[1m\x1b[36m     ██║   ███████╗███████╗███████╗\x1b[0m
+  \x1b[1m\x1b[36m     ╚═╝   ╚══════╝╚══════╝╚══════╝\x1b[0m
+`;
+
+const BANNER = `${ASCII_LOGO}
   \x1b[1m\x1b[33m⚡ Tezz\x1b[0m \x1b[2m(तेज़)\x1b[0m \x1b[36mv${VERSION}\x1b[0m
   \x1b[2mA Fast Backend Language\x1b[0m
-  \x1b[2mCreated by Abhinav\x1b[0m
+  \x1b[2mOfficially created by Abhinav\x1b[0m
 `;
 
 const HELP = `${BANNER}
@@ -23,8 +34,10 @@ const HELP = `${BANNER}
 
   \x1b[1mCommands:\x1b[0m
     run   <file.tezz>           Compile and run a Tezz file
+    dev   <file.tezz>           Run with hot-reload (watches for changes)
     build <file.tezz>           Compile to JavaScript
     init                        Create a new Tezz project
+    repl                        Start the interactive Tezz REPL
 
   \x1b[1mOptions:\x1b[0m
     --target <node|worker>      Output target (default: node)
@@ -34,10 +47,38 @@ const HELP = `${BANNER}
 
   \x1b[1mExamples:\x1b[0m
     tezz run app.tezz
+    tezz dev app.tezz
     tezz build app.tezz --target worker
-    tezz build app.tezz --target worker --output dist/worker.js
     tezz init
+    tezz repl
 `;
+
+// --- Error Handling ---
+
+function printError(err, source, file) {
+  console.error(BANNER);
+  console.error(`  \x1b[31m✗ Tezz Error in ${file}:[0m\n`);
+  
+  if (err.message.includes('Line')) {
+    const match = err.message.match(/Line (\d+)/);
+    if (match && source) {
+      const lineNum = parseInt(match[1]);
+      const lines = source.split('\n');
+      const start = Math.max(0, lineNum - 2);
+      const end = Math.min(lines.length, lineNum + 1);
+      
+      for (let i = start; i < end; i++) {
+        if (i === lineNum - 1) {
+          console.error(`  \x1b[31m▸ ${i + 1} │  ${lines[i]}\x1b[0m`);
+        } else {
+          console.error(`    ${i + 1} │  ${lines[i]}`);
+        }
+      }
+      console.error();
+    }
+  }
+  console.error(`    ${err.message}\n`);
+}
 
 // --- Compiler Pipeline ---
 
@@ -54,52 +95,74 @@ function compile(source, options = {}) {
 
 // --- Commands ---
 
-function cmdRun(file, options) {
+function cmdRun(file, options, isDev = false) {
   if (!fs.existsSync(file)) {
     console.error(`\x1b[31m  ✗ File not found: ${file}\x1b[0m`);
     process.exit(1);
   }
 
-  const source = fs.readFileSync(file, 'utf-8');
+  let child;
+  
+  function start() {
+    const source = fs.readFileSync(file, 'utf-8');
 
-  try {
-    const jsCode = compile(source, { target: 'node' });
+    try {
+      const jsCode = compile(source, { target: 'node' });
 
-    // Write to .tezz/ temp directory
-    const tmpDir = path.join(path.dirname(path.resolve(file)), '.tezz');
-    if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true });
-    const tmpFile = path.join(tmpDir, path.basename(file, '.tezz') + '.compiled.js');
-    fs.writeFileSync(tmpFile, jsCode);
+      const tmpDir = path.join(path.dirname(path.resolve(file)), '.tezz');
+      if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true });
+      const tmpFile = path.join(tmpDir, path.basename(file, '.tezz') + '.compiled.js');
+      fs.writeFileSync(tmpFile, jsCode);
 
+      if (!isDev) {
+        console.log(BANNER);
+        console.log(`  \x1b[32m✓\x1b[0m Compiled \x1b[1m${file}\x1b[0m`);
+        console.log(`  \x1b[32m✓\x1b[0m Starting server...\n`);
+      } else {
+        console.log(`\x1b[32m[Tezz Dev]\x1b[0m Restarting server...`);
+      }
+
+      child = spawn(process.execPath, [tmpFile], {
+        stdio: 'inherit',
+        cwd: process.cwd(),
+      });
+
+      child.on('error', (err) => {
+        console.error(`\x1b[31m  ✗ Failed to start: ${err.message}\x1b[0m`);
+        if (!isDev) process.exit(1);
+      });
+
+      if (!isDev) {
+        child.on('exit', (code) => {
+          process.exit(code || 0);
+        });
+      }
+
+    } catch (err) {
+      printError(err, source, file);
+      if (!isDev) process.exit(1);
+    }
+  }
+  
+  if (isDev) {
     console.log(BANNER);
-    console.log(`  \x1b[32m✓\x1b[0m Compiled \x1b[1m${file}\x1b[0m`);
-    console.log(`  \x1b[32m✓\x1b[0m Starting server...\n`);
-
-    // Execute
-    const { spawn } = require('child_process');
-    const child = spawn(process.execPath, [tmpFile], {
-      stdio: 'inherit',
-      cwd: process.cwd(),
+    console.log(`  \x1b[36m⟳\x1b[0m Hot-reload enabled for \x1b[1m${file}\x1b[0m\n`);
+    start();
+    
+    let debounce;
+    fs.watch(file, (eventType) => {
+      if (eventType === 'change') {
+        clearTimeout(debounce);
+        debounce = setTimeout(() => {
+          if (child) child.kill();
+          start();
+        }, 300);
+      }
     });
-
-    child.on('error', (err) => {
-      console.error(`\x1b[31m  ✗ Failed to start: ${err.message}\x1b[0m`);
-      process.exit(1);
-    });
-
-    child.on('exit', (code) => {
-      process.exit(code || 0);
-    });
-
-    // Forward signals
-    process.on('SIGINT', () => { child.kill('SIGINT'); });
-    process.on('SIGTERM', () => { child.kill('SIGTERM'); });
-
-  } catch (err) {
-    console.error(BANNER);
-    console.error(`  \x1b[31m✗ Compilation Error:\x1b[0m\n`);
-    console.error(`    ${err.message}\n`);
-    process.exit(1);
+  } else {
+    start();
+    process.on('SIGINT', () => { if (child) child.kill('SIGINT'); });
+    process.on('SIGTERM', () => { if (child) child.kill('SIGTERM'); });
   }
 }
 
@@ -117,7 +180,6 @@ function cmdBuild(file, options) {
 
     const outputFile = options.output || file.replace(/\.tezz$/, '.js');
 
-    // Ensure output directory exists
     const outDir = path.dirname(outputFile);
     if (outDir && !fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
 
@@ -137,9 +199,7 @@ function cmdBuild(file, options) {
     }
 
   } catch (err) {
-    console.error(BANNER);
-    console.error(`  \x1b[31m✗ Compilation Error:\x1b[0m\n`);
-    console.error(`    ${err.message}\n`);
+    printError(err, source, file);
     process.exit(1);
   }
 }
@@ -147,21 +207,22 @@ function cmdBuild(file, options) {
 function cmdInit() {
   console.log(BANNER);
 
-  const appContent = `-- ⚡ Welcome to Tezz!
--- Your first Tezz service
+  const appContent = `-- ⚡ Welcome to Tezz v0.2.0!
+-- Your first Tezz service (Hinglish/English syntax supported)
 
-service App on 3000 {
+seva App on 3000 {
 
   route GET "/" {
-    respond 200 {
-      message: "Hello from Tezz! ⚡",
-      version: "0.1.0",
+    rakho message = "Namaste from Tezz! ⚡"
+    jawab 200 {
+      message: message,
+      version: "0.2.0",
       status: "running"
     }
   }
 
-  route GET "/health" {
-    respond 200 { healthy: true, uptime: "ok" }
+  rasta GET "/health" {
+    respond 200 { healthy: sahi, uptime: "ok" }
   }
 
 }
@@ -170,8 +231,48 @@ service App on 3000 {
   fs.writeFileSync('app.tezz', appContent);
   console.log(`  \x1b[32m✓\x1b[0m Created \x1b[1mapp.tezz\x1b[0m\n`);
   console.log(`  \x1b[2mGet started:\x1b[0m`);
-  console.log(`    tezz run app.tezz`);
+  console.log(`    tezz dev app.tezz`);
   console.log(`    tezz build app.tezz --target worker\n`);
+}
+
+function cmdRepl() {
+  console.log(BANNER);
+  console.log(`  \x1b[36mType 'exit' to quit.\x1b[0m\n`);
+  
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    prompt: '\x1b[33mtezz>\x1b[0m '
+  });
+
+  rl.prompt();
+
+  rl.on('line', (line) => {
+    line = line.trim();
+    if (line === 'exit' || line === 'quit') {
+      process.exit(0);
+    }
+    if (line === '') {
+      rl.prompt();
+      return;
+    }
+    
+    try {
+      // Very basic REPL compilation
+      const jsCode = compile(line, { target: 'node' });
+      // Strip out comments and imports, just run the logic
+      const runnable = jsCode.replace(/\/\/.*\n/g, '');
+      const result = eval(runnable);
+      if (result !== undefined) {
+         console.log(result);
+      }
+    } catch (err) {
+      console.error(`\x1b[31mError: ${err.message}\x1b[0m`);
+    }
+    rl.prompt();
+  }).on('close', () => {
+    process.exit(0);
+  });
 }
 
 // --- Argument Parsing ---
@@ -204,7 +305,11 @@ for (let i = 1; i < args.length; i++) {
 switch (command) {
   case 'run':
     if (!options.file) { console.error('Usage: tezz run <file.tezz>'); process.exit(1); }
-    cmdRun(options.file, options);
+    cmdRun(options.file, options, false);
+    break;
+  case 'dev':
+    if (!options.file) { console.error('Usage: tezz dev <file.tezz>'); process.exit(1); }
+    cmdRun(options.file, options, true);
     break;
   case 'build':
     if (!options.file) { console.error('Usage: tezz build <file.tezz>'); process.exit(1); }
@@ -213,9 +318,12 @@ switch (command) {
   case 'init':
     cmdInit();
     break;
+  case 'repl':
+    cmdRepl();
+    break;
   default:
     if (fs.existsSync(command) && command.endsWith('.tezz')) {
-      cmdRun(command, options);
+      cmdRun(command, options, false);
     } else {
       console.error(`\x1b[31mUnknown command: ${command}\x1b[0m`);
       console.log(HELP);

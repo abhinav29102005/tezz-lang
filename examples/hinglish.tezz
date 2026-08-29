@@ -1,0 +1,30 @@
+-- ⚡ Tezz v0.2.0 — Hinglish Example
+-- You can write code completely using Hinglish keywords!
+
+pakka version = "0.2.0"
+
+kaam generateGreeting(name) {
+  agar name == "Abhinav" {
+    vapas "Namaste Creator! 🙏"
+  } warna {
+    vapas "Namaste, {name}! ⚡"
+  }
+}
+
+seva HinglishAPI on 3000 {
+
+  rasta GET "/" {
+    rakho user = request.query.name || "Duniya"
+    rakho greeting = generateGreeting(user)
+    
+    dikha("Request received from: " + user)
+    
+    jawab 200 {
+      message: greeting,
+      version: version,
+      status: sahi,
+      language: "Hinglish"
+    }
+  }
+
+}

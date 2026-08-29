@@ -46,13 +46,18 @@ class Parser {
   parseStatement() {
     switch (this.peek().type) {
       case TokenType.LET:     return this.parseLetDecl();
+      case TokenType.CONST:   return this.parseConstDecl();
       case TokenType.FN:      return this.parseFnDecl();
+      case TokenType.ASYNC:   return this.parseAsyncFnDecl();
       case TokenType.SERVICE: return this.parseServiceDecl();
       case TokenType.ROUTE:   return this.parseRouteDecl();
       case TokenType.RESPOND: return this.parseRespondStmt();
       case TokenType.RETURN:  return this.parseReturnStmt();
       case TokenType.IF:      return this.parseIfStmt();
       case TokenType.FOR:     return this.parseForStmt();
+      case TokenType.WHILE:   return this.parseWhileStmt();
+      case TokenType.TRY:     return this.parseTryCatchStmt();
+      case TokenType.PRINT:   return this.parsePrintStmt();
       case TokenType.IMPORT:  return this.parseImportStmt();
       case TokenType.EXPORT:  return this.parseExportStmt();
       default:                return this.parseExprStmt();
@@ -66,7 +71,17 @@ class Parser {
     const name = this.expect(TokenType.IDENTIFIER).value;
     this.expect(TokenType.ASSIGN);
     const value = this.parseExpression();
-    return { type: 'VariableDeclaration', name, value, line };
+    return { type: 'VariableDeclaration', name, value, kind: 'let', line };
+  }
+
+  // const name = expression  OR  pakka name = expression
+  parseConstDecl() {
+    const line = this.peek().line;
+    this.expect(TokenType.CONST);
+    const name = this.expect(TokenType.IDENTIFIER).value;
+    this.expect(TokenType.ASSIGN);
+    const value = this.parseExpression();
+    return { type: 'VariableDeclaration', name, value, kind: 'const', line };
   }
 
   // fn name(params) -> returnType { body }
@@ -85,7 +100,27 @@ class Parser {
     }
 
     const body = this.parseBlock();
-    return { type: 'FunctionDeclaration', name, params, returnType, body, line };
+    return { type: 'FunctionDeclaration', name, params, returnType, body, isAsync: false, line };
+  }
+
+  // async fn name(params) { body }  OR  baadmein kaam name(params) { body }
+  parseAsyncFnDecl() {
+    const line = this.peek().line;
+    this.expect(TokenType.ASYNC);
+    this.expect(TokenType.FN);
+    const name = this.expect(TokenType.IDENTIFIER).value;
+    this.expect(TokenType.LPAREN);
+    const params = this.parseParamList();
+    this.expect(TokenType.RPAREN);
+
+    let returnType = null;
+    if (this.check(TokenType.ARROW)) {
+      this.advance();
+      returnType = this.expect(TokenType.IDENTIFIER).value;
+    }
+
+    const body = this.parseBlock();
+    return { type: 'FunctionDeclaration', name, params, returnType, body, isAsync: true, line };
   }
 
   parseParamList() {
@@ -152,8 +187,9 @@ class Parser {
     let value = null;
     if (!this.check(TokenType.RBRACE) && !this.isAtEnd()) {
       const next = this.peek().type;
-      const stmtStarters = [TokenType.LET, TokenType.FN, TokenType.SERVICE,
-        TokenType.ROUTE, TokenType.IF, TokenType.FOR, TokenType.RESPOND, TokenType.RETURN];
+      const stmtStarters = [TokenType.LET, TokenType.CONST, TokenType.FN, TokenType.SERVICE,
+        TokenType.ROUTE, TokenType.IF, TokenType.FOR, TokenType.WHILE, TokenType.RESPOND,
+        TokenType.RETURN, TokenType.TRY, TokenType.PRINT, TokenType.ASYNC];
       if (!stmtStarters.includes(next)) {
         value = this.parseExpression();
       }
@@ -184,6 +220,40 @@ class Parser {
     const iterable = this.parseExpression();
     const body = this.parseBlock();
     return { type: 'ForStatement', variable, iterable, body, line };
+  }
+
+  // while condition { body }
+  parseWhileStmt() {
+    const line = this.peek().line;
+    this.expect(TokenType.WHILE);
+    const condition = this.parseExpression();
+    const body = this.parseBlock();
+    return { type: 'WhileStatement', condition, body, line };
+  }
+
+  // try { body } catch err { body }
+  parseTryCatchStmt() {
+    const line = this.peek().line;
+    this.expect(TokenType.TRY);
+    const tryBody = this.parseBlock();
+    this.expect(TokenType.CATCH);
+    const errorVar = this.expect(TokenType.IDENTIFIER).value;
+    const catchBody = this.parseBlock();
+    return { type: 'TryCatchStatement', tryBody, errorVar, catchBody, line };
+  }
+
+  // print(expression)  OR  dikha(expression)
+  parsePrintStmt() {
+    const line = this.peek().line;
+    this.expect(TokenType.PRINT);
+    this.expect(TokenType.LPAREN);
+    const args = [];
+    if (!this.check(TokenType.RPAREN)) {
+      do { args.push(this.parseExpression()); }
+      while (this.check(TokenType.COMMA) && this.advance());
+    }
+    this.expect(TokenType.RPAREN);
+    return { type: 'PrintStatement', args, line };
   }
 
   // import name from "source"
@@ -231,6 +301,20 @@ class Parser {
       this.advance();
       const value = this.parseAssignment();
       return { type: 'AssignmentExpression', target: expr, value };
+    }
+    if (this.check(TokenType.PLUS_ASSIGN)) {
+      this.advance();
+      const value = this.parseAssignment();
+      return { type: 'AssignmentExpression', target: expr, value: {
+        type: 'BinaryExpression', operator: '+', left: expr, right: value
+      }};
+    }
+    if (this.check(TokenType.MINUS_ASSIGN)) {
+      this.advance();
+      const value = this.parseAssignment();
+      return { type: 'AssignmentExpression', target: expr, value: {
+        type: 'BinaryExpression', operator: '-', left: expr, right: value
+      }};
     }
     return expr;
   }
@@ -295,6 +379,10 @@ class Parser {
       const op = this.advance().value;
       return { type: 'UnaryExpression', operator: op, operand: this.parseUnary() };
     }
+    if (this.check(TokenType.AWAIT)) {
+      this.advance();
+      return { type: 'AwaitExpression', argument: this.parseUnary() };
+    }
     return this.parseCall();
   }
 
@@ -356,9 +444,37 @@ class Parser {
 
       case TokenType.LPAREN: {
         this.advance();
-        const expr = this.parseExpression();
+        // Check for arrow function: (params) => expr
+        // If we see ), then =>, it's an arrow function
+        if (this.check(TokenType.RPAREN)) {
+          this.advance(); // consume )
+          if (this.check(TokenType.FAT_ARROW)) {
+            this.advance(); // consume =>
+            return this.parseArrowBody([]);
+          }
+          // Otherwise it was empty parens in some other context — error
+          this.error('Unexpected empty parentheses');
+        }
+        // Parse first expression
+        const first = this.parseExpression();
+        // If comma or ) => , it might be arrow function params
+        if (this.check(TokenType.COMMA) || (this.check(TokenType.RPAREN) && this.tokens[this.pos + 1] && this.tokens[this.pos + 1].type === TokenType.FAT_ARROW)) {
+          // Collect remaining params
+          const params = [this.exprToParam(first)];
+          while (this.check(TokenType.COMMA)) {
+            this.advance();
+            params.push(this.exprToParam(this.parseExpression()));
+          }
+          this.expect(TokenType.RPAREN);
+          if (this.check(TokenType.FAT_ARROW)) {
+            this.advance();
+            return this.parseArrowBody(params);
+          }
+          // Not an arrow — error, we consumed too much
+          this.error('Expected => for arrow function');
+        }
         this.expect(TokenType.RPAREN);
-        return expr;
+        return first;
       }
 
       case TokenType.LBRACKET:
@@ -370,6 +486,20 @@ class Parser {
       default:
         this.error(`Unexpected token ${token.type} ('${token.value}')`, token.line);
     }
+  }
+
+  exprToParam(expr) {
+    if (expr.type === 'Identifier') return { name: expr.name, paramType: null };
+    this.error('Invalid arrow function parameter');
+  }
+
+  parseArrowBody(params) {
+    if (this.check(TokenType.LBRACE)) {
+      const body = this.parseBlock();
+      return { type: 'ArrowFunction', params, body, isBlock: true };
+    }
+    const expr = this.parseExpression();
+    return { type: 'ArrowFunction', params, body: expr, isBlock: false };
   }
 
   parseArrayLiteral() {
@@ -388,6 +518,7 @@ class Parser {
     return token.type === TokenType.IDENTIFIER ||
            token.type === TokenType.STRING ||
            token.type === TokenType.LET ||
+           token.type === TokenType.CONST ||
            token.type === TokenType.FN ||
            token.type === TokenType.SERVICE ||
            token.type === TokenType.ROUTE ||
@@ -403,7 +534,13 @@ class Parser {
            token.type === TokenType.NULL ||
            token.type === TokenType.IMPORT ||
            token.type === TokenType.FROM ||
-           token.type === TokenType.EXPORT;
+           token.type === TokenType.EXPORT ||
+           token.type === TokenType.WHILE ||
+           token.type === TokenType.TRY ||
+           token.type === TokenType.CATCH ||
+           token.type === TokenType.PRINT ||
+           token.type === TokenType.ASYNC ||
+           token.type === TokenType.AWAIT;
   }
 
   parseObjectLiteral() {

@@ -1,23 +1,18 @@
--- ⚡ Hello World in Tezz
--- Run: tezz run examples/hello.tezz
+-- ⚡ Tezz v0.2.0
 
-service Hello on 8080 {
+const version = "0.2.0"
+
+service HelloAPI on 3000 {
 
   route GET "/" {
+    let name = request.query.name || "World"
+    print("Greeting: " + name)
+    
     respond 200 {
-      message: "Welcome to Tezz, officially created by Abhinav! ⚡",
-      language: "Tezz (तेज़)",
-      meaning: "Fast, Sharp, Brilliant"
+      message: "Hello, {name}! ⚡",
+      version: version,
+      status: true
     }
-  }
-
-  route GET "/hello" {
-    respond 200 { message: "Hello, World!" }
-  }
-
-  route GET "/hello/:name" {
-    let name = params.name
-    respond 200 { message: "Hello, {name}! Welcome to Tezz ⚡" }
   }
 
 }
