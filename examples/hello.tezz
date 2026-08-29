@@ -1,4 +1,4 @@
--- ⚡ Tezz v0.2.0
+-- Tezz v0.2.0
 
 const version = "0.2.0"
 
@@ -9,7 +9,7 @@ service HelloAPI on 3000 {
     print("Greeting: " + name)
     
     respond 200 {
-      message: "Hello, {name}! ⚡",
+      message: "Hello, {name}! ",
       version: version,
       status: true
     }

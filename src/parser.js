@@ -1,4 +1,4 @@
-// ⚡ Tezz Language — Parser
+// Tezz Language — Parser
 // Converts token stream into an Abstract Syntax Tree (AST)
 // Uses recursive descent parsing with operator precedence climbing
 

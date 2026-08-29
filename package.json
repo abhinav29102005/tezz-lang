@@ -1,7 +1,7 @@
 {
   "name": "tezz-lang",
   "version": "0.3.0",
-  "description": "⚡ Tezz (तेज़) — The Fast Backend Language. Write once, deploy everywhere: Cloudflare Workers, Node.js, Deno, Bun.",
+  "description": "Tezz (तेज़) — The Fast Backend Language. Write once, deploy everywhere: Cloudflare Workers, Node.js, Deno, Bun.",
   "main": "src/lexer.js",
   "bin": {
     "tezz": "./bin/tezz.js"
@@ -14,7 +14,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "test": "node bin/tezz.js build examples/hello.tezz --output /dev/null && echo '✅ Tests passed'",
+    "test": "node bin/tezz.js build examples/hello.tezz --output /dev/null && echo 'Tests passed'",
     "example:hello": "node bin/tezz.js run examples/hello.tezz",
     "example:api": "node bin/tezz.js run examples/api.tezz",
     "prepublishOnly": "npm test"

@@ -1,4 +1,4 @@
--- ⚡ REST API Example in Tezz
+-- REST API Example in Tezz
 -- A simple Todo API with CRUD operations
 -- Run: tezz run examples/api.tezz
 

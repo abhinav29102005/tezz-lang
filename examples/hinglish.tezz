@@ -1,13 +1,13 @@
--- ⚡ Tezz v0.2.0 — Hinglish Example
+-- Tezz v0.2.0 — Hinglish Example
 -- You can write code completely using Hinglish keywords!
 
 pakka version = "0.2.0"
 
 kaam generateGreeting(name) {
   agar name == "Abhinav" {
-    vapas "Namaste Creator! 🙏"
+    vapas "Namaste Creator! "
   } warna {
-    vapas "Namaste, {name}! ⚡"
+    vapas "Namaste, {name}! "
   }
 }
 

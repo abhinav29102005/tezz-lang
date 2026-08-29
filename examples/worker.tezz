@@ -1,11 +1,11 @@
--- ⚡ Cloudflare Worker Example in Tezz
+-- Cloudflare Worker Example in Tezz
 -- Build: tezz build examples/worker.tezz --target worker
 
 service EdgeAPI on 0 {
 
   route GET "/" {
     respond 200 {
-      message: "Hello from the Edge! ⚡",
+      message: "Hello from the Edge! ",
       powered_by: "Tezz + Cloudflare Workers",
       runtime: "edge"
     }
@@ -22,7 +22,7 @@ service EdgeAPI on 0 {
 
   route GET "/greet/:name" {
     let name = params.name
-    respond 200 { greeting: "Namaste, {name}! 🙏" }
+    respond 200 { greeting: "Namaste, {name}! " }
   }
 
 }

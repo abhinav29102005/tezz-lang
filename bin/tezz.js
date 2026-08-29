@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-// ⚡ Tezz (तेज़) — CLI
+// Tezz (तेज़) — CLI
 // The Fast Backend Language
 // Created by Abhinav
 
@@ -24,7 +24,7 @@ const ASCII_LOGO = `
 `;
 
 const BANNER = `${ASCII_LOGO}
-  \x1b[1m\x1b[33m⚡ Tezz\x1b[0m \x1b[2m(तेज़)\x1b[0m \x1b[36mv${VERSION}\x1b[0m
+  \x1b[1m\x1b[33mTezz\x1b[0m \x1b[2m(तेज़)\x1b[0m \x1b[36mv${VERSION}\x1b[0m
   \x1b[2mA Fast Backend Language\x1b[0m
   \x1b[2mOfficially created by Abhinav\x1b[0m
 `;
@@ -231,7 +231,7 @@ function cmdDeploy(file, options) {
     console.log(`  \x1b[32m✓\x1b[0m Target: \x1b[36mcloudflare-worker\x1b[0m`);
     console.log(`  \x1b[32m✓\x1b[0m Size: ${(Buffer.byteLength(jsCode) / 1024).toFixed(1)} KB\n`);
     
-    console.log(`  \x1b[36m🚀 Deploying ${name} to Cloudflare Edge...\x1b[0m\n`);
+    console.log(`  \x1b[36mDeploying ${name} to Cloudflare Edge...\x1b[0m\n`);
     
     const child = spawn('npx', ['-y', 'wrangler', 'deploy', outputFile, '--name', name, '--compatibility-date', '2024-01-01'], {
       stdio: 'inherit',
@@ -260,13 +260,13 @@ function cmdDeploy(file, options) {
 function cmdInit() {
   console.log(BANNER);
 
-  const appContent = `-- ⚡ Welcome to Tezz v0.2.0!
+  const appContent = `-- Welcome to Tezz v0.2.0!
 -- Your first Tezz service (Hinglish/English syntax supported)
 
 seva App on 3000 {
 
   route GET "/" {
-    rakho message = "Namaste from Tezz! ⚡"
+    rakho message = "Namaste from Tezz! "
     jawab 200 {
       message: message,
       version: "0.2.0",

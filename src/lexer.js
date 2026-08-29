@@ -1,4 +1,4 @@
-// ⚡ Tezz Language — Lexer (Tokenizer)
+// Tezz Language — Lexer (Tokenizer)
 // Converts .tezz source code into a stream of tokens
 // Supports both English AND Hinglish keywords
 

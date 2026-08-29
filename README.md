@@ -1,17 +1,17 @@
-# ⚡ Tezz (तेज़)
+# Tezz (तेज़)
 
 **The Fast Backend Language** — Write once, deploy everywhere.
 *Officially created by Abhinav.*
 
-🌍 **Website:** [tezz.abhinavkumarsingh.tech](https://tezz.abhinavkumarsingh.tech)  
-📦 **NPM Package:** [npmjs.com/package/tezz-lang](https://www.npmjs.com/package/tezz-lang)  
-👨‍💻 **Creator:** [Portfolio](https://abhinavkumarsingh.tech) | [LinkedIn](https://linkedin.com/in/bigboyaks) | [GitHub](https://github.com/abhinav29102005)
+**Website:** [tezz.abhinavkumarsingh.tech](https://tezz.abhinavkumarsingh.tech)  
+**NPM Package:** [npmjs.com/package/tezz-lang](https://www.npmjs.com/package/tezz-lang)  
+👨‍**Creator:** [Portfolio](https://abhinavkumarsingh.tech) | [LinkedIn](https://linkedin.com/in/bigboyaks) | [GitHub](https://github.com/abhinav29102005)
 
 Tezz is a brand new programming language designed for backend servers, services, and connectivity. It transpiles to JavaScript so it runs natively on **Cloudflare Workers, Node.js, Deno, and Bun**.
 
 > **Tezz (तेज़)** = Fast / Sharp / Brilliant in Hindi
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 # Install globally
@@ -50,7 +50,7 @@ fn add(a: number, b: number) -> number {
 service API on 3000 {
 
   route GET "/hello" {
-    respond 200 { message: "Hello from Tezz! ⚡" }
+    respond 200 { message: "Hello from Tezz! " }
   }
 
   route POST "/users" {
@@ -103,7 +103,7 @@ let data = response.json()
 | `tezz init` | Create a new project |
 | `tezz --help` | Show help |
 
-## ☁️ Deploy to Cloudflare Workers
+## ☁Deploy to Cloudflare Workers
 
 ```bash
 # Build for Cloudflare Workers
@@ -151,4 +151,4 @@ MIT
 
 ---
 
-**Made with ❤️ and तेज़ी (speed)**
+**Made with ❤and तेज़ी (speed)**

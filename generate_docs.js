@@ -68,7 +68,7 @@ const layout = (title, content, sidebar, toc) => `<!DOCTYPE html>
     </div>
 
     <footer class="npm-footer">
-      <p>Built with ⚡ by Abhinav. Tezz v0.2.0.</p>
+      <p>Built with by Abhinav. Tezz v0.2.0.</p>
     </footer>
 
     <script>
@@ -328,9 +328,9 @@ for n in numbers {
 
 kaam generateGreeting(name) {
   agar name == "Abhinav" {
-    vapas "Namaste Creator! 🙏"
+    vapas "Namaste Creator! "
   } warna {
-    vapas "Namaste, {name}! ⚡"
+    vapas "Namaste, {name}! "
   }
 }
 
