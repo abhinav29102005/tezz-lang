@@ -5,7 +5,7 @@ const layout = (title, content, sidebar, toc) => `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/jpeg" href="/tezz-logo.jpg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${title} | npm Docs (Tezz Edition)</title>
     <meta name="description" content="Documentation for Tezz, the blazing fast backend language.">
