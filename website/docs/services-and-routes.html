@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/tezz-logo.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Services & Routes | Tezz Documentation</title>
+    <meta name="description" content="Documentation for Tezz, the blazing fast backend language.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+  </head>
+  <body>
+    <div id="app">
+      <!-- Navbar -->
+      <nav class="navbar">
+        <div class="nav-brand">
+          <a href="/" style="display:flex; align-items:center; gap:1rem; text-decoration:none; color:inherit;">
+            <img src="/tezz-logo.jpg" alt="Tezz Logo" class="logo">
+            <span>Tezz</span>
+          </a>
+        </div>
+        <div class="nav-links">
+          <a href="/">Home</a>
+          <a href="https://www.npmjs.com/package/tezz-lang" target="_blank" class="nav-icon">npm</a>
+          <a href="https://github.com/abhinav29102005/automatic-octo-carnival" target="_blank" class="btn-outline">GitHub</a>
+        </div>
+      </nav>
+
+      <div class="full-docs">
+        <div class="docs-container">
+          <!-- Sidebar -->
+          <aside class="docs-sidebar">
+            <ul class="sticky-nav">
+              <li><a href="introduction.html">Introduction</a></li>
+              <li><a href="installation-and-cli.html">Installation & CLI</a></li>
+              <li><a href="syntax.html">Language Syntax</a></li>
+              <li><a href="hinglish.html">Hinglish Support 🇮🇳</a></li>
+              <li><a href="services-and-routes.html">Services & Routes</a></li>
+              <li><a href="deployment.html">Deployment Guide</a></li>
+            </ul>
+          </aside>
+
+          <!-- Main Content -->
+          <main class="docs-content fade-in">
+            
+      <div class="doc-section">
+        <h3>Services & Routes</h3>
+        <p class="lead-text">Tezz abstracts away HTTP server boilerplate, allowing you to focus purely on business logic.</p>
+        
+        <h4>The Service Block</h4>
+        <p>A <code>service</code> block declares an HTTP server and binds it to a specific port.</p>
+        <div class="code-block">service UserAPI on 8080 {
+  // Routes go here
+}</div>
+
+        <h4>Routing</h4>
+        <p>Inside a service, you define endpoints using the <code>route</code> block. You specify the HTTP method (GET, POST, PUT, DELETE) and the path.</p>
+        <div class="code-block">route GET "/users" {
+  // ...
+}
+
+route POST "/users" {
+  // ...
+}</div>
+
+        <h4>Dynamic Path Parameters</h4>
+        <p>You can capture variables from the URL path using a colon (<code>:</code>). The captured values are available in the implicitly provided <code>params</code> object.</p>
+        <div class="code-block">route GET "/users/:id" {
+  let userId = params.id
+  print("Fetching user: " + userId)
+}</div>
+
+        <h4>The Request Object</h4>
+        <p>Every route automatically injects a <code>request</code> object containing the incoming HTTP data.</p>
+        <ul>
+          <li><code>request.method</code> - The HTTP method (e.g., "GET").</li>
+          <li><code>request.url</code> - The request URL path.</li>
+          <li><code>request.query</code> - An object containing parsed query parameters.</li>
+          <li><code>request.json()</code> - Parses and returns the JSON body payload.</li>
+        </ul>
+
+        <h4>Sending Responses</h4>
+        <p>Use the <code>respond</code> keyword to instantly send a JSON response to the client. You provide an HTTP status code followed by an object.</p>
+        <div class="code-block">route POST "/login" {
+  let body = request.json()
+  
+  if body.username == "admin" && body.password == "123" {
+    respond 200 { success: true, token: "abc-123" }
+  } else {
+    respond 401 { success: false, error: "Invalid credentials" }
+  }
+}</div>
+      </div>
+    
+          </main>
+        </div>
+      </div>
+      
+      <footer>
+        <p>Built with ⚡ by Abhinav</p>
+        <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem;">
+          <a href="https://github.com/abhinav29102005" target="_blank" style="color: var(--text-muted); text-decoration: none;">GitHub</a>
+          <a href="https://linkedin.com/in/bigboyaks" target="_blank" style="color: var(--text-muted); text-decoration: none;">LinkedIn</a>
+          <a href="https://abhinavkumarsingh.tech" target="_blank" style="color: var(--text-muted); text-decoration: none;">Portfolio</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/tezz-logo.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Installation & CLI | Tezz Documentation</title>
+    <meta name="description" content="Documentation for Tezz, the blazing fast backend language.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+  </head>
+  <body>
+    <div id="app">
+      <!-- Navbar -->
+      <nav class="navbar">
+        <div class="nav-brand">
+          <a href="/" style="display:flex; align-items:center; gap:1rem; text-decoration:none; color:inherit;">
+            <img src="/tezz-logo.jpg" alt="Tezz Logo" class="logo">
+            <span>Tezz</span>
+          </a>
+        </div>
+        <div class="nav-links">
+          <a href="/">Home</a>
+          <a href="https://www.npmjs.com/package/tezz-lang" target="_blank" class="nav-icon">npm</a>
+          <a href="https://github.com/abhinav29102005/automatic-octo-carnival" target="_blank" class="btn-outline">GitHub</a>
+        </div>
+      </nav>
+
+      <div class="full-docs">
+        <div class="docs-container">
+          <!-- Sidebar -->
+          <aside class="docs-sidebar">
+            <ul class="sticky-nav">
+              <li><a href="introduction.html">Introduction</a></li>
+              <li><a href="installation-and-cli.html">Installation & CLI</a></li>
+              <li><a href="syntax.html">Language Syntax</a></li>
+              <li><a href="hinglish.html">Hinglish Support 🇮🇳</a></li>
+              <li><a href="services-and-routes.html">Services & Routes</a></li>
+              <li><a href="deployment.html">Deployment Guide</a></li>
+            </ul>
+          </aside>
+
+          <!-- Main Content -->
+          <main class="docs-content fade-in">
+            
+      <div class="doc-section">
+        <h3>Installation & CLI</h3>
+        <p class="lead-text">Everything you need to install Tezz and manage your projects from the terminal.</p>
+        
+        <h4>Installation</h4>
+        <p>Tezz is distributed via the npm registry. Install it globally on your machine using npm:</p>
+        <div class="code-block">npm install -g tezz-lang</div>
+        <p>Verify the installation by checking the version:</p>
+        <div class="code-block">tezz --version</div>
+
+        <h4>CLI Commands</h4>
+        <p>The <code>tezz</code> CLI is your all-in-one tool for development and production.</p>
+        
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th>Command</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>tezz init</code></td>
+              <td>Scaffolds a new <code>app.tezz</code> file with a starter template.</td>
+            </tr>
+            <tr>
+              <td><code>tezz dev &lt;file&gt;</code></td>
+              <td>Starts the development server with <strong>hot-reloading</strong> enabled. Saving your file instantly restarts the server.</td>
+            </tr>
+            <tr>
+              <td><code>tezz run &lt;file&gt;</code></td>
+              <td>Compiles and runs a Tezz file directly in Node.js.</td>
+            </tr>
+            <tr>
+              <td><code>tezz build &lt;file&gt;</code></td>
+              <td>Compiles your Tezz code into raw JavaScript. Use <code>--target worker</code> to compile for Cloudflare Workers.</td>
+            </tr>
+            <tr>
+              <td><code>tezz repl</code></td>
+              <td>Starts an interactive Read-Eval-Print Loop for testing snippets on the fly.</td>
+            </tr>
+          </tbody>
+        </table>
+        
+        <h4>Hot-Reloading in Action</h4>
+        <p>When running <code>tezz dev app.tezz</code>, the CLI watches your file for changes. When a change is detected, it intercepts the signal, kills the current server, recompiles the AST, and spawns a new server instance—all in less than 300ms.</p>
+      </div>
+    
+          </main>
+        </div>
+      </div>
+      
+      <footer>
+        <p>Built with ⚡ by Abhinav</p>
+        <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem;">
+          <a href="https://github.com/abhinav29102005" target="_blank" style="color: var(--text-muted); text-decoration: none;">GitHub</a>
+          <a href="https://linkedin.com/in/bigboyaks" target="_blank" style="color: var(--text-muted); text-decoration: none;">LinkedIn</a>
+          <a href="https://abhinavkumarsingh.tech" target="_blank" style="color: var(--text-muted); text-decoration: none;">Portfolio</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/tezz-logo.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hinglish Support | Tezz Documentation</title>
+    <meta name="description" content="Documentation for Tezz, the blazing fast backend language.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+  </head>
+  <body>
+    <div id="app">
+      <!-- Navbar -->
+      <nav class="navbar">
+        <div class="nav-brand">
+          <a href="/" style="display:flex; align-items:center; gap:1rem; text-decoration:none; color:inherit;">
+            <img src="/tezz-logo.jpg" alt="Tezz Logo" class="logo">
+            <span>Tezz</span>
+          </a>
+        </div>
+        <div class="nav-links">
+          <a href="/">Home</a>
+          <a href="https://www.npmjs.com/package/tezz-lang" target="_blank" class="nav-icon">npm</a>
+          <a href="https://github.com/abhinav29102005/automatic-octo-carnival" target="_blank" class="btn-outline">GitHub</a>
+        </div>
+      </nav>
+
+      <div class="full-docs">
+        <div class="docs-container">
+          <!-- Sidebar -->
+          <aside class="docs-sidebar">
+            <ul class="sticky-nav">
+              <li><a href="introduction.html">Introduction</a></li>
+              <li><a href="installation-and-cli.html">Installation & CLI</a></li>
+              <li><a href="syntax.html">Language Syntax</a></li>
+              <li><a href="hinglish.html">Hinglish Support 🇮🇳</a></li>
+              <li><a href="services-and-routes.html">Services & Routes</a></li>
+              <li><a href="deployment.html">Deployment Guide</a></li>
+            </ul>
+          </aside>
+
+          <!-- Main Content -->
+          <main class="docs-content fade-in">
+            
+      <div class="doc-section">
+        <h3>Hinglish Support 🇮🇳</h3>
+        <p class="lead-text">Tezz is the world's first backend language that natively supports Hinglish (Hindi + English) keywords interchangeably.</p>
+        
+        <p>Whether you are learning to code or want to express logic in a more culturally familiar way, Tezz maps Hinglish keywords directly to their English counterparts at the AST level. There is <strong>zero performance penalty</strong>.</p>
+        
+        <h4>Keyword Mapping</h4>
+        <table class="doc-table">
+          <thead>
+            <tr>
+              <th>English</th>
+              <th>Hinglish</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>let</code></td><td><code>rakho</code></td><td>Keep / Store</td></tr>
+            <tr><td><code>const</code></td><td><code>pakka</code></td><td>Permanent / Fixed</td></tr>
+            <tr><td><code>fn</code></td><td><code>kaam</code></td><td>Work / Task</td></tr>
+            <tr><td><code>service</code></td><td><code>seva</code></td><td>Service</td></tr>
+            <tr><td><code>route</code></td><td><code>rasta</code></td><td>Path / Route</td></tr>
+            <tr><td><code>respond</code></td><td><code>jawab</code></td><td>Answer / Respond</td></tr>
+            <tr><td><code>if</code></td><td><code>agar</code></td><td>If</td></tr>
+            <tr><td><code>else</code></td><td><code>warna</code></td><td>Otherwise</td></tr>
+            <tr><td><code>while</code></td><td><code>jabtak</code></td><td>As long as</td></tr>
+            <tr><td><code>try</code></td><td><code>koshish</code></td><td>Attempt</td></tr>
+            <tr><td><code>catch</code></td><td><code>pakad</code></td><td>Grab / Catch</td></tr>
+            <tr><td><code>return</code></td><td><code>vapas</code></td><td>Return / Back</td></tr>
+            <tr><td><code>print</code></td><td><code>dikha</code></td><td>Show</td></tr>
+            <tr><td><code>async</code></td><td><code>baadmein</code></td><td>Later (Asynchronous)</td></tr>
+            <tr><td><code>await</code></td><td><code>ruko</code></td><td>Wait</td></tr>
+            <tr><td><code>true</code></td><td><code>sahi</code></td><td>Correct / True</td></tr>
+            <tr><td><code>false</code></td><td><code>galat</code></td><td>Wrong / False</td></tr>
+          </tbody>
+        </table>
+
+        <h4>Example: A Pure Hinglish API</h4>
+        <p>You can write an entire backend service using only Hinglish keywords.</p>
+        <div class="code-block">pakka version = "0.2.0"
+
+kaam generateGreeting(name) {
+  agar name == "Abhinav" {
+    vapas "Namaste Creator! 🙏"
+  } warna {
+    vapas "Namaste, {name}! ⚡"
+  }
+}
+
+seva HinglishAPI on 3000 {
+  rasta GET "/" {
+    rakho user = request.query.name || "Duniya"
+    dikha("Request from: " + user)
+    jawab 200 { 
+      message: generateGreeting(user),
+      status: sahi
+    }
+  }
+}</div>
+      </div>
+    
+          </main>
+        </div>
+      </div>
+      
+      <footer>
+        <p>Built with ⚡ by Abhinav</p>
+        <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem;">
+          <a href="https://github.com/abhinav29102005" target="_blank" style="color: var(--text-muted); text-decoration: none;">GitHub</a>
+          <a href="https://linkedin.com/in/bigboyaks" target="_blank" style="color: var(--text-muted); text-decoration: none;">LinkedIn</a>
+          <a href="https://abhinavkumarsingh.tech" target="_blank" style="color: var(--text-muted); text-decoration: none;">Portfolio</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

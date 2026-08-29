@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/jpeg" href="/tezz-logo.jpg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Language Syntax | Tezz Documentation</title>
+    <meta name="description" content="Documentation for Tezz, the blazing fast backend language.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+  </head>
+  <body>
+    <div id="app">
+      <!-- Navbar -->
+      <nav class="navbar">
+        <div class="nav-brand">
+          <a href="/" style="display:flex; align-items:center; gap:1rem; text-decoration:none; color:inherit;">
+            <img src="/tezz-logo.jpg" alt="Tezz Logo" class="logo">
+            <span>Tezz</span>
+          </a>
+        </div>
+        <div class="nav-links">
+          <a href="/">Home</a>
+          <a href="https://www.npmjs.com/package/tezz-lang" target="_blank" class="nav-icon">npm</a>
+          <a href="https://github.com/abhinav29102005/automatic-octo-carnival" target="_blank" class="btn-outline">GitHub</a>
+        </div>
+      </nav>
+
+      <div class="full-docs">
+        <div class="docs-container">
+          <!-- Sidebar -->
+          <aside class="docs-sidebar">
+            <ul class="sticky-nav">
+              <li><a href="introduction.html">Introduction</a></li>
+              <li><a href="installation-and-cli.html">Installation & CLI</a></li>
+              <li><a href="syntax.html">Language Syntax</a></li>
+              <li><a href="hinglish.html">Hinglish Support 🇮🇳</a></li>
+              <li><a href="services-and-routes.html">Services & Routes</a></li>
+              <li><a href="deployment.html">Deployment Guide</a></li>
+            </ul>
+          </aside>
+
+          <!-- Main Content -->
+          <main class="docs-content fade-in">
+            
+      <div class="doc-section">
+        <h3>Language Syntax</h3>
+        <p class="lead-text">Tezz syntax is designed to be highly readable, borrowing the best parts of modern JavaScript, Swift, and Rust.</p>
+        
+        <h4>Variables</h4>
+        <p>Declare mutable variables with <code>let</code> and immutable variables with <code>const</code>.</p>
+        <div class="code-block">let age = 21
+const name = "Abhinav"
+
+// Reassignment
+age = 22</div>
+        
+        <h4>Functions</h4>
+        <p>Functions are declared using the <code>fn</code> keyword. For asynchronous operations, prefix the function with <code>async</code>.</p>
+        <div class="code-block">fn calculateTotal(price, tax) {
+  return price + (price * tax)
+}
+
+async fn fetchUserData(id) {
+  let response = await fetch("https://api.example.com/users/" + id)
+  return await response.json()
+}</div>
+
+        <h4>Control Flow</h4>
+        <p>Standard branching and looping constructs are fully supported.</p>
+        <div class="code-block">// If / Else
+if age >= 18 {
+  print("Adult")
+} else {
+  print("Minor")
+}
+
+// While Loop
+let count = 0
+while count &lt; 5 {
+  print(count)
+  count += 1
+}
+
+// For Loop
+let numbers = [1, 2, 3]
+for n in numbers {
+  print(n)
+}</div>
+
+        <h4>Error Handling</h4>
+        <p>Use <code>try</code> and <code>catch</code> to gracefully handle exceptions.</p>
+        <div class="code-block">try {
+  let data = parseJSON(invalidString)
+} catch err {
+  print("Failed to parse data!")
+}</div>
+      </div>
+    
+          </main>
+        </div>
+      </div>
+      
+      <footer>
+        <p>Built with ⚡ by Abhinav</p>
+        <div style="margin-top: 1rem; display: flex; justify-content: center; gap: 1rem;">
+          <a href="https://github.com/abhinav29102005" target="_blank" style="color: var(--text-muted); text-decoration: none;">GitHub</a>
+          <a href="https://linkedin.com/in/bigboyaks" target="_blank" style="color: var(--text-muted); text-decoration: none;">LinkedIn</a>
+          <a href="https://abhinavkumarsingh.tech" target="_blank" style="color: var(--text-muted); text-decoration: none;">Portfolio</a>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
