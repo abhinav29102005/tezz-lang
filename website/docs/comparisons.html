@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tezz vs Others | Tezz Docs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
+    <meta name="view-transition" content="same-origin" />
+  <script>
+    if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark-theme');
+  </script>
+</head>
+  <body class="npm-theme">
+    
+    <header class="npm-header">
+      <a href="/" class="npm-brand">
+        <img src="/favicon.svg" alt="Tezz Logo" style="height: 30px; margin-right: 10px;" class="animated-logo" />
+        <span style="border-left: 1px solid #e1e4e8; padding-left: 15px;">tezz</span>
+      </a>
+      <div class="npm-header-links">
+        <a href="/docs/introduction.html">Documentation</a>
+        <a href="https://www.npmjs.com/package/tezz-lang" target="_blank">npm</a>
+        <a href="/#contact">Contact</a>
+        <a href="https://github.com/abhinav29102005/automatic-octo-carnival" target="_blank">GitHub</a>
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle Theme">🌙</button>
+      </div>
+    </header>
+
+    
+
+    <div class="npm-subheader">
+      <div class="npm-subheader-title">Tezz Documentation</div>
+    </div>
+    <div class="npm-container">
+      <aside class="npm-sidebar">
+        <div class="npm-nav-group"><h4>Comparisons</h4><ul class="npm-nav-list"><li><a href="/docs/comparisons.html" class="active">Tezz vs Others</a></li></ul></div><div class="npm-nav-group"><h4>Getting Started</h4><ul class="npm-nav-list"><li><a href="/docs/introduction.html" >Introduction</a></li><li><a href="/docs/installation-and-cli.html" >Installation & CLI</a></li></ul></div><div class="npm-nav-group"><h4>Core Language</h4><ul class="npm-nav-list"><li><a href="/docs/syntax.html" >Language Syntax</a></li><li><a href="/docs/hinglish.html" >Hinglish Support</a></li></ul></div><div class="npm-nav-group"><h4>Backend APIs</h4><ul class="npm-nav-list"><li><a href="/docs/services-and-routes.html" >Services & Routes</a></li><li><a href="/docs/deployment.html" >Deployment Guide</a></li></ul></div><div class="npm-nav-group"><h4>Ecosystem</h4><ul class="npm-nav-list"><li><a href="/docs/ecosystem.html" >Standard Libraries</a></li></ul></div>
+      </aside>
+      <main class="npm-main">
+        <section id="comparisons" class="doc-section">
+      <h1 id="comparisons">Tezz vs Other Frameworks</h1>
+      <p>Tezz is designed to bring the speed of compiled languages with the ease of JavaScript and Python. Here is how Tezz compares with other popular backend ecosystems.</p>
+
+      <h2 id="nodejs">Node.js (Express / Fastify)</h2>
+      <p>While Tezz compiles to JavaScript (for Cloudflare Workers or Node environments), the source language eliminates the boilerplate of Express.js.</p>
+      <ul>
+        <li><strong>Setup:</strong> Node requires <code>package.json</code>, npm installs, and complex setups. Tezz is zero-config.</li>
+        <li><strong>Routing:</strong> Tezz has built-in declarative routing via the <code>service</code> block.</li>
+        <li><strong>Speed:</strong> Tezz compiles directly into native Fetch API / Worker formats, bypassing heavy middleware layers.</li>
+      </ul>
+
+      <h2 id="python">Python (FastAPI / Django)</h2>
+      <p>Python is loved for its simplicity, but it struggles with asynchronous performance and deployment complexity (WSGI/ASGI).</p>
+      <ul>
+        <li><strong>Syntax:</strong> Tezz offers a Python-like clean syntax but adds strict safety.</li>
+        <li><strong>Performance:</strong> Tezz is significantly faster than Python because it compiles to V8 optimized JavaScript rather than interpreted Python bytecode.</li>
+        <li><strong>Deployment:</strong> Deploying Python requires Gunicorn/Uvicorn and Docker. Tezz deploys to edge networks (Cloudflare) in 1 second.</li>
+      </ul>
+
+      <h2 id="go">Go (Golang)</h2>
+      <p>Go is the king of backend performance and concurrency. Tezz aims to be the "Go for the Edge".</p>
+      <ul>
+        <li><strong>Learning Curve:</strong> Go requires understanding pointers, goroutines, and strict typing. Tezz is as easy to learn as JavaScript.</li>
+        <li><strong>Cold Starts:</strong> Go binaries can be large. Tezz compiles to tiny JS bundles with 0ms cold starts on the Edge.</li>
+        <li><strong>Ecosystem:</strong> Go has a rich standard library. Tezz relies on the massive npm ecosystem under the hood.</li>
+      </ul>
+
+      <h2 id="rust">Rust (Actix / Axum)</h2>
+      <p>Rust offers unparalleled memory safety and speed, but at the cost of a notoriously steep learning curve.</p>
+      <ul>
+        <li><strong>Development Speed:</strong> Writing a Rust backend takes time due to the borrow checker. Tezz lets you prototype and ship in minutes.</li>
+        <li><strong>Safety:</strong> Rust guarantees memory safety at compile time. Tezz relies on the V8 engine's garbage collector.</li>
+        <li><strong>Use Case:</strong> Use Rust for OS-level systems and CPU-heavy tasks. Use Tezz for blazing fast web APIs and microservices.</li>
+      </ul>
+    </section>
+      </main>
+      <aside class="npm-toc">
+        <h4>In this article</h4>
+        <ul>
+          <li><a href="#comparisons">Tezz vs Others</a></li><li><a href="#nodejs">Node.js / Express</a></li><li><a href="#python">Python / FastAPI</a></li><li><a href="#go">Go (Golang)</a></li><li><a href="#rust">Rust / Actix</a></li>
+        </ul>
+      </aside>
+    </div>
+  
+
+
+    
+
+    <footer class="npm-footer">
+      <p>Built with by Abhinav. Tezz v0.2.0.</p>
+    </footer>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

@@ -3,6 +3,54 @@ const path = require('path');
 
 const pages = [
   {
+    slug: 'comparisons',
+    group: 'Comparisons',
+    title: 'Tezz vs Others',
+    toc: [
+      { id: 'comparisons', text: 'Tezz vs Others' },
+      { id: 'nodejs', text: 'Node.js / Express' },
+      { id: 'python', text: 'Python / FastAPI' },
+      { id: 'go', text: 'Go (Golang)' },
+      { id: 'rust', text: 'Rust / Actix' }
+    ],
+    content: `
+      <h1 id="comparisons">Tezz vs Other Frameworks</h1>
+      <p>Tezz is designed to bring the speed of compiled languages with the ease of JavaScript and Python. Here is how Tezz compares with other popular backend ecosystems.</p>
+
+      <h2 id="nodejs">Node.js (Express / Fastify)</h2>
+      <p>While Tezz compiles to JavaScript (for Cloudflare Workers or Node environments), the source language eliminates the boilerplate of Express.js.</p>
+      <ul>
+        <li><strong>Setup:</strong> Node requires <code>package.json</code>, npm installs, and complex setups. Tezz is zero-config.</li>
+        <li><strong>Routing:</strong> Tezz has built-in declarative routing via the <code>service</code> block.</li>
+        <li><strong>Speed:</strong> Tezz compiles directly into native Fetch API / Worker formats, bypassing heavy middleware layers.</li>
+      </ul>
+
+      <h2 id="python">Python (FastAPI / Django)</h2>
+      <p>Python is loved for its simplicity, but it struggles with asynchronous performance and deployment complexity (WSGI/ASGI).</p>
+      <ul>
+        <li><strong>Syntax:</strong> Tezz offers a Python-like clean syntax but adds strict safety.</li>
+        <li><strong>Performance:</strong> Tezz is significantly faster than Python because it compiles to V8 optimized JavaScript rather than interpreted Python bytecode.</li>
+        <li><strong>Deployment:</strong> Deploying Python requires Gunicorn/Uvicorn and Docker. Tezz deploys to edge networks (Cloudflare) in 1 second.</li>
+      </ul>
+
+      <h2 id="go">Go (Golang)</h2>
+      <p>Go is the king of backend performance and concurrency. Tezz aims to be the "Go for the Edge".</p>
+      <ul>
+        <li><strong>Learning Curve:</strong> Go requires understanding pointers, goroutines, and strict typing. Tezz is as easy to learn as JavaScript.</li>
+        <li><strong>Cold Starts:</strong> Go binaries can be large. Tezz compiles to tiny JS bundles with 0ms cold starts on the Edge.</li>
+        <li><strong>Ecosystem:</strong> Go has a rich standard library. Tezz relies on the massive npm ecosystem under the hood.</li>
+      </ul>
+
+      <h2 id="rust">Rust (Actix / Axum)</h2>
+      <p>Rust offers unparalleled memory safety and speed, but at the cost of a notoriously steep learning curve.</p>
+      <ul>
+        <li><strong>Development Speed:</strong> Writing a Rust backend takes time due to the borrow checker. Tezz lets you prototype and ship in minutes.</li>
+        <li><strong>Safety:</strong> Rust guarantees memory safety at compile time. Tezz relies on the V8 engine's garbage collector.</li>
+        <li><strong>Use Case:</strong> Use Rust for OS-level systems and CPU-heavy tasks. Use Tezz for blazing fast web APIs and microservices.</li>
+      </ul>
+    `
+  },
+  {
     slug: 'introduction',
     group: 'Getting Started',
     title: 'Introduction',
