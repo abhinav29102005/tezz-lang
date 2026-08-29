@@ -4,241 +4,85 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/jpeg" href="/tezz-logo.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tezz | The Fast Backend Language</title>
-    <meta name="description" content="Tezz is a blazing fast programming language designed for backend servers and Cloudflare Workers. Officially created by Abhinav.">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <title>Tezz | The Blazing Fast Backend Language</title>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style.css">
   </head>
-  <body>
-    <div id="app">
-      <!-- Navbar -->
-      <nav class="navbar fade-in">
-        <div class="nav-brand">
-          <img src="/tezz-logo.jpg" alt="Tezz Logo" class="logo">
-          <span>Tezz</span>
-        </div>
-        <div class="nav-links">
-          <a href="#features">Features</a>
-          <a href="#installation">Install</a>
-          <a href="/docs/introduction.html">Documentation</a>
-          <a href="https://www.npmjs.com/package/tezz-lang" target="_blank" class="nav-icon">npm</a>
-          <a href="https://github.com/abhinav29102005/automatic-octo-carnival" target="_blank" class="btn-outline">GitHub</a>
-        </div>
-      </nav>
+  <body class="npm-theme">
+    
+    <header class="npm-header">
+      <a href="/" class="npm-brand">
+        <img src="/tezz-logo.jpg" alt="Tezz Logo" style="height: 30px; width: 30px; border-radius: 4px; margin-right: 10px;" />
+        <span style="border-left: 1px solid #e1e4e8; padding-left: 15px;">tezz</span>
+      </a>
+      <div class="npm-header-links">
+        <a href="/docs/introduction.html">Documentation</a>
+        <a href="https://www.npmjs.com/package/tezz-lang" target="_blank">npm</a>
+        <a href="https://github.com/abhinav29102005/automatic-octo-carnival" target="_blank">GitHub</a>
+      </div>
+    </header>
 
-      <!-- Hero Section -->
-      <header class="hero slide-up">
-        <div class="hero-content">
-          <div class="badge">⚡ v0.1.0 Released on npm</div>
-          <h1 class="hero-title">The <span class="text-gradient">Fast</span> Backend Language.</h1>
-          <p class="hero-subtitle">Write once, deploy everywhere. Natively compiles to JavaScript for Cloudflare Workers, Node.js, Deno, and Bun.</p>
-          <div class="hero-actions">
-            <a href="#documentation" class="btn-primary">Read Documentation</a>
-            <div class="code-snippet">
-              <code>npm install -g tezz-lang</code>
-              <button class="copy-btn" onclick="copyToClipboard('npm install -g tezz-lang')">Copy</button>
-            </div>
-          </div>
-          <p class="creator-credit">Officially created by <strong>Abhinav</strong>.</p>
+    <main class="npm-home-main">
+      <section class="npm-hero">
+        <img src="/tezz-logo.jpg" alt="Tezz Logo" class="hero-logo" />
+        <h1 class="hero-title">Build Backends. Blazing Fast.</h1>
+        <p class="hero-subtitle">The first language with zero configuration, lightning fast compilation, and native Hinglish support.</p>
+        
+        <div class="hero-code-box">
+          <code>npm install -g tezz-lang</code>
         </div>
-        <div class="hero-visual floating">
-          <img src="/tezz-logo.jpg" alt="Tezz Power" class="hero-logo-large">
+        
+        <div class="hero-buttons">
+          <a href="/docs/introduction.html" class="npm-btn npm-btn-primary">Get Started</a>
+          <a href="/docs/syntax.html" class="npm-btn npm-btn-outline">View Syntax</a>
         </div>
-      </header>
+      </section>
 
-      <!-- Features Section -->
-      <section id="features" class="features scroll-reveal">
-        <h2 class="section-title">Why Tezz?</h2>
-        <div class="grid-3">
-          <div class="glass-card">
-            <div class="card-icon">⚡</div>
-            <h3>Blazing Fast</h3>
-            <p>Designed for the edge. Zero cold starts when deployed to Cloudflare Workers. It transpiles cleanly to optimized JavaScript.</p>
+      <section class="npm-features">
+        <div class="feature-grid">
+          <div class="feature-card">
+            <h3 class="feature-title">⚡ Zero Configuration</h3>
+            <p>No Webpack, Babel, or TSConfig. Write your code and let Tezz instantly compile it to raw JavaScript in under 300ms.</p>
           </div>
-          <div class="glass-card">
-            <div class="card-icon">🌐</div>
-            <h3>Built-in HTTP</h3>
-            <p>Services and Routes are first-class citizens. No web frameworks required. You write `service` and `route`, Tezz handles the rest.</p>
+          <div class="feature-card">
+            <h3 class="feature-title">🇮🇳 Native Hinglish</h3>
+            <p>Write your backend using words like <code>rakho</code>, <code>kaam</code>, and <code>rasta</code>. Tezz translates it directly at the AST level with zero penalty.</p>
           </div>
-          <div class="glass-card">
-            <div class="card-icon">📦</div>
-            <h3>Zero Dependencies</h3>
-            <p>The compiler is pure JavaScript. Write clean, Python-like syntax without worrying about massive node_modules folders.</p>
+          <div class="feature-card">
+            <h3 class="feature-title">🚀 Built for the Edge</h3>
+            <p>Use simple <code>service</code> and <code>route</code> blocks to build APIs. Compile to Node.js or deploy instantly to Cloudflare Workers.</p>
           </div>
         </div>
       </section>
 
-      <!-- Comprehensive Documentation Section -->
-      <section id="documentation" class="full-docs scroll-reveal">
-        <div class="docs-container">
-          
-          <div class="docs-sidebar">
-            <ul class="sticky-nav">
-              <li><a href="#installation">1. Installation & CLI</a></li>
-              <li><a href="#basics">2. Variables & Types</a></li>
-              <li><a href="#functions">3. Functions</a></li>
-              <li><a href="#control-flow">4. Control Flow</a></li>
-              <li><a href="#services">5. Services & Routes</a></li>
-              <li><a href="#deployment">6. Deployment</a></li>
-            </ul>
+      <section class="npm-code-showcase">
+        <h2>Beautifully Simple APIs</h2>
+        <p>No boilerplate. Just logic.</p>
+        <div class="code-window">
+          <div class="code-window-header">
+            <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+            <span class="code-window-title">api.tezz</span>
           </div>
-
-          <div class="docs-content">
-            <h2 class="section-title text-left">Complete Documentation</h2>
-            <p class="lead-text">Everything you need to know to master the Tezz programming language.</p>
-
-            <!-- 1. Installation -->
-            <div id="installation" class="doc-section scroll-reveal">
-              <h3>1. Installation & CLI</h3>
-              <p>Tezz is distributed via npm. Install it globally to use the CLI from anywhere.</p>
-              
-              <div class="code-block glass-card">
-                <pre><code>$ npm install -g tezz-lang</code></pre>
-              </div>
-
-              <h4>CLI Commands</h4>
-              <table class="doc-table">
-                <thead>
-                  <tr><th>Command</th><th>Description</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td><code>tezz init</code></td><td>Creates a new Tezz project with a hello world example in the current directory.</td></tr>
-                  <tr><td><code>tezz run app.tezz</code></td><td>Compiles and runs the Tezz file immediately in a local Node.js environment.</td></tr>
-                  <tr><td><code>tezz build app.tezz</code></td><td>Compiles the code to JavaScript.</td></tr>
-                  <tr><td><code>tezz build app.tezz --target worker</code></td><td>Compiles specifically for Cloudflare Workers.</td></tr>
-                </tbody>
-              </table>
-            </div>
-
-            <!-- 2. Basics -->
-            <div id="basics" class="doc-section scroll-reveal">
-              <h3>2. Variables & Types</h3>
-              <p>Tezz uses the <code>let</code> keyword for declaring variables. It supports strings (with powerful interpolation), numbers, booleans, arrays, and objects.</p>
-              
-              <div class="code-block glass-card">
-                <pre><code><span class="comment">-- Variables</span>
-<span class="keyword">let</span> name = <span class="string">"Tezz"</span>
-<span class="keyword">let</span> version = <span class="number">0.1</span>
-<span class="keyword">let</span> isFast = <span class="keyword">true</span>
-
-<span class="comment">-- Arrays and Objects</span>
-<span class="keyword">let</span> frameworks = [<span class="string">"Node"</span>, <span class="string">"Cloudflare"</span>, <span class="string">"Bun"</span>]
-<span class="keyword">let</span> config = { port: <span class="number">8080</span>, mode: <span class="string">"production"</span> }
-
-<span class="comment">-- String Interpolation (uses {})</span>
-<span class="keyword">let</span> greeting = <span class="string">"Welcome to {name} version {version}!"</span></code></pre>
-              </div>
-            </div>
-
-            <!-- 3. Functions -->
-            <div id="functions" class="doc-section scroll-reveal">
-              <h3>3. Functions</h3>
-              <p>Functions are defined using the <code>fn</code> keyword. You can specify parameter types and return types using arrows.</p>
-              
-              <div class="code-block glass-card">
-                <pre><code><span class="keyword">fn</span> <span class="entity">calculateTotal</span>(price: number, tax: number) -> number {
-  <span class="keyword">let</span> total = price + tax
-  <span class="keyword">return</span> total
-}
-
-<span class="keyword">fn</span> <span class="entity">greetUser</span>(name: string) {
-  <span class="keyword">return</span> <span class="string">"Namaste, {name}! 🙏"</span>
-}</code></pre>
-              </div>
-            </div>
-
-            <!-- 4. Control Flow -->
-            <div id="control-flow" class="doc-section scroll-reveal">
-              <h3>4. Control Flow</h3>
-              <p>Standard if/else statements and for-in loops are supported without unnecessary parentheses.</p>
-              
-              <div class="code-block glass-card">
-                <pre><code><span class="comment">-- If Statements</span>
-<span class="keyword">if</span> status == <span class="number">200</span> {
-  <span class="keyword">respond</span> <span class="number">200</span> { success: <span class="keyword">true</span> }
-} <span class="keyword">else if</span> status == <span class="number">404</span> {
-  <span class="keyword">respond</span> <span class="number">404</span> { error: <span class="string">"Not Found"</span> }
-} <span class="keyword">else</span> {
-  <span class="keyword">respond</span> <span class="number">500</span> { error: <span class="string">"Server Error"</span> }
-}
-
-<span class="comment">-- Loops</span>
-<span class="keyword">for</span> user <span class="keyword">in</span> users {
-  <span class="comment">-- Process user</span>
-}</code></pre>
-              </div>
-            </div>
-
-            <!-- 5. Services & Routes -->
-            <div id="services" class="doc-section scroll-reveal">
-              <h3>5. Services & Routes <span class="badge" style="margin-left: 10px;">Killer Feature</span></h3>
-              <p>Tezz was built specifically for backend connectivity. <code>service</code>, <code>route</code>, and <code>respond</code> are native keywords in the language. There is no need to import Express or Hono.</p>
-              
-              <div class="code-block glass-card">
-                <pre><code><span class="keyword">service</span> <span class="entity">UserAPI</span> <span class="keyword">on</span> <span class="number">3000</span> {
-
-  <span class="comment">-- GET route</span>
-  <span class="keyword">route</span> <span class="entity">GET</span> <span class="string">"/users"</span> {
-    <span class="keyword">let</span> usersList = [{ id: <span class="number">1</span>, name: <span class="string">"Abhinav"</span> }]
-    <span class="keyword">respond</span> <span class="number">200</span> { users: usersList }
+          <pre><code><span class="keyword">service</span> <span class="entity">UsersAPI</span> <span class="keyword">on</span> <span class="number">3000</span> {
+  
+  <span class="keyword">route</span> GET <span class="string">"/users/:id"</span> {
+    <span class="keyword">rakho</span> user = db.find(params.id)
+    
+    <span class="keyword">agar</span> user {
+      <span class="keyword">respond</span> <span class="number">200</span> { success: <span class="keyword">true</span>, data: user }
+    } <span class="keyword">warna</span> {
+      <span class="keyword">respond</span> <span class="number">404</span> { success: <span class="keyword">false</span>, error: <span class="string">"Not found"</span> }
+    }
   }
 
-  <span class="comment">-- POST route (parsing JSON body)</span>
-  <span class="keyword">route</span> <span class="entity">POST</span> <span class="string">"/users"</span> {
-    <span class="keyword">let</span> body = request.json()
-    <span class="keyword">respond</span> <span class="number">201</span> { created: <span class="keyword">true</span>, received: body }
-  }
-
-  <span class="comment">-- Path parameters</span>
-  <span class="keyword">route</span> <span class="entity">GET</span> <span class="string">"/users/:id"</span> {
-    <span class="keyword">let</span> userId = params.id
-    <span class="keyword">respond</span> <span class="number">200</span> { id: userId, message: <span class="string">"Fetching user {userId}"</span> }
-  }
 }</code></pre>
-              </div>
-
-              <h4>Built-in Route Objects</h4>
-              <p>Inside any <code>route</code> block, you automatically have access to:</p>
-              <ul class="feature-list" style="margin-top: 10px;">
-                <li><code>request.method</code> - e.g. "GET", "POST"</li>
-                <li><code>request.url</code> - e.g. "/users/1"</li>
-                <li><code>request.headers</code> - Object containing request headers</li>
-                <li><code>request.json()</code> - Automatically parses the request body as JSON</li>
-                <li><code>request.text()</code> - Reads raw text body</li>
-                <li><code>params.name</code> - Accesses URL path parameters (like <code>:id</code>)</li>
-                <li><code>request.query</code> - Object containing URL search parameters</li>
-              </ul>
-            </div>
-
-            <!-- 6. Deployment -->
-            <div id="deployment" class="doc-section scroll-reveal">
-              <h3>6. Deployment (Cloudflare Workers)</h3>
-              <p>Tezz compiles down to the standard Fetch API format used by edge runtimes like Cloudflare Workers.</p>
-              
-              <div class="code-block glass-card">
-                <pre><code><span class="comment"># 1. Compile your Tezz code targeting 'worker'</span>
-$ tezz build app.tezz --target worker --output dist/worker.js
-
-<span class="comment"># 2. Deploy to Cloudflare using Wrangler</span>
-$ npx wrangler deploy dist/worker.js</code></pre>
-              </div>
-            </div>
-
-          </div>
         </div>
       </section>
+    </main>
 
-      <!-- Footer -->
-      <footer style="padding-bottom: 4rem;">
-        <p>Tezz (तेज़) Programming Language. Officially created by <strong>Abhinav</strong>.</p>
-        <p style="margin-top: 15px; font-size: 0.95rem;">
-          <a href="https://tezz.abhinavkumarsingh.tech" style="color: var(--accent-cyan); text-decoration: none;">Website</a> | 
-          <a href="https://www.npmjs.com/package/tezz-lang" style="color: var(--accent-cyan); text-decoration: none;">NPM</a> | 
-          <a href="https://github.com/abhinav29102005" style="color: var(--accent-yellow); text-decoration: none;">GitHub</a> | 
-          <a href="https://linkedin.com/in/bigboyaks" style="color: var(--accent-yellow); text-decoration: none;">LinkedIn</a> | 
-          <a href="https://abhinavkumarsingh.tech" style="color: var(--accent-yellow); text-decoration: none;">Portfolio</a>
-        </p>
-      </footer>
-    </div>
-    <script type="module" src="/main.js"></script>
+    <footer class="npm-footer">
+      <p>Built with ⚡ by Abhinav. Tezz v0.2.0.</p>
+    </footer>
+
   </body>
 </html>
