@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+const printDocs = require('../src/docs.js');
 
 // Tezz (तेज़) — CLI
 // The Fast Backend Language
@@ -492,6 +493,9 @@ switch (command) {
     break;
   case 'init':
     cmdInit();
+    break;
+  case 'docs':
+    printDocs();
     break;
   case 'repl':
     cmdRepl();
