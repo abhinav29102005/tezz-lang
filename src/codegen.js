@@ -319,7 +319,7 @@ genImport(node) {
     this.line(`method: '${node.method}',`);
     this.line(`pattern: new RegExp('${pattern}'),`);
     this.line(`paramNames: ${JSON.stringify(paramNames)},`);
-    this.line(`handler: async function(__tezz_request, __tezz_params) {`);
+    this.line(`handler: async function(__tezz_request, __tezz_params, env) {`);
     this.indent++;
     // Expose request and params as local variables
     this.line(`const request = __tezz_request;`);
@@ -400,7 +400,7 @@ genImport(node) {
     // Call handler
     this.line(`try {`);
     this.indent++;
-    this.line(`const __result = await __route.handler(__request, __params);`);
+    this.line(`const __result = await __route.handler(__request, __params, env);`);
     this.line(`const __status = __result && __result.__tezz_status ? __result.__tezz_status : 200;`);
     this.line(`const __respBody = __result && __result.__tezz_body ? __result.__tezz_body : (__result || {});`);
     this.line(`res.writeHead(__status, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });`);
@@ -500,7 +500,7 @@ genImport(node) {
 
     this.line(`try {`);
     this.indent++;
-    this.line(`const __result = await __route.handler(__request, __params);`);
+    this.line(`const __result = await __route.handler(__request, __params, env);`);
     this.line(`const __status = __result && __result.__tezz_status ? __result.__tezz_status : 200;`);
     this.line(`const __respBody = __result && __result.__tezz_body ? __result.__tezz_body : (__result || {});`);
     this.line(`return new Response(JSON.stringify(__respBody), {`);

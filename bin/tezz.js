@@ -198,10 +198,32 @@ function cmdBuild(file, options) {
     const result = compile(source, { target });
     const jsCode = typeof result === 'string' ? result : result.code;
 
-    const outputFile = options.output || file.replace(/\.tezz$/, '.js');
+    
+    let outputFile = options.output;
+    if (!outputFile) {
+      const parsedPath = path.parse(file);
+      outputFile = path.join(parsedPath.dir, '.tezz', 'build', parsedPath.name + '.js');
+    }
 
+
+    
     const outDir = path.dirname(outputFile);
-    if (outDir && !fs.existsSync(outDir)) fs.mkdirSync(outDir, { recursive: true });
+    if (outDir && !fs.existsSync(outDir)) {
+      fs.mkdirSync(outDir, { recursive: true });
+      // If it's the .tezz build dir, auto-ignore it
+      if (outDir.includes('.tezz')) {
+        const gitignorePath = path.join(process.cwd(), '.gitignore');
+        if (fs.existsSync(gitignorePath)) {
+          const gi = fs.readFileSync(gitignorePath, 'utf8');
+          if (!gi.includes('.tezz')) {
+            fs.appendFileSync(gitignorePath, '\n.tezz\n');
+          }
+        } else {
+          fs.writeFileSync(gitignorePath, '.tezz\n');
+        }
+      }
+    }
+
 
     fs.writeFileSync(outputFile, jsCode);
 

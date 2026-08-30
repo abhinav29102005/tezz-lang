@@ -1,3 +1,43 @@
+# ⚡ Tezz (तेज़)
+
+**The Blazing Fast, Zero-Overhead Language for the Modern Edge**
+
+Tezz is a next-generation transpiled programming language designed to give you the strict, clean, and elegant developer experience (DX) of languages like Rust and Go, while compiling directly into highly optimized, boilerplate-free JavaScript.
+
+### Why Tezz?
+
+JavaScript is the undisputed assembly language of the web. Platforms like Cloudflare Workers and V8 runtimes natively execute JavaScript and WebAssembly. Instead of building a heavy, slow custom runtime, **Tezz compiles your code directly to raw JavaScript.**
+
+By compiling to JS, Tezz unlocks:
+- **Zero-Overhead Edge Deployment**: Your backend runs natively on Cloudflare Workers and Node.js without a bulky language runtime.
+- **Vast Ecosystem**: You can still import and use the millions of packages on NPM.
+- **V8 Optimizations**: Tezz rides on billions of dollars of engine optimizations built into V8.
+
+### Unmatched Developer Experience (DX)
+
+The point of Tezz is to eliminate the painful boilerplate of modern web development. You shouldn't have to manually configure CORS, wrangle with `try/catch` JSON parsing, or set up rigid routing frameworks.
+
+Tezz abstracts all of that away with a beautiful, brace-based syntax. 
+
+**You write 25 lines of elegant Tezz:**
+```tezz
+service on 8787 {
+  GET "/api/hello" {
+    return { success: true, message: "Hello World" }
+  }
+}
+```
+
+**Tezz automatically generates 100+ lines of robust JavaScript** that handles:
+- Cross-Origin Resource Sharing (CORS) preflight and headers automatically.
+- Parameter extraction via Regex.
+- Secure, non-blocking asynchronous `req.json()` parsing.
+- Auto-mapping returned objects to HTTP `200 OK` JSON responses.
+- Safe `500 Internal Server Error` fallbacks.
+
+To keep your workspace completely clean, Tezz automatically hides the generated JavaScript files inside a hidden `.tezz/build/` directory! You never have to look at the JS.
+
+
 # Tezz (तेज़) ⚡
 
 **The Fast Backend Language** — Write once, deploy everywhere.

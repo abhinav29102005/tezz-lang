@@ -12,6 +12,6 @@
   "dependencies": {
     "dotenv": "^17.4.2",
     "tezz-database": "^0.1.1",
-    "tezz-lang": "^0.4.3"
+    "tezz-lang": "^0.4.5"
   }
 }
