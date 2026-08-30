@@ -54,7 +54,7 @@
           btn.disabled = true;
           
           try {
-            const res = await fetch(import.meta.env.VITE_API_URL + '/api/contact', {
+            const res = await fetch((import.meta.env.VITE_API_URL || 'https://tezz-contact-api.bigboyaks-account.workers.dev') + '/api/contact', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
