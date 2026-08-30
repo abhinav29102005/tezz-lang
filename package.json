@@ -1,6 +1,6 @@
 {
   "name": "tezz-lang",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "Tezz (तेज़) — The Fast Backend Language. Write once, deploy everywhere: Cloudflare Workers, Node.js, Deno, Bun.",
   "main": "src/lexer.js",
   "bin": {
