@@ -122,4 +122,4 @@ npx wrangler deploy dist/worker.js
 | **Workers** | Edge-first, request/response model |
 
 ---
-**Made with and तेज़ी (speed)**
+**Made with ❤️ and तेज़ी (speed)**

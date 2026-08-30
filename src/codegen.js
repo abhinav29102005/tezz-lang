@@ -27,6 +27,11 @@ class CodeGenerator {
     this.emit(`// Target: ${this.target}\n`);
     this.emit(`// Generated at: ${new Date().toISOString()}\n\n`);
 
+    if (this.target === 'node') {
+      this.emit('const env = typeof process !== "undefined" ? process.env : {};\n\n');
+    }
+
+
     // Collect services for later
     for (const node of this.ast.body) {
       if (node.type === 'ServiceDeclaration') this.services.push(node);
@@ -90,7 +95,11 @@ class CodeGenerator {
 
   genReturn(node) {
     if (node.value) {
-      this.line(`return ${this.genExpr(node.value)};`);
+      if (this.inRoute) {
+        this.line(`return { __tezz_status: 200, __tezz_body: ${this.genExpr(node.value)} };`);
+      } else {
+        this.line(`return ${this.genExpr(node.value)};`);
+      }
     } else {
       this.line('return;');
     }
@@ -165,7 +174,7 @@ genImport(node) {
         if (this.target === 'worker') {
           this.line(`import ${node.name} from '${pkgName}';`);
         } else {
-          this.line(`const ${node.name} = require('${pkgName}');`);
+          this.line(`const ${node.name} = require('${pkgName}').default || require('${pkgName}');`);
         }
       } else {
         throw new Error(`[Tezz Codegen] Unknown standard library: ${node.source}`);
@@ -176,7 +185,7 @@ genImport(node) {
     if (this.target === 'worker') {
       this.line(`import ${node.name} from '${node.source}';`);
     } else {
-      this.line(`const ${node.name} = require('${node.source}');`);
+      this.line(`const ${node.name} = require('${node.source}').default || require('${node.source}');`);
     }
   }
 
@@ -315,7 +324,9 @@ genImport(node) {
     // Expose request and params as local variables
     this.line(`const request = __tezz_request;`);
     this.line(`const params = __tezz_params;`);
+    this.inRoute = true;
     for (const s of node.body) this.genStmt(s);
+    this.inRoute = false;
     this.indent--;
     this.line(`}`);
     this.indent--;

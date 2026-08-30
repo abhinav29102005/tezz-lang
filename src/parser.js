@@ -150,7 +150,10 @@ class Parser {
   parseServiceDecl() {
     const line = this.peek().line;
     this.expect(TokenType.SERVICE);
-    const name = this.expect(TokenType.IDENTIFIER).value;
+    let name = "AnonymousService_" + Math.random().toString(36).substring(2, 8);
+    if (this.check(TokenType.IDENTIFIER)) {
+      name = this.expect(TokenType.IDENTIFIER).value;
+    }
     this.expect(TokenType.ON);
     const port = this.parseExpression();
     this.expect(TokenType.LBRACE);
@@ -158,6 +161,8 @@ class Parser {
     while (!this.check(TokenType.RBRACE) && !this.isAtEnd()) {
       if (this.check(TokenType.ROUTE)) {
         routes.push(this.parseRouteDecl());
+      } else if (this.check(TokenType.IDENTIFIER) && ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'].includes(this.peek().value.toUpperCase())) {
+        routes.push(this.parseRouteDecl(true));
       } else {
         routes.push(this.parseStatement());
       }
@@ -166,10 +171,12 @@ class Parser {
     return { type: 'ServiceDeclaration', name, port, routes, line };
   }
 
-  // route GET "/path" { body }
-  parseRouteDecl() {
+  // [route]? GET "/path" { body }
+  parseRouteDecl(isOptional = false) {
     const line = this.peek().line;
-    this.expect(TokenType.ROUTE);
+    if (!isOptional) {
+      this.expect(TokenType.ROUTE);
+    }
     const method = this.expect(TokenType.IDENTIFIER).value.toUpperCase();
     const path = this.expect(TokenType.STRING).value;
     const body = this.parseBlock();

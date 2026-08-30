@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "tezz-database": "file:../packages/tezz-database"
+    "dotenv": "^17.4.2",
+    "tezz-database": "^0.1.1",
+    "tezz-lang": "^0.4.3"
   }
 }

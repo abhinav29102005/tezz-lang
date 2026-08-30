@@ -4,6 +4,7 @@
 // The Fast Backend Language
 // Created by Abhinav
 
+
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
@@ -31,7 +32,7 @@ const HELP = `${BANNER}
   \x1b[1mCommands:\x1b[0m
     run   <file.tezz>           Compile and run a Tezz file
     dev   <file.tezz>           Run with hot-reload (watches for changes)
-    deploy <file.tezz>          Deploy natively to Cloudflare Edge\n    build <file.tezz>           Compile to JavaScript
+    deploy <file.tezz>          Deploy natively to Cloudflare Edge\n    build <file.tezz>           Compile to JavaScript\n    install <pkg>               Install a package (e.g. tezz install database)
     init                        Create a new Tezz project
     repl                        Start the interactive Tezz REPL
 
@@ -46,7 +47,7 @@ const HELP = `${BANNER}
     tezz dev app.tezz
     tezz deploy app.tezz
     tezz build app.tezz --target worker
-    tezz init
+    tezz install database\n    tezz init
     tezz repl
 `;
 
@@ -91,6 +92,26 @@ function compile(source, options = {}) {
 }
 
 // --- Commands ---
+
+function cmdInstall(pkg) {
+  if (!pkg) { console.error('Usage: tezz install <pkg>'); process.exit(1); }
+  const fullName = pkg.startsWith('tezz-') ? pkg : `tezz-${pkg}`;
+  console.log(BANNER);
+  console.log(`  \x1b[93mInstalling ${fullName}...\x1b[0m\n`);
+  const child = spawn('npm', ['install', fullName], {
+    stdio: 'inherit',
+    cwd: process.cwd()
+  });
+  child.on('exit', (code) => {
+    if (code === 0) {
+      console.log(`\n  \x1b[32m✓ Successfully installed ${fullName}\x1b[0m\n`);
+    } else {
+      console.error(`\n  \x1b[31m✗ Installation failed.\x1b[0m\n`);
+    }
+    process.exit(code || 0);
+  });
+}
+
 
 function cmdRun(file, options, isDev = false) {
   if (!fs.existsSync(file)) {
@@ -349,12 +370,22 @@ function cmdRepl() {
 const args = process.argv.slice(2);
 
 // Load .env silently
+
+// Load .env relative to the target file if provided
 try {
-  if (fs.existsSync('.env')) {
+  let targetDir = process.cwd();
+  for (let i = 1; i < args.length; i++) {
+    if (!args[i].startsWith('-') && !['run', 'dev', 'deploy', 'build', 'install', 'init', 'repl'].includes(args[i])) {
+      targetDir = require('path').dirname(require('path').resolve(args[i]));
+      break;
+    }
+  }
+  const envPath = require('path').join(targetDir, '.env');
+  if (require('fs').existsSync(envPath)) {
     if (process.loadEnvFile) {
-      process.loadEnvFile();
+      process.loadEnvFile(envPath);
     } else {
-      const envFile = fs.readFileSync('.env', 'utf-8');
+      const envFile = require('fs').readFileSync(envPath, 'utf-8');
       envFile.split('\n').forEach(line => {
         const match = line.match(/^\s*([^#=\s]+)\s*=\s*(.*)$/);
         if (match) {
@@ -367,6 +398,7 @@ try {
     }
   }
 } catch (e) {}
+
 
 if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
   console.log(HELP);
@@ -407,7 +439,15 @@ if (command === '--internal-run') {
   return;
 }
 
+
+// Alias `run dev` to `dev`
+if (command === 'run' && options.file === 'dev' && args.length > 2) {
+  command = 'dev';
+  options.file = args[2];
+}
+
 switch (command) {
+
   case 'run':
     if (!options.file) { console.error('Usage: tezz run <file.tezz>'); process.exit(1); }
     cmdRun(options.file, options, false);
@@ -423,6 +463,10 @@ switch (command) {
   case 'build':
     if (!options.file) { console.error('Usage: tezz build <file.tezz>'); process.exit(1); }
     cmdBuild(options.file, options);
+    break;
+  
+  case 'install':
+    cmdInstall(options.file);
     break;
   case 'init':
     cmdInit();

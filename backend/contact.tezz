@@ -1,18 +1,29 @@
 import createClient from "tezz-database"
 
-service ContactAPI on 8787 {
-  route GET "/" {
-    respond 200 { status: "healthy", service: "Contact API" }
+service on 8787 {
+  GET "/" {
+    return { status: "healthy", service: "Contact API" }
   }
 
-  route POST "/api/contact" {
+  GET "/api/contacts" {
+    return { 
+      success: true,
+      contacts: [
+        { name: "Abhinav", email: "abhinav@example.com", message: "Tezz is blazing fast!" },
+        { name: "Batman", email: "batman@wayne.com", message: "We should use Tezz!" },
+        { name: "Pikachu", email: "pika@chu.com", message: "Zero-overhead JS without node_modules" }
+      ]
+    }
+  }
+
+  POST "/api/contact" {
     let body = request.json()
     let name = body.name
     let email = body.email
     let message = body.message
 
     if !name || !email || !message {
-      respond 400 { success: false, error: "Missing required fields" }
+      return { success: false, error: "Missing required fields" }
       return
     }
 
@@ -25,10 +36,10 @@ service ContactAPI on 8787 {
       let result = await db.execute("INSERT INTO contacts (name, email, message) VALUES (?, ?, ?)", [name, email, message])
 
       if result.ok {
-        respond 200 { success: true }
+        return { success: true }
       }
     } catch err {
-      respond 500 { success: false, error: "Database error" }
+      return { success: false, error: "Database error" }
     }
   }
 }
