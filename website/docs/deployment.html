@@ -46,10 +46,32 @@
       <pre><code>tezz build app.tezz --target node --output dist/server.js
 node dist/server.js</code></pre>
 
-      <h2 id="cloudflare-workers">Deploying to Cloudflare Workers</h2>
-      <pre><code>tezz deploy app.tezz --name my-super-fast-api</code></pre>
+            <h2 id="cloudflare-workers">Deploying to Cloudflare Workers (Recommended for Edge)</h2>
+      <p>Tezz shines on Cloudflare Workers because it compiles to zero-overhead JavaScript.</p>
+      <ol>
+        <li><strong>Initialize your project:</strong> <code>tezz init</code></li>
+        <li><strong>Develop locally:</strong> <code>tezz build backend/contact.tezz --target worker</code></li>
+        <li><strong>Configure your wrangler.toml:</strong> Ensure it points to the generated hidden file:
+          <pre><code>main = ".tezz/build/contact.js"</code></pre>
+        </li>
+        <li><strong>Deploy:</strong> <code>npx wrangler deploy</code> (Or just use <code>tezz deploy backend/contact.tezz</code>)</li>
+      </ol>
 
-      <h2 id="why-target">Why Target-Based Compilation?</h2>
+      <h2 id="nodejs">Deploying to Node.js (Traditional Servers / VPS / Docker)</h2>
+      <ol>
+        <li><strong>Build for Node target (default):</strong>
+          <pre><code>tezz build backend/contact.tezz</code></pre>
+          <em>(This generates .tezz/build/contact.js)</em>
+        </li>
+        <li><strong>Run it using Node directly:</strong>
+          <pre><code>node .tezz/build/contact.js</code></pre>
+        </li>
+        <li><strong>Production Deployment (e.g. via PM2):</strong>
+          <pre><code>pm2 start .tezz/build/contact.js --name tezz-api</code></pre>
+        </li>
+      </ol>
+
+      <h2 id="why-target">Why Target-Based Compilation?</h2>Why Target-Based Compilation?</h2>
       <p>Your source code never changes. If you target node, the codegen outputs http.createServer. If you target worker, it outputs an export default { fetch() } object.</p>
     </section>
       </main>

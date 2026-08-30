@@ -44,11 +44,14 @@
       
       <p>Install Tezz globally using npm:</p>
       <pre><code>npm install -g tezz-lang</code></pre>
-      <h2 id="cli-commands">CLI Commands</h2>
+            <h2 id="cli-commands">Core CLI Commands</h2>
       <ul>
-        <li><code>tezz run app.tezz</code> - Runs your server locally with hot-reloading.</li>
-        <li><code>tezz build app.tezz</code> - Compiles to production-ready JS.</li>
-        <li><code>tezz deploy app.tezz</code> - Deploys straight to Cloudflare Workers.</li>
+        <li><code>tezz run &lt;file.tezz&gt;</code> - Compiles and executes a Tezz file immediately in Node.</li>
+        <li><code>tezz dev &lt;file.tezz&gt;</code> - Runs a Tezz file in watch mode (auto-reload on changes).</li>
+        <li><code>tezz build &lt;file.tezz&gt;</code> - Compiles a Tezz file to JavaScript (outputs to <code>.tezz/build/</code>). Use <code>--target worker</code> for Cloudflare Workers.</li>
+        <li><code>tezz init</code> - Initializes a new Tezz project with boilerplate.</li>
+        <li><code>tezz deploy &lt;file.tezz&gt;</code> - Automatically builds and deploys to Cloudflare via Wrangler.</li>
+        <li><code>tezz docs</code> - Displays extensive documentation directly in your terminal.</li>
       </ul>
       <div style="text-align:center; margin: 2rem 0;"><img src="https://i.imgflip.com/1bhm.jpg" style="max-width:400px; border-radius: 8px;"/></div>
     </section>
