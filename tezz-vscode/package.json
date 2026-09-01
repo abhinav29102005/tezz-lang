@@ -1,8 +1,8 @@
 {
   "name": "tezz-lang",
   "displayName": "Tezz",
-  "description": "Syntax highlighting and snippets for the Tezz programming language.",
-  "version": "0.2.0",
+  "description": "Premium syntax highlighting, snippets, and real-time LSP integration for the Tezz programming language.",
+  "version": "0.2.1",
   "engines": {
     "vscode": "^1.80.0"
   },
@@ -57,5 +57,7 @@
   "devDependencies": {
     "@types/node": "^26.4.0",
     "typescript": "^7.0.2"
-  }
+  },
+  "author": "Abhinav",
+  "license": "MIT"
 }
