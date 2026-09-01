@@ -1,0 +1,29 @@
+{
+  "Service Block": {
+    "prefix": "service",
+    "body": [
+      "service ${1:Name} on ${2:8080} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create a new Tezz service"
+  },
+  "Route Block": {
+    "prefix": "route",
+    "body": [
+      "route ${1|GET,POST,PUT,DELETE|} \"/${2:path}\" {",
+      "\trespond ${3:200} { ${4:message}: \"${5:success}\" }",
+      "}"
+    ],
+    "description": "Create a new HTTP route"
+  },
+  "Spawn Block": {
+    "prefix": "spawn",
+    "body": [
+      "spawn {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create a parallel spawn block"
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Tezz",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#functions"
+    },
+    {
+      "include": "#macros"
+    },
+    {
+      "include": "#constants"
+    },
+    {
+      "include": "#types"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "match": "//.*$",
+          "name": "comment.line.double-slash.tezz"
+        },
+        {
+          "begin": "/\\*",
+          "end": "\\*/",
+          "name": "comment.block.tezz"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "match": "\\b(let|fn|service|route|on|spawn|return|import|from|enum|trait|if|else|for|while|await|async|class|struct|try|catch)\\b",
+          "name": "keyword.control.tezz"
+        },
+        {
+          "match": "\\b(GET|POST|PUT|DELETE|PATCH|OPTIONS)\\b",
+          "name": "keyword.other.http.tezz"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "begin": "\"",
+          "end": "\"",
+          "name": "string.quoted.double.tezz",
+          "patterns": [
+            {
+              "match": "\\\\.",
+              "name": "constant.character.escape.tezz"
+            }
+          ]
+        },
+        {
+          "begin": "'",
+          "end": "'",
+          "name": "string.quoted.single.tezz",
+          "patterns": [
+            {
+              "match": "\\\\.",
+              "name": "constant.character.escape.tezz"
+            }
+          ]
+        }
+      ]
+    },
+    "functions": {
+      "patterns": [
+        {
+          "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=\\()",
+          "name": "entity.name.function.tezz"
+        }
+      ]
+    },
+    "macros": {
+      "patterns": [
+        {
+          "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*!)\\b",
+          "name": "entity.name.function.macro.tezz"
+        }
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "match": "\\b(true|false|null|undefined)\\b",
+          "name": "constant.language.tezz"
+        },
+        {
+          "match": "\\b[0-9]+(\\.[0-9]+)?\\b",
+          "name": "constant.numeric.tezz"
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "match": "\\b([A-Z][a-zA-Z0-9_]*)\\b",
+          "name": "entity.name.type.tezz"
+        }
+      ]
+    }
+  },
+  "scopeName": "source.tezz"
+}

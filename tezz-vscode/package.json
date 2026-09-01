@@ -1,0 +1,61 @@
+{
+  "name": "tezz-lang",
+  "displayName": "Tezz Language Support",
+  "description": "Syntax highlighting and snippets for the Tezz programming language.",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "publisher": "tezz-lang",
+  "contributes": {
+    "languages": [
+      {
+        "id": "tezz",
+        "aliases": [
+          "Tezz",
+          "tezz"
+        ],
+        "extensions": [
+          ".tezz",
+          ".tz"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "tezz",
+        "scopeName": "source.tezz",
+        "path": "./syntaxes/tezz.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "tezz",
+        "path": "./snippets.json"
+      }
+    ]
+  },
+  "icon": "logo.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abhinav29102005/automatic-octo-carnival.git"
+  },
+  "main": "./client/out/extension.js",
+  "activationEvents": [
+    "onLanguage:tezz"
+  ],
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -b",
+    "watch": "tsc -b -w",
+    "postinstall": "cd client && npm install && cd ../server && npm install && cd .."
+  },
+  "devDependencies": {
+    "@types/node": "^26.4.0",
+    "typescript": "^7.0.2"
+  }
+}
