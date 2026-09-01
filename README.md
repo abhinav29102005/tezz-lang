@@ -1,145 +1,98 @@
-# ⚡ Tezz (तेज़)
+<div align="center">
+  <img src="https://raw.githubusercontent.com/abhinav29102005/automatic-octo-carnival/main/website/public/favicon.svg" width="120" alt="Tezz Logo" />
+  <h1>⚡ Tezz (तेज़) ⚡</h1>
+  <p><strong>The Blazing Fast, Zero-Overhead Language for the Modern Edge</strong></p>
+  
+  <p>
+    <a href="https://www.npmjs.com/package/tezz-lang"><img src="https://img.shields.io/npm/v/tezz-lang?color=00f2fe&label=npm" alt="NPM Version" /></a>
+    <a href="https://github.com/abhinav29102005/automatic-octo-carnival/actions"><img src="https://img.shields.io/github/actions/workflow/status/abhinav29102005/automatic-octo-carnival/test.yml?branch=main" alt="Build Status" /></a>
+    <a href="https://tezz.abhinavkumarsingh.tech"><img src="https://img.shields.io/badge/docs-tezz.abhinavkumarsingh.tech-4facfe" alt="Documentation" /></a>
+    <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License" /></a>
+  </p>
+</div>
 
-**The Blazing Fast, Zero-Overhead Language for the Modern Edge**
+---
 
-Tezz is a next-generation transpiled programming language designed to give you the strict, clean, and elegant developer experience (DX) of languages like Rust and Go, while compiling directly into highly optimized, boilerplate-free JavaScript.
+**Tezz** is a next-generation transpiled programming language designed to give you the strict, clean, and elegant developer experience (DX) of languages like Rust and Go, while compiling directly into highly optimized, boilerplate-free JavaScript.
 
-### Why Tezz?
+*(Tezz translates to "Fast / Sharp / Brilliant" in Hindi)*
 
-JavaScript is the undisputed assembly language of the web. Platforms like Cloudflare Workers and V8 runtimes natively execute JavaScript and WebAssembly. Instead of building a heavy, slow custom runtime, **Tezz compiles your code directly to raw JavaScript.**
-
-By compiling to JS, Tezz unlocks:
-- **Zero-Overhead Edge Deployment**: Your backend runs natively on Cloudflare Workers and Node.js without a bulky language runtime.
-- **Vast Ecosystem**: You can still import and use the millions of packages on NPM.
-- **V8 Optimizations**: Tezz rides on billions of dollars of engine optimizations built into V8.
-
-### Unmatched Developer Experience (DX)
-
-The point of Tezz is to eliminate the painful boilerplate of modern web development. You shouldn't have to manually configure CORS, wrangle with `try/catch` JSON parsing, or set up rigid routing frameworks.
-
-Tezz abstracts all of that away with a beautiful, brace-based syntax. 
-
-**You write 25 lines of elegant Tezz:**
-```tezz
-service on 8787 {
-  GET "/api/hello" {
-    return { success: true, message: "Hello World" }
-  }
-}
-```
-
-**Tezz automatically generates 100+ lines of robust JavaScript** that handles:
-- Cross-Origin Resource Sharing (CORS) preflight and headers automatically.
-- Parameter extraction via Regex.
-- Secure, non-blocking asynchronous `req.json()` parsing.
-- Auto-mapping returned objects to HTTP `200 OK` JSON responses.
-- Safe `500 Internal Server Error` fallbacks.
-
-To keep your workspace completely clean, Tezz automatically hides the generated JavaScript files inside a hidden `.tezz/build/` directory! You never have to look at the JS.
-
-
-# Tezz (तेज़) ⚡
-
-**The Fast Backend Language** — Write once, deploy everywhere.
-*Officially created by Abhinav.*
-
-**Website:** [tezz.abhinavkumarsingh.tech](https://tezz.abhinavkumarsingh.tech)  
-**NPM Package:** [npmjs.com/package/tezz-lang](https://www.npmjs.com/package/tezz-lang)  
-**Creator:** [Portfolio](https://abhinavkumarsingh.tech) | [LinkedIn](https://linkedin.com/in/bigboyaks) | [GitHub](https://github.com/abhinav29102005)
-
-Tezz is a brand new programming language designed for backend servers, services, and connectivity. It transpiles to JavaScript so it runs natively on **Cloudflare Workers, Node.js, Deno, and Bun**.
-
-> **Tezz (तेज़)** = Fast / Sharp / Brilliant in Hindi
-
-## Quick Start
+## 🚀 The 60-Second Quickstart
 
 ```bash
-# Install globally
+# 1. Install globally
 npm install -g tezz-lang
 
-# Create a new project
-tezz init
+# 2. Create a new project
+tezz init my-backend
 
-# Run your first service (Fileless JIT Execution - No JS files created!)
+# 3. Run your first service fileless in memory!
+cd my-backend
 tezz run app.tezz
 ```
 
-## Language Syntax
+## ✨ Why Tezz?
 
-### Variables & Data Types
+JavaScript is the assembly language of the web. Platforms like Cloudflare Workers and V8 runtimes natively execute JS. Instead of building a heavy custom runtime, **Tezz compiles your code directly to raw JavaScript.**
+
+- **Zero-Overhead Edge Deployment**: Runs natively on Cloudflare Workers, Node.js, Deno, and Bun.
+- **Vast Ecosystem**: Import and use millions of NPM packages natively.
+- **V8 Optimizations**: Tezz rides on billions of dollars of engine optimizations built into V8.
+- **🇮🇳 Native Hinglish Support**: Write `rakho` instead of `let`, `agar/warna` instead of `if/else`.
+
+## 💻 Beautifully Simple APIs
+
+The point of Tezz is to eliminate painful boilerplate. You shouldn't have to manually configure CORS or wrangle with JSON parsing.
+
+**You write 10 lines of elegant Tezz:**
 ```tezz
-let name = "Tezz"
-let port = 8080
-let users = ["Alice", "Bob"]
-let config = { debug: true, version: "1.0" }
-```
-
-### Services & Routes (The Killer Feature)
-```tezz
-service API on 3000 {
-
-  route GET "/hello" {
-    respond 200 { message: "Hello from Tezz! " }
-  }
-
-  route POST "/users" {
-    let body = request.json()
-    respond 201 { created: true, user: body.name }
+service API on 8080 {
+  route GET "/hello/:name" {
+    let name = params.name
+    respond 200 { message: "Hello " + name + ", from Tezz!" }
   }
 }
 ```
 
-### Advanced Types: Enums & Traits
-Tezz features static-typing constructs (similar to Rust) that compile with zero-overhead.
-```tezz
-enum Status { PENDING, ACTIVE, DELETED }
+**Tezz automatically generates 100+ lines of robust JavaScript** handling CORS, routing regex, secure asynchronous payload parsing, and error boundaries. All hidden in a `.tezz/build/` directory!
 
-trait UserProvider {
-  fn getUser(id)
-  fn saveUser(user)
-}
-```
+## 📦 Binaries (No Node.js Required)
 
-### Compile-Time Macros
-Deep metaprogramming without runtime overhead. Macros are expanded safely at compile time via the AST.
-```tezz
-macro log_status(status) {
-  print("The current status is:")
-  print(status)
-}
+Want to run Tezz without installing Node.js? Download the standalone binaries:
+- [Mac OS (Apple Silicon / Intel)](#)
+- [Linux (x64)](#)
+- [Windows (x64)](#)
 
-// In your route:
-log_status!(Status.ACTIVE)
-```
+*(Direct download links coming soon)*
 
-### Concurrency: Goroutines (`spawn` / `paida_kar`)
-Run heavy CPU-bound tasks in parallel! Tezz automatically compiles `spawn` blocks to OS-level `worker_threads` in Node.js, and non-blocking isolates on Cloudflare Edge.
+## 🧩 VS Code Extension
+
+Tezz has first-class IDE support.
+Search for **Tezz Language Support** in the VS Code Extensions marketplace to get:
+- Full Syntax Highlighting
+- Code Snippets (e.g., type `service` or `route`)
+- Auto-closing brackets and string support.
+
+## 🛠 Advanced Features
+
+### Concurrency: Goroutines (`spawn`)
+Run heavy CPU-bound tasks in parallel! Tezz automatically compiles `spawn` blocks to OS-level `worker_threads` in Node.js.
 ```tezz
 spawn {
   print("Running in parallel!")
 }
 ```
 
-### Standard Library Packages
-Tezz comes with officially supported decoupled packages. No duplicate code.
+### Compile-Time Macros
+Deep metaprogramming without runtime overhead.
 ```tezz
-import auth from "tezz-auth"
-import validator from "tezz-validator"
-import openapi from "tezz-openapi"
+macro log_status(status) {
+  print("Status: ")
+  print(status)
+}
+
+log_status!(Status.ACTIVE)
 ```
-
-## 🛠 CLI Commands
-
-| Command | Description |
-|---|---|
-| `tezz run <file.tezz>` | Execute fileless in memory |
-| `tezz dev <file.tezz>` | Run with instant hot-reloading |
-| `tezz build <file.tezz>` | Compile to JavaScript |
-| `tezz build <file> --static` | Bundle into a standalone portable binary! |
-| `tezz build <file> --target worker` | Compile for Cloudflare Workers |
-| `tezz deploy <file.tezz>` | One-click deploy natively to Cloudflare Edge |
-| `tezz init` | Create a new project |
-| `tezz repl` | Start the interactive Tezz shell |
 
 ## ☁ Deploy to Cloudflare Workers
 
@@ -151,15 +104,9 @@ tezz build app.tezz --target worker --output dist/worker.js
 npx wrangler deploy dist/worker.js
 ```
 
-## 🎯 Design Philosophy
+## 🤝 Contributing
 
-| From | What Tezz Takes |
-|---|---|
-| **Python** | Clean syntax, no semicolons |
-| **Go** | Built-in HTTP server, goroutines (`spawn`) |
-| **Rust** | Type annotations, Enums, Macros (`!`) |
-| **TypeScript** | Runs on JS runtimes, npm ecosystem |
-| **Workers** | Edge-first, request/response model |
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
 ---
-**Made with ❤️ and तेज़ी (speed)**
+**Made with ❤️ and तेज़ी (speed) by [Abhinav](https://abhinavkumarsingh.tech)**

@@ -17,7 +17,8 @@
     "test": "node bin/tezz.js build examples/hello.tezz --output /dev/null && echo 'Tests passed'",
     "example:hello": "node bin/tezz.js run examples/hello.tezz",
     "example:api": "node bin/tezz.js run examples/api.tezz",
-    "prepublishOnly": "npm test"
+    "prepublishOnly": "npm test",
+    "build:binaries": "npx pkg . --targets node18-linux-x64,node18-macos-x64,node18-win-x64 --out-path bin-dist/"
   },
   "keywords": [
     "tezz",
