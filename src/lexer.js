@@ -30,7 +30,7 @@ const TokenType = {
   LPAREN: 'LPAREN', RPAREN: 'RPAREN',
   LBRACE: 'LBRACE', RBRACE: 'RBRACE',
   LBRACKET: 'LBRACKET', RBRACKET: 'RBRACKET',
-  COMMA: 'COMMA', COLON: 'COLON', DOT: 'DOT', ARROW: 'ARROW',
+  COMMA: 'COMMA', COLON: 'COLON', DOT: 'DOT', DOT_DOT: 'DOT_DOT', ARROW: 'ARROW',
   SEMICOLON: 'SEMICOLON',
   EOF: 'EOF',
 };
@@ -147,7 +147,11 @@ class Lexer {
       if (ch === ']') { this.addToken(TokenType.RBRACKET, ']'); continue; }
       if (ch === ',') { this.addToken(TokenType.COMMA, ','); continue; }
       if (ch === ':') { this.addToken(TokenType.COLON, ':'); continue; }
-      if (ch === '.') { this.addToken(TokenType.DOT, '.'); continue; }
+      if (ch === '.') {
+        if (this.match('.')) { this.addToken(TokenType.DOT_DOT, '..'); }
+        else { this.addToken(TokenType.DOT, '.'); }
+        continue;
+      }
       if (ch === ';') { this.addToken(TokenType.SEMICOLON, ';'); continue; }
       if (ch === '*') { this.addToken(TokenType.STAR, '*'); continue; }
       if (ch === '/') { this.addToken(TokenType.SLASH, '/'); continue; }

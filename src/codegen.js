@@ -569,6 +569,8 @@ genImport(node) {
       case 'NullLiteral':          return 'null';
       case 'Identifier':           return node.name;
       case 'StringLiteral':        return this.genString(node);
+      case 'RangeExpression':
+        return `Array.from({length: (${this.genExpr(node.end)}) - (${this.genExpr(node.start)}) + 1}, (_, __i) => (${this.genExpr(node.start)}) + __i)`;
       case 'BinaryExpression':     return `(${this.genExpr(node.left)} ${node.operator} ${this.genExpr(node.right)})`;
       case 'UnaryExpression':      return `(${node.operator}${this.genExpr(node.operand)})`;
       case 'AssignmentExpression': return `${this.genExpr(node.target)} = ${this.genExpr(node.value)}`;

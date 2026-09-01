@@ -387,7 +387,7 @@ class Parser {
   parseExpression() { return this.parseAssignment(); }
 
   parseAssignment() {
-    const expr = this.parseOr();
+    const expr = this.parseRange();
     if (this.check(TokenType.ASSIGN)) {
       this.advance();
       const value = this.parseAssignment();
@@ -408,6 +408,17 @@ class Parser {
       }};
     }
     return expr;
+  }
+
+
+  parseRange() {
+    let left = this.parseOr();
+    if (this.check(TokenType.DOT_DOT)) {
+      this.advance();
+      let right = this.parseOr();
+      return { type: 'RangeExpression', start: left, end: right };
+    }
+    return left;
   }
 
   parseOr() {

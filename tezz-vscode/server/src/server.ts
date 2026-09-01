@@ -107,7 +107,7 @@ async function validateTextDocument(textDocument: TextDocument): Promise<void> {
 connection.onCompletion(
   (_textDocumentPosition: TextDocumentPositionParams): CompletionItem[] => {
     return [
-      { label: 'service', kind: CompletionItemKind.Keyword, data: 1 },
+            { label: 'service', kind: CompletionItemKind.Keyword, data: 1 },
       { label: 'GET', kind: CompletionItemKind.Method, data: 2 },
       { label: 'POST', kind: CompletionItemKind.Method, data: 3 },
       { label: 'fn', kind: CompletionItemKind.Keyword, data: 4 },
@@ -116,7 +116,11 @@ connection.onCompletion(
       { label: 'return', kind: CompletionItemKind.Keyword, data: 7 },
       { label: 'spawn', kind: CompletionItemKind.Function, data: 8 },
       { label: 'if', kind: CompletionItemKind.Keyword, data: 9 },
-      { label: 'else', kind: CompletionItemKind.Keyword, data: 10 }
+      { label: 'else', kind: CompletionItemKind.Keyword, data: 10 },
+      { label: 'Math', kind: CompletionItemKind.Module, data: 11 },
+      { label: 'JSON', kind: CompletionItemKind.Module, data: 12 },
+      { label: 'File', kind: CompletionItemKind.Module, data: 13 },
+      { label: 'System', kind: CompletionItemKind.Module, data: 14 }
     ];
   }
 );
@@ -126,7 +130,11 @@ connection.onCompletionResolve(
     const docs: Record<number, {detail: string, doc: string}> = {
       1: { detail: 'Service Definition', doc: 'Defines an HTTP service.\n\nExample:\nservice on 8787 {\n  GET "/" {\n    return { success: true }\n  }\n}' },
       2: { detail: 'GET Route', doc: 'Defines a GET route handler.' },
-      3: { detail: 'POST Route', doc: 'Defines a POST route handler.' },
+            3: { detail: 'POST Route', doc: 'Defines a POST route handler.' },
+      11: { detail: 'Standard Library: Math', doc: 'Native Tezz Math module. Includes .random(), .min(), .max(), .round(), etc.' },
+      12: { detail: 'Standard Library: JSON', doc: 'Native Tezz JSON module. Includes .parse(), .stringify().' },
+      13: { detail: 'Standard Library: File', doc: 'Native Tezz File system module. Includes .readSync(), .writeSync().' },
+      14: { detail: 'Standard Library: System', doc: 'Native Tezz System module. Includes .env, .exit().' },
       4: { detail: 'Function Definition', doc: 'Defines a new function using `fn`.' },
       5: { detail: 'Variable Declaration', doc: 'Declares a mutable variable.' },
       6: { detail: 'Constant Declaration', doc: 'Declares an immutable constant.' },
