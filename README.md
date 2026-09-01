@@ -1,11 +1,11 @@
 <div align="center">
-  <img src="https://raw.githubusercontent.com/abhinav29102005/automatic-octo-carnival/main/website/public/favicon.svg" width="120" alt="Tezz Logo" />
+  <img src="https://raw.githubusercontent.com/abhinav29102005/tezz-lang/main/website/public/favicon.svg" width="120" alt="Tezz Logo" />
   <h1>⚡ Tezz (तेज़) ⚡</h1>
   <p><strong>The Blazing Fast, Zero-Overhead Language for the Modern Edge</strong></p>
   
   <p>
     <a href="https://www.npmjs.com/package/tezz-lang"><img src="https://img.shields.io/npm/v/tezz-lang?color=00f2fe&label=npm" alt="NPM Version" /></a>
-    <a href="https://github.com/abhinav29102005/automatic-octo-carnival/actions"><img src="https://img.shields.io/github/actions/workflow/status/abhinav29102005/automatic-octo-carnival/test.yml?branch=main" alt="Build Status" /></a>
+    <a href="https://github.com/abhinav29102005/tezz-lang/actions"><img src="https://img.shields.io/github/actions/workflow/status/abhinav29102005/tezz-lang/test.yml?branch=main" alt="Build Status" /></a>
     <a href="https://tezz.abhinavkumarsingh.tech"><img src="https://img.shields.io/badge/docs-tezz.abhinavkumarsingh.tech-4facfe" alt="Documentation" /></a>
     <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License" /></a>
   </p>

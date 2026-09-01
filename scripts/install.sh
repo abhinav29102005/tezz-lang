@@ -27,7 +27,7 @@ else
 fi
 
 # In a real scenario, this URL would point to the GitHub releases
-DOWNLOAD_URL="https://github.com/abhinav29102005/automatic-octo-carnival/releases/latest/download/tezz-$PLATFORM-$ARCH"
+DOWNLOAD_URL="https://github.com/abhinav29102005/tezz-lang/releases/latest/download/tezz-$PLATFORM-$ARCH"
 INSTALL_DIR="/usr/local/bin"
 
 echo "Downloading Tezz for $PLATFORM ($ARCH)..."

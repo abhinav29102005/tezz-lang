@@ -46,12 +46,9 @@
   "icon": "logo.png",
   "repository": {
     "type": "git",
-    "url": "https://github.com/abhinav29102005/automatic-octo-carnival.git"
+    "url": "https://github.com/abhinav29102005/tezz-lang.git"
   },
   "main": "./client/out/extension.js",
-  "activationEvents": [
-    "onLanguage:tezz"
-  ],
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -b",

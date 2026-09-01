@@ -6,7 +6,7 @@ $Platform = "win"
 $Arch = "x64"
 
 # In a real scenario, this URL would point to the GitHub releases
-$DownloadUrl = "https://github.com/abhinav29102005/automatic-octo-carnival/releases/latest/download/tezz-$Platform-$Arch.exe"
+$DownloadUrl = "https://github.com/abhinav29102005/tezz-lang/releases/latest/download/tezz-$Platform-$Arch.exe"
 $InstallDir = "$env:USERPROFILE\AppData\Local\Tezz\bin"
 
 If (!(Test-Path -Path $InstallDir)) {

@@ -36,11 +36,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/abhinav29102005/automatic-octo-carnival.git"
+    "url": "git+https://github.com/abhinav29102005/tezz-lang.git"
   },
-  "homepage": "https://github.com/abhinav29102005/automatic-octo-carnival#readme",
+  "homepage": "https://github.com/abhinav29102005/tezz-lang#readme",
   "bugs": {
-    "url": "https://github.com/abhinav29102005/automatic-octo-carnival/issues"
+    "url": "https://github.com/abhinav29102005/tezz-lang/issues"
   },
   "engines": {
     "node": ">=18.0.0"
