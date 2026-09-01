@@ -1,8 +1,8 @@
 {
-  "name": "tezz",
-  "displayName": "Tezz Official",
+  "name": "tezz-lang",
+  "displayName": "Tezz Language Support",
   "description": "Premium syntax highlighting, snippets, and real-time LSP integration for the Tezz programming language.",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "engines": {
     "vscode": "^1.80.0"
   },
