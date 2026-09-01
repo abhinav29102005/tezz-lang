@@ -3,7 +3,8 @@
   "compilerOptions": {
     "outDir": "./out",
     "rootDir": "./src",
-    "composite": true
+    "composite": true,
+    "allowJs": true
   },
   "include": [
     "src"

@@ -1,8 +1,8 @@
 {
   "name": "tezz-lang",
-  "displayName": "Tezz Language Support",
+  "displayName": "Tezz",
   "description": "Syntax highlighting and snippets for the Tezz programming language.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "engines": {
     "vscode": "^1.80.0"
   },
