@@ -2,7 +2,7 @@
   "name": "tezz-lang",
   "displayName": "Tezz",
   "description": "Premium syntax highlighting, snippets, and real-time LSP integration for the Tezz programming language.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "engines": {
     "vscode": "^1.80.0"
   },
@@ -22,7 +22,11 @@
           ".tezz",
           ".tz"
         ],
-        "configuration": "./language-configuration.json"
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./logo.png",
+          "dark": "./logo.png"
+        }
       }
     ],
     "grammars": [
