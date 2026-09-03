@@ -71,6 +71,7 @@ class CodeGenerator {
       case 'SpawnStatement':       return this.genSpawn(node);
       case 'EnumDeclaration':      return this.genEnum(node);
       case 'TraitDeclaration':     return this.genTrait(node);
+      case 'ClassDeclaration':     return this.genClass(node);
       case 'MacroDeclaration':     return this.genMacro(node);
 
       default: throw new Error(`[Tezz Codegen] Unknown statement: ${node.type}`);
@@ -191,6 +192,30 @@ genImport(node) {
 
 
 
+
+
+  genClass(node) {
+    let decl = `class ${node.name}`;
+    if (node.superclass) {
+      decl += ` extends ${node.superclass}`;
+    }
+    decl += ' {';
+    this.line(decl);
+    this.indent++;
+    for (const m of node.methods) {
+      const params = m.params.join(', ');
+      this.line(`${m.name}(${params}) {`);
+      this.indent++;
+      for (const s of m.body) {
+        this.genStmt(s);
+      }
+      this.indent--;
+      this.line('}');
+    }
+    this.indent--;
+    this.line('}');
+    this.emit('\n');
+  }
 
   genEnum(node) {
     const obj = node.variants.map(v => `${v}: "${v}"`).join(', ');
@@ -581,6 +606,8 @@ genImport(node) {
       case 'ArrayLiteral':         return `[${node.elements.map(e => this.genExpr(e)).join(', ')}]`;
       case 'ObjectLiteral':        return this.genObject(node);
       case 'ArrowFunction':        return this.genArrow(node);
+      case 'ThisExpression':       return 'this';
+      case 'NewExpression':        return `new ${this.genExpr(node.callee)}(${node.arguments.map(a => this.genExpr(a)).join(', ')})`;
       default: throw new Error(`[Tezz Codegen] Unknown expression: ${node.type}`);
     }
   }
@@ -595,7 +622,7 @@ genImport(node) {
         .replace(/\{([^}]+)\}/g, '${$1}');
       return '`' + tmpl + '`';
     }
-    return "'" + val.replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'";
+    return "'" + val.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n').replace(/\r/g, '\\r') + "'";
   }
 
   genCall(node) {

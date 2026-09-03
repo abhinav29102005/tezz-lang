@@ -66,6 +66,7 @@ class Parser {
       case TokenType.SPAWN:   return this.parseSpawnStmt();
       case TokenType.ENUM:    return this.parseEnumDecl();
       case TokenType.TRAIT:   return this.parseTraitDecl();
+      case TokenType.CLASS:   return this.parseClassDeclaration();
       case TokenType.MACRO:   return this.parseMacroDecl();
 
       default:                return this.parseExprStmt();
@@ -289,7 +290,38 @@ class Parser {
     return { type: 'ExportStatement', declaration, line };
   }
 
+
+  // class Name [extends Super] { method() {} }
+  parseClassDeclaration() {
+    const line = this.peek().line;
+    this.expect(TokenType.CLASS);
+    const name = this.expect(TokenType.IDENTIFIER).value;
+    let superclass = null;
+    if (this.check(TokenType.EXTENDS)) {
+      this.advance();
+      superclass = this.expect(TokenType.IDENTIFIER).value;
+    }
+    this.expect(TokenType.LBRACE);
+    const methods = [];
+    while (!this.check(TokenType.RBRACE) && !this.isAtEnd()) {
+       const mLine = this.peek().line;
+       const mName = this.expect(TokenType.IDENTIFIER).value;
+       this.expect(TokenType.LPAREN);
+       const params = [];
+       if (!this.check(TokenType.RPAREN)) {
+         do { params.push(this.expect(TokenType.IDENTIFIER).value); }
+         while (this.check(TokenType.COMMA) && this.advance());
+       }
+       this.expect(TokenType.RPAREN);
+       const body = this.parseBlock();
+       methods.push({ type: 'MethodDefinition', name: mName, params, body, line: mLine });
+    }
+    this.expect(TokenType.RBRACE);
+    return { type: 'ClassDeclaration', name, superclass, methods, line };
+  }
+
   // { statements }
+
 
 
   // spawn { body }
@@ -553,6 +585,25 @@ class Parser {
       case TokenType.IDENTIFIER:
         this.advance();
         return { type: 'Identifier', name: token.value };
+
+      case TokenType.THIS:
+        this.advance();
+        return { type: 'ThisExpression' };
+
+      case TokenType.NEW: {
+        this.advance();
+        const callee = this.parsePrimary();
+        let args = [];
+        if (this.check(TokenType.LPAREN)) {
+          this.advance();
+          if (!this.check(TokenType.RPAREN)) {
+            do { args.push(this.parseExpression()); }
+            while (this.check(TokenType.COMMA) && this.advance());
+          }
+          this.expect(TokenType.RPAREN);
+        }
+        return { type: 'NewExpression', callee, arguments: args };
+      }
 
       case TokenType.LPAREN: {
         this.advance();

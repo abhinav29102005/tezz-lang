@@ -41,7 +41,7 @@
     "keywords": {
       "patterns": [
         {
-          "match": "\\b(let|fn|service|route|on|spawn|return|import|from|enum|trait|if|else|for|while|await|async|class|struct|try|catch)\\b",
+          "match": "\\b(let|const|fn|service|route|on|spawn|return|import|from|enum|trait|if|else|for|while|await|async|class|extends|new|this|try|catch|rakho|pakka|agar|warna|jabtak|har|mein|koshish|pakad|dikha|baadmein|ruko|piche_kam|paida_kar|vikalp|lakshan|jadoo|dhancha|naya|yeh|se_bana)\\b",
           "name": "keyword.control.tezz"
         },
         {

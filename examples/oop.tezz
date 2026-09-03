@@ -1,0 +1,39 @@
+-- Testing OOP in Tezz
+
+class Animal {
+  constructor(name) {
+    this.name = name
+  }
+  
+  speak() {
+    print(this.name + " makes a noise.")
+  }
+}
+
+class Dog extends Animal {
+  speak() {
+    print(this.name + " barks: Woof!")
+  }
+  
+  fetch() {
+    print(this.name + " is fetching the ball!")
+  }
+}
+
+let generic = new Animal("Creature")
+generic.speak()
+
+let myDog = new Dog("Buddy")
+myDog.speak()
+myDog.fetch()
+
+print("\n=== Testing Hinglish OOP ===")
+
+dhancha Billi se_bana Animal {
+  speak() {
+    dikha(yeh.name + " meows: Meow!")
+  }
+}
+
+rakho myCat = naya Billi("Whiskers")
+myCat.speak()

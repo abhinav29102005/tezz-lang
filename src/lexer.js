@@ -17,6 +17,7 @@ const TokenType = {
   PRINT: 'PRINT', ASYNC: 'ASYNC', AWAIT: 'AWAIT',
   BACKGROUND: 'BACKGROUND', SPAWN: 'SPAWN',
   ENUM: 'ENUM', TRAIT: 'TRAIT', MACRO: 'MACRO',
+  CLASS: 'CLASS', NEW: 'NEW', THIS: 'THIS', EXTENDS: 'EXTENDS',
 
   // Operators
   PLUS: 'PLUS', MINUS: 'MINUS', STAR: 'STAR', SLASH: 'SLASH', PERCENT: 'PERCENT',
@@ -55,6 +56,7 @@ const KEYWORDS = {
   'enum': TokenType.ENUM,
   'trait': TokenType.TRAIT,
   'macro': TokenType.MACRO,
+  'class': TokenType.CLASS, 'new': TokenType.NEW, 'this': TokenType.THIS, 'extends': TokenType.EXTENDS,
 
   // Hinglish keywords — same token types, different words
   'rakho': TokenType.LET,        // let = rakho (keep/store)
@@ -84,6 +86,7 @@ const KEYWORDS = {
   'vikalp': TokenType.ENUM,          // enum = vikalp
   'lakshan': TokenType.TRAIT,        // trait = lakshan
   'jadoo': TokenType.MACRO,          // macro = jadoo
+  'dhancha': TokenType.CLASS, 'naya': TokenType.NEW, 'yeh': TokenType.THIS, 'se_bana': TokenType.EXTENDS,
 };
 
 class Token {
@@ -261,7 +264,7 @@ class Lexer {
   scanIdentifier(first) {
     let value = first;
     while (this.pos < this.source.length && /[a-zA-Z0-9_]/.test(this.peek())) value += this.advance();
-    this.addToken(KEYWORDS[value] || TokenType.IDENTIFIER, value);
+    this.addToken(Object.prototype.hasOwnProperty.call(KEYWORDS, value) ? KEYWORDS[value] : TokenType.IDENTIFIER, value);
   }
 }
 
