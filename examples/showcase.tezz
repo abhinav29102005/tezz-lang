@@ -1,0 +1,134 @@
+-- Tezz (तेज़) Language - The Ultimate Showcase
+-- A zero-overhead, blazing fast backend language.
+
+import Core from "std/core"
+
+-- 1. Enums and Traits (Interfaces)
+enum ApplicationState {
+  INITIALIZING,
+  RUNNING,
+  STOPPED,
+  ERROR
+}
+
+trait Serializable {
+  fn toJSON()
+  fn fromJSON(data)
+}
+
+-- 2. Macros for Metaprogramming
+macro log_execution(funcName) {
+  print("[SYSTEM_LOG] Executing function: " + funcName)
+  let startTime = Date.now()
+}
+
+-- 3. Advanced Object-Oriented Programming
+class BaseController {
+  constructor(name) {
+    this.name = name
+    this.createdAt = Date.now()
+  }
+
+  log(message) {
+    print("[" + this.name + "] " + message)
+  }
+}
+
+class UserController extends BaseController {
+  constructor(dbConnection) {
+    this.name = "UserController"
+    this.db = dbConnection
+    this.cache = {}
+  }
+
+  fetchUserById(id) {
+    if (this.cache[id]) {
+      return this.cache[id]
+    }
+    
+    try {
+      let user = await this.db.query("SELECT * FROM users WHERE id = ?", id)
+      this.cache[id] = user
+      return user
+    } catch err {
+      this.log("Database error: " + err.message)
+      return null
+    }
+  }
+}
+
+-- 4. Native Edge HTTP Server (Cloudflare Workers / Node.js)
+service ProductionAPI on 3000 {
+  
+  route GET "/health" {
+    log_execution!("HealthCheck")
+    
+    let uptime = Date.now()
+    
+    -- Native JSON responses
+    respond 200 { 
+      status: "Operational",
+      state: ApplicationState.RUNNING,
+      uptime_ms: uptime
+    }
+  }
+
+  route POST "/api/users" {
+    let payload = request.body
+    
+    -- Background jobs run asynchronously outside the request lifecycle
+    background {
+      Logger.trackAnalytics("user_signup", payload.email)
+    }
+    
+    respond 201 { success: true, message: "User created" }
+  }
+}
+
+-- 5. Control Flow & Data Processing
+fn processBatch(items) {
+  let processed = []
+  
+  -- Range operator (1..100) and loops
+  for idx in 1..items.length {
+    let current = items[idx]
+    
+    if (current.isValid) {
+      processed.push(current.transform())
+    } else {
+      print("Skipping invalid item at index " + idx)
+    }
+  }
+  
+  return processed
+}
+
+-- 6. Hinglish Support (Native Translation) 🇮🇳
+-- Writing the exact same OOP structures using native Hinglish keywords!
+
+dhancha PaymentProcessor se_bana BaseController {
+  
+  process() {
+    koshish {
+      dikha("Payment processing started...")
+      
+      -- jabtak (while), ruko (await), baadmein (async)
+      let attempt = 0
+      jabtak (attempt < 3) {
+        let success = ruko Crypto.verifyTransaction()
+        agar (success) {
+          dikha("Transaction successful!")
+          return true
+        } warna {
+          attempt = attempt + 1
+        }
+      }
+    } pakad err {
+      dikha("Transaction failed: " + err)
+    }
+  }
+}
+
+-- Instantiation using 'rakho' (let), 'naya' (new), and 'yeh' (this)
+rakho processor = naya PaymentProcessor("Stripe")
+processor.process()
