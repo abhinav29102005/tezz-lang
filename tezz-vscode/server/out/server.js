@@ -92,7 +92,11 @@ connection.onCompletion((_textDocumentPosition) => {
         { label: 'return', kind: node_1.CompletionItemKind.Keyword, data: 7 },
         { label: 'spawn', kind: node_1.CompletionItemKind.Function, data: 8 },
         { label: 'if', kind: node_1.CompletionItemKind.Keyword, data: 9 },
-        { label: 'else', kind: node_1.CompletionItemKind.Keyword, data: 10 }
+        { label: 'else', kind: node_1.CompletionItemKind.Keyword, data: 10 },
+        { label: 'Math', kind: node_1.CompletionItemKind.Module, data: 11 },
+        { label: 'JSON', kind: node_1.CompletionItemKind.Module, data: 12 },
+        { label: 'File', kind: node_1.CompletionItemKind.Module, data: 13 },
+        { label: 'System', kind: node_1.CompletionItemKind.Module, data: 14 }
     ];
 });
 connection.onCompletionResolve((item) => {
@@ -100,6 +104,10 @@ connection.onCompletionResolve((item) => {
         1: { detail: 'Service Definition', doc: 'Defines an HTTP service.\n\nExample:\nservice on 8787 {\n  GET "/" {\n    return { success: true }\n  }\n}' },
         2: { detail: 'GET Route', doc: 'Defines a GET route handler.' },
         3: { detail: 'POST Route', doc: 'Defines a POST route handler.' },
+        11: { detail: 'Standard Library: Math', doc: 'Native Tezz Math module. Includes .random(), .min(), .max(), .round(), etc.' },
+        12: { detail: 'Standard Library: JSON', doc: 'Native Tezz JSON module. Includes .parse(), .stringify().' },
+        13: { detail: 'Standard Library: File', doc: 'Native Tezz File system module. Includes .readSync(), .writeSync().' },
+        14: { detail: 'Standard Library: System', doc: 'Native Tezz System module. Includes .env, .exit().' },
         4: { detail: 'Function Definition', doc: 'Defines a new function using `fn`.' },
         5: { detail: 'Variable Declaration', doc: 'Declares a mutable variable.' },
         6: { detail: 'Constant Declaration', doc: 'Declares an immutable constant.' },
