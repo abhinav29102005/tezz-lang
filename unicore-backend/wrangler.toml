@@ -1,0 +1,7 @@
+name = "unicore-backend"
+main = "src/worker.js"
+compatibility_date = "2024-04-05"
+
+[vars]
+TURSO_URL = "libsql://unicore-abhinav29102005.aws-ap-northeast-1.turso.io"
+TURSO_TOKEN = "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJhIjoicnciLCJpYXQiOjE3ODkzNDU3NTAsImlkIjoiMDFhMDlkNTEtNDgwMS03NDY2LWE3N2EtN2Q3OGE0NDVkZjU3Iiwia2lkIjoiYy1xeWVFV1NyU1hzQjBZQTZoQThEbFo2NmpUWldZZURFRmQ4aEduNVNNZyIsInJpZCI6Ijg2Y2ExY2VmLTg3MTQtNGI3Zi05ODA0LTZkZWZmZGQ0NzJhOSJ9.n6mEWGacLcsruZlKj_uST2lnPCkyPFg0QeOyqlK9Pp_RP5oDjK34WzLWytV2VhvG5hVEoSQPUJZUqqfVxjK7Cg"
