@@ -178,10 +178,29 @@ class Parser {
     if (!isOptional) {
       this.expect(TokenType.ROUTE);
     }
+    else if (this.check(TokenType.IDENTIFIER) && ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'].includes(this.peek().value.toUpperCase())) {
+      routes.push(this.parseSocketDecl(true));
+    }
+    else if (this.check(TokenType.IDENTIFIER) && this.peek().value.toLowerCase() == 'socket'){
+      routes.push(this.parseSocketDecl());
+    }
     const method = this.expect(TokenType.IDENTIFIER).value.toUpperCase();
     const path = this.expect(TokenType.STRING).value;
     const body = this.parseBlock();
     return { type: 'RouteDeclaration', method, path, body, line };
+
+  }
+
+  // parseSocket -> 
+  parseSocketDecl() {
+      const line = this.peek().line;
+      this.advance();
+      const path = this.expect(TokenType.STRING).value;
+      
+
+    /// 
+    //
+    //left here -> continue from here
   }
 
   // respond 200 { key: value }
