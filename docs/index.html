@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tezz (तेज़) | The Fast Edge Programming Language</title>
+    <meta name="description" content="Tezz-lang is a zero-overhead, highly optimized backend programming language compiling to JavaScript. Native support for English and Hinglish syntaxes. Built for Node.js, Cloudflare Workers, and Bun.">
+    <meta name="keywords" content="tezz, tezz-lang, programming language, compiler, transpiler, ast, edge computing, cloudflare workers, hinglish, javascript">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 2rem; }
+        h1 { color: #00f2fe; font-size: 3rem; margin-bottom: 0.5rem; text-align: center; }
+        h2 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 0.5rem; margin-top: 2rem; }
+        .hero { text-align: center; margin-bottom: 3rem; }
+        .subtitle { font-size: 1.2rem; color: #666; margin-bottom: 2rem; }
+        code { background: #f4f4f4; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: monospace; }
+        pre { background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 8px; overflow-x: auto; }
+        .cta-button { display: inline-block; background: #00f2fe; color: #fff; text-decoration: none; padding: 0.8rem 1.5rem; border-radius: 6px; font-weight: bold; margin: 0.5rem; transition: background 0.3s; }
+        .cta-button:hover { background: #4facfe; }
+        .links { text-align: center; margin-top: 2rem; }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>⚡ Tezz (तेज़)</h1>
+        <p class="subtitle">The Blazing Fast, Zero-Overhead Language for the Modern Edge</p>
+        <div>
+            <a href="https://github.com/abhinav29102005/tezz-lang" class="cta-button">View on GitHub</a>
+            <a href="https://www.npmjs.com/package/tezz-lang" class="cta-button">View on NPM</a>
+            <a href="https://marketplace.visualstudio.com/items?itemName=abhinav29102005.tezz" class="cta-button">VS Code Extension</a>
+        </div>
+    </div>
+
+    <h2>What is tezz-lang?</h2>
+    <p><strong>tezz-lang</strong> is a next-generation transpiled programming language designed to give you the strict, clean, and elegant developer experience (DX) of languages like Rust and Go, while compiling directly into highly optimized, boilerplate-free JavaScript.</p>
+    
+    <p>It was created to run natively on platforms like <strong>Node.js, Cloudflare Workers, and Bun</strong>. Tezz is also known for being one of the first production-ready languages to natively support both <strong>English and Hinglish</strong> syntaxes directly in the compiler!</p>
+
+    <h2>The 60-Second Quickstart</h2>
+    <pre><code># 1. Install globally
+npm install -g tezz-lang
+
+# 2. Run a Tezz file directly
+tezz run app.tezz</code></pre>
+
+    <h2>Why Developers Choose Tezz</h2>
+    <ul>
+        <li><strong>Zero-Overhead Edge Deployment:</strong> Compiles down to raw JavaScript that rides on V8's optimizations.</li>
+        <li><strong>Native HTTP Services:</strong> Spin up APIs without boilerplate using the <code>service</code> and <code>route</code> keywords.</li>
+        <li><strong>Object-Oriented:</strong> Full support for classes, inheritance, and lexical scoping.</li>
+        <li><strong>Built-in Language Server (LSP):</strong> A first-class VS Code extension providing real-time diagnostics.</li>
+    </ul>
+
+    <h2>Code Example</h2>
+    <pre><code>service API on 8080 {
+  route GET "/hello/:name" {
+    let name = params.name
+    respond 200 { message: "Hello " + name + ", from Tezz!" }
+  }
+}</code></pre>
+
+    <div class="links">
+        <p>Built with ❤️ and तेज़ी by <a href="https://github.com/abhinav29102005">Abhinav</a>.</p>
+    </div>
+</body>
+</html>

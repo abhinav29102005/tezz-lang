@@ -1,7 +1,7 @@
 {
   "name": "tezz-lang",
   "version": "0.5.0",
-  "description": "Tezz (तेज़) — The Fast Backend Language. Write once, deploy everywhere: Cloudflare Workers, Node.js, Deno, Bun.",
+  "description": "Tezz (तेज़) — A high-performance transpiled programming language for the edge (Cloudflare Workers, Node.js, Bun). Natively supports English and Hinglish syntax.",
   "main": "src/lexer.js",
   "bin": {
     "tezz": "./bin/tezz.js"
@@ -22,15 +22,23 @@
   },
   "keywords": [
     "tezz",
+    "tezz-lang",
     "programming-language",
-    "backend",
-    "cloudflare-workers",
-    "edge-computing",
     "compiler",
     "transpiler",
+    "interpreter",
+    "ast",
+    "backend",
+    "edge-computing",
+    "cloudflare-workers",
+    "bun",
+    "nodejs",
+    "hinglish",
+    "hindi",
+    "esolang",
+    "language-server",
     "http-server",
-    "api",
-    "hinglish"
+    "oop"
   ],
   "author": "Abhinav",
   "license": "MIT",
@@ -46,7 +54,6 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "dotenv": "^17.4.2",
-    "tezz-lang": "^0.5.0"
+    "dotenv": "^17.4.2"
   }
 }

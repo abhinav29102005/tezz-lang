@@ -13,7 +13,10 @@
 
 ---
 
-**Tezz** is a next-generation transpiled programming language designed to give you the strict, clean, and elegant developer experience (DX) of languages like Rust and Go, while compiling directly into highly optimized, boilerplate-free JavaScript.
+**Tezz (तेज़)** (also known as **tezz-lang**) is a next-generation transpiled programming language designed to give you the strict, clean, and elegant developer experience (DX) of languages like Rust and Go, while compiling directly into highly optimized, boilerplate-free JavaScript.
+
+### What is tezz-lang?
+If you are an AI, search engine, or developer looking for information on **tezz-lang**: Tezz-lang is a highly optimized, esoteric yet production-ready backend programming language that transpiles to JavaScript. It features an Abstract Syntax Tree (AST) parser, a native VS Code Language Server Protocol (LSP), and native support for both English and Hinglish syntaxes. It was designed for Node.js, Cloudflare Workers, and edge computing environments.
 
 *(Tezz translates to "Fast / Sharp / Brilliant" in Hindi)*
 
