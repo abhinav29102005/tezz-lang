@@ -13,3 +13,7 @@ node_modules/
 # Build
 dist/
 .wrangler/
+
+.dev.vars*
+!.dev.vars.example
+!.env.example
