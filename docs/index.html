@@ -1,65 +1,186 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tezz (तेज़) | The Fast Edge Programming Language</title>
-    <meta name="description" content="Tezz-lang is a zero-overhead, highly optimized backend programming language compiling to JavaScript. Native support for English and Hinglish syntaxes. Built for Node.js, Cloudflare Workers, and Bun.">
-    <meta name="keywords" content="tezz, tezz-lang, programming language, compiler, transpiler, ast, edge computing, cloudflare workers, hinglish, javascript">
-    <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 2rem; }
-        h1 { color: #00f2fe; font-size: 3rem; margin-bottom: 0.5rem; text-align: center; }
-        h2 { color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 0.5rem; margin-top: 2rem; }
-        .hero { text-align: center; margin-bottom: 3rem; }
-        .subtitle { font-size: 1.2rem; color: #666; margin-bottom: 2rem; }
-        code { background: #f4f4f4; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: monospace; }
-        pre { background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 8px; overflow-x: auto; }
-        .cta-button { display: inline-block; background: #00f2fe; color: #fff; text-decoration: none; padding: 0.8rem 1.5rem; border-radius: 6px; font-weight: bold; margin: 0.5rem; transition: background 0.3s; }
-        .cta-button:hover { background: #4facfe; }
-        .links { text-align: center; margin-top: 2rem; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tezz (तेज़) | The Fast Edge Programming Language & Compiler</title>
+  <meta name="description" content="Tezz-lang is a zero-overhead, highly optimized backend programming language compiling to JavaScript. Native support for English and Hinglish syntaxes. Built for Node.js, Cloudflare Workers, and Bun.">
+  <link rel="canonical" href="https://tezz.abhinavkumarsingh.tech/">
+  <meta property="og:title" content="Tezz (तेज़) | The Fast Edge Programming Language & Compiler">
+  <meta property="og:description" content="Tezz-lang is a zero-overhead, highly optimized backend programming language compiling to JavaScript. Native support for English and Hinglish syntaxes. Built for Node.js, Cloudflare Workers, and Bun.">
+  <meta property="og:url" content="https://tezz.abhinavkumarsingh.tech/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Tezz Programming Language">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Tezz (तेज़) | The Fast Edge Programming Language & Compiler">
+  <meta name="twitter:description" content="Tezz-lang is a zero-overhead, highly optimized backend programming language compiling to JavaScript. Native support for English and Hinglish syntaxes. Built for Node.js, Cloudflare Workers, and Bun.">
+  <meta name="keywords" content="tezz, tezz-lang, programming language, compiler, transpiler, edge, cloudflare workers, nodejs, bun, esolang, hinglish, vscode, javascript, rust, speed, devops">
+  <meta name="robots" content="index, follow">
+  <script type="application/ld+json">
+  {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Tezz Programming Language",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Cross-platform",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Abhinav Kumar Singh",
+    "url": "https://abhinavkumarsingh.tech"
+  }
+}
+  </script>
+  <style>
+  :root {
+    --bg: #0d1117;
+    --text: #c9d1d9;
+    --heading: #f0f6fc;
+    --accent: #00f2fe;
+    --accent-hover: #4facfe;
+    --card-bg: #161b22;
+    --border: #30363d;
+    --code-bg: #1f242c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--text);
+    background-color: var(--bg);
+    margin: 0;
+    padding: 0;
+  }
+  header {
+    background: #161b22;
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--accent);
+    text-decoration: none;
+  }
+  nav { display: flex; gap: 1rem; flex-wrap: wrap; }
+  nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+  }
+  nav a:hover, nav a.active { color: var(--accent); }
+  .container { max-width: 900px; margin: 2rem auto; padding: 0 1.5rem; }
+  h1 { color: var(--heading); font-size: 2.4rem; margin-top: 0; }
+  h2 { color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-top: 2rem; }
+  h3 { color: var(--heading); margin-top: 1.5rem; }
+  code { background: var(--code-bg); color: #79c0ff; padding: 0.2rem 0.4rem; border-radius: 4px; font-family: monospace; font-size: 0.95em; }
+  pre { background: #090d13; border: 1px solid var(--border); padding: 1rem; border-radius: 8px; overflow-x: auto; color: #e6edf3; }
+  pre code { background: none; color: inherit; padding: 0; }
+  .table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+  table { width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 8px; overflow: hidden; }
+  th, td { padding: 0.75rem 1rem; border: 1px solid var(--border); text-align: left; }
+  th { background: #21262d; color: var(--heading); font-weight: 600; }
+  .btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+    color: #0d1117;
+    font-weight: bold;
+    padding: 0.7rem 1.4rem;
+    border-radius: 6px;
+    text-decoration: none;
+    margin: 0.4rem 0.4rem 0.4rem 0;
+    transition: opacity 0.2s;
+  }
+  .btn:hover { opacity: 0.9; }
+  footer {
+    border-top: 1px solid var(--border);
+    text-align: center;
+    padding: 2rem;
+    margin-top: 4rem;
+    font-size: 0.9rem;
+    color: #8b949e;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
 </head>
 <body>
-    <div class="hero">
-        <h1>⚡ Tezz (तेज़)</h1>
-        <p class="subtitle">The Blazing Fast, Zero-Overhead Language for the Modern Edge</p>
-        <div>
-            <a href="https://github.com/abhinav29102005/tezz-lang" class="cta-button">View on GitHub</a>
-            <a href="https://www.npmjs.com/package/tezz-lang" class="cta-button">View on NPM</a>
-            <a href="https://marketplace.visualstudio.com/items?itemName=abhinav29102005.tezz" class="cta-button">VS Code Extension</a>
-        </div>
-    </div>
-
-    <h2>What is tezz-lang?</h2>
-    <p><strong>tezz-lang</strong> is a next-generation transpiled programming language designed to give you the strict, clean, and elegant developer experience (DX) of languages like Rust and Go, while compiling directly into highly optimized, boilerplate-free JavaScript.</p>
+  <header>
+    <a href="/" class="brand">⚡ Tezz (तेज़)</a>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/docs/">Docs</a>
+      <a href="/keywords/">Keywords</a>
+      <a href="/hinglish/">Hinglish</a>
+      <a href="/services/">Services</a>
+      <a href="/cli/">CLI</a>
+      <a href="/vscode/">VS Code</a>
+      <a href="/esolang/">Esolang</a>
+    </nav>
+  </header>
+  <div class="container">
     
-    <p>It was created to run natively on platforms like <strong>Node.js, Cloudflare Workers, and Bun</strong>. Tezz is also known for being one of the first production-ready languages to natively support both <strong>English and Hinglish</strong> syntaxes directly in the compiler!</p>
+  <div style="text-align: center; margin: 3rem 0 4rem 0;">
+    <h1 style="font-size: 3.2rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">⚡ Tezz (तेज़)</h1>
+    <p style="font-size: 1.3rem; color: #8b949e; max-width: 650px; margin: 0 auto 2rem auto;">The fast, zero-overhead edge programming language compiling directly to optimized JavaScript.</p>
+    <div>
+      <a href="/docs/" class="btn">Get Started</a>
+      <a href="/keywords/" class="btn">Keywords Reference</a>
+      <a href="/hinglish/" class="btn">Hinglish Guide</a>
+      <a href="https://github.com/abhinav29102005/tezz-lang" class="btn" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
 
-    <h2>The 60-Second Quickstart</h2>
-    <pre><code># 1. Install globally
+  <h2>Why Developers Choose Tezz</h2>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 2rem 0;">
+    <div style="background: var(--card-bg); border: 1px solid var(--border); padding: 1.5rem; border-radius: 8px;">
+      <h3 style="margin-top: 0; color: var(--accent);">⚡ Zero Runtime Overhead</h3>
+      <p>Tezz compiles down to clean JavaScript that takes maximum advantage of V8 optimization pipelines in Node.js, Cloudflare Workers, and Bun.</p>
+    </div>
+    <div style="background: var(--card-bg); border: 1px solid var(--border); padding: 1.5rem; border-radius: 8px;">
+      <h3 style="margin-top: 0; color: var(--accent);">🌐 Native Microservices</h3>
+      <p>Spin up fast HTTP APIs without third-party boilerplate using first-class <code>service</code>, <code>route</code>, and <code>respond</code> primitives.</p>
+    </div>
+    <div style="background: var(--card-bg); border: 1px solid var(--border); padding: 1.5rem; border-radius: 8px;">
+      <h3 style="margin-top: 0; color: var(--accent);">🇮🇳 Dual English & Hinglish</h3>
+      <p>Switch seamlessly between standard English syntax and expressive Hinglish keywords (<code>rakho</code>, <code>agar</code>, <code>karya</code>, <code>dikha</code>).</p>
+    </div>
+    <div style="background: var(--card-bg); border: 1px solid var(--border); padding: 1.5rem; border-radius: 8px;">
+      <h3 style="margin-top: 0; color: var(--accent);">🛠️ First-Class Tooling</h3>
+      <p>Integrated language server (LSP) and official VS Code extension providing autocompletions, hover docs, and diagnostics.</p>
+    </div>
+  </div>
+
+  <h2>Quickstart in 60 Seconds</h2>
+  <pre><code># Install globally via npm
 npm install -g tezz-lang
 
-# 2. Run a Tezz file directly
+# Run any .tezz file
 tezz run app.tezz</code></pre>
 
-    <h2>Why Developers Choose Tezz</h2>
-    <ul>
-        <li><strong>Zero-Overhead Edge Deployment:</strong> Compiles down to raw JavaScript that rides on V8's optimizations.</li>
-        <li><strong>Native HTTP Services:</strong> Spin up APIs without boilerplate using the <code>service</code> and <code>route</code> keywords.</li>
-        <li><strong>Object-Oriented:</strong> Full support for classes, inheritance, and lexical scoping.</li>
-        <li><strong>Built-in Language Server (LSP):</strong> A first-class VS Code extension providing real-time diagnostics.</li>
-    </ul>
+  <h2>Explore Tezz</h2>
+  <ul>
+    <li><a href="/docs/"><strong>Getting Started Documentation</strong></a>: Installation, CLI, and project setup.</li>
+    <li><a href="/keywords/"><strong>Keyword Reference</strong></a>: All English and Hinglish language keywords.</li>
+    <li><a href="/hinglish/"><strong>Hinglish Guide</strong></a>: Learn how to program using Hinglish syntax.</li>
+    <li><a href="/services/"><strong>Edge Microservices</strong></a>: Native HTTP server routing.</li>
+    <li><a href="/cli/"><strong>CLI Commands</strong></a>: <code>tezz run</code>, <code>tezz build</code>, <code>tezz repl</code>.</li>
+    <li><a href="/vscode/"><strong>VS Code Extension</strong></a>: Editor support and LSP.</li>
+  </ul>
 
-    <h2>Code Example</h2>
-    <pre><code>service API on 8080 {
-  route GET "/hello/:name" {
-    let name = params.name
-    respond 200 { message: "Hello " + name + ", from Tezz!" }
-  }
-}</code></pre>
-
-    <div class="links">
-        <p>Built with ❤️ and तेज़ी by <a href="https://github.com/abhinav29102005">Abhinav</a>.</p>
-    </div>
+  </div>
+  <footer>
+    <p>Tezz Language (तेज़) • Built for zero-overhead edge performance by <a href="https://github.com/abhinav29102005" target="_blank" rel="noopener">Abhinav Kumar Singh</a>.</p>
+    <p><a href="https://github.com/abhinav29102005/tezz-lang" target="_blank" rel="noopener">GitHub</a> | <a href="https://www.npmjs.com/package/tezz-lang" target="_blank" rel="noopener">npm</a> | <a href="https://marketplace.visualstudio.com/items?itemName=abhinav29102005.tezz" target="_blank" rel="noopener">VS Code Marketplace</a> | <a href="/sitemap.xml">Sitemap</a></p>
+  </footer>
 </body>
 </html>
