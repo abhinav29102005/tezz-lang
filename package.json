@@ -21,7 +21,8 @@
     "build:binaries": "npx pkg . --targets node18-linux-x64,node18-macos-x64,node18-win-x64 --out-path bin-dist/",
     "deploy": "wrangler pages deploy docs --project-name automatic-octo-carnival",
     "preview": "wrangler dev",
-    "deploy:pages": "wrangler pages deploy docs --project-name automatic-octo-carnival"
+    "deploy:pages": "wrangler pages deploy docs --project-name automatic-octo-carnival",
+    "build": "node scripts/generate_docs.js"
   },
   "keywords": [
     "tezz",
