@@ -2,17 +2,5 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "automatic-octo-carnival",
   "compatibility_date": "2026-09-21",
-  "observability": {
-    "enabled": true
-  },
-  "assets": {
-    "directory": "docs"
-  },
-  "routes": [
-    {
-      "pattern": "tezz.abhinavkumarsingh.tech/*",
-      "zone_name": "abhinavkumarsingh.tech"
-    }
-  ],
   "pages_build_output_dir": "docs"
 }
