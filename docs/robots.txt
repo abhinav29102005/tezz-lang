@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://tezwhy.abhinavkumarsingh.tech/sitemap.xml
+Sitemap: https://tezz.abhinavkumarsingh.tech/sitemap.xml

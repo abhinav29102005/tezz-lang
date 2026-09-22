@@ -10,8 +10,8 @@
   },
   "routes": [
     {
-      "pattern": "tezwhy.abhinavkumarsingh.tech",
-      "custom_domain": true
+      "pattern": "tezz.abhinavkumarsingh.tech/*",
+      "zone_name": "abhinavkumarsingh.tech"
     }
   ]
 }
