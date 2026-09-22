@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_1 = require("vscode-languageserver/node");
 const vscode_languageserver_textdocument_1 = require("vscode-languageserver-textdocument");
+const keywords_1 = require("./keywords");
 let Lexer;
 let Parser;
 try {
@@ -82,43 +83,17 @@ async function validateTextDocument(textDocument) {
     connection.sendDiagnostics({ uri: textDocument.uri, diagnostics });
 }
 connection.onCompletion((_textDocumentPosition) => {
-    return [
-        { label: 'service', kind: node_1.CompletionItemKind.Keyword, data: 1 },
-        { label: 'GET', kind: node_1.CompletionItemKind.Method, data: 2 },
-        { label: 'POST', kind: node_1.CompletionItemKind.Method, data: 3 },
-        { label: 'fn', kind: node_1.CompletionItemKind.Keyword, data: 4 },
-        { label: 'let', kind: node_1.CompletionItemKind.Keyword, data: 5 },
-        { label: 'const', kind: node_1.CompletionItemKind.Keyword, data: 6 },
-        { label: 'return', kind: node_1.CompletionItemKind.Keyword, data: 7 },
-        { label: 'spawn', kind: node_1.CompletionItemKind.Function, data: 8 },
-        { label: 'if', kind: node_1.CompletionItemKind.Keyword, data: 9 },
-        { label: 'else', kind: node_1.CompletionItemKind.Keyword, data: 10 },
-        { label: 'Math', kind: node_1.CompletionItemKind.Module, data: 11 },
-        { label: 'JSON', kind: node_1.CompletionItemKind.Module, data: 12 },
-        { label: 'File', kind: node_1.CompletionItemKind.Module, data: 13 },
-        { label: 'System', kind: node_1.CompletionItemKind.Module, data: 14 }
-    ];
+    return keywords_1.tezzKeywords.map(k => ({
+        label: k.label,
+        kind: k.kind,
+        data: k.data
+    }));
 });
 connection.onCompletionResolve((item) => {
-    const docs = {
-        1: { detail: 'Service Definition', doc: 'Defines an HTTP service.\n\nExample:\nservice on 8787 {\n  GET "/" {\n    return { success: true }\n  }\n}' },
-        2: { detail: 'GET Route', doc: 'Defines a GET route handler.' },
-        3: { detail: 'POST Route', doc: 'Defines a POST route handler.' },
-        11: { detail: 'Standard Library: Math', doc: 'Native Tezz Math module. Includes .random(), .min(), .max(), .round(), etc.' },
-        12: { detail: 'Standard Library: JSON', doc: 'Native Tezz JSON module. Includes .parse(), .stringify().' },
-        13: { detail: 'Standard Library: File', doc: 'Native Tezz File system module. Includes .readSync(), .writeSync().' },
-        14: { detail: 'Standard Library: System', doc: 'Native Tezz System module. Includes .env, .exit().' },
-        4: { detail: 'Function Definition', doc: 'Defines a new function using `fn`.' },
-        5: { detail: 'Variable Declaration', doc: 'Declares a mutable variable.' },
-        6: { detail: 'Constant Declaration', doc: 'Declares an immutable constant.' },
-        7: { detail: 'Return Statement', doc: 'Returns a value from a function or route.' },
-        8: { detail: 'Spawn Goroutine', doc: 'Spawns a new asynchronous task (Goroutine equivalent).' },
-        9: { detail: 'If Statement', doc: 'Conditional logic block.' },
-        10: { detail: 'Else Statement', doc: 'Fallback conditional logic block.' }
-    };
-    if (item.data && docs[item.data]) {
-        item.detail = docs[item.data].detail;
-        item.documentation = docs[item.data].doc;
+    const keyword = keywords_1.tezzKeywords.find(k => k.data === item.data);
+    if (keyword) {
+        item.detail = keyword.detail;
+        item.documentation = keyword.documentation;
     }
     return item;
 });
