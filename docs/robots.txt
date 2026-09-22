@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://tezz-lang.bigboyaks-account.workers.dev/sitemap.xml
+Sitemap: https://tezwhy.abhinavkumarsingh.tech/sitemap.xml
