@@ -19,8 +19,9 @@
     "example:api": "node bin/tezz.js run examples/api.tezz",
     "prepublishOnly": "npm test",
     "build:binaries": "npx pkg . --targets node18-linux-x64,node18-macos-x64,node18-win-x64 --out-path bin-dist/",
-    "deploy": "wrangler pages deploy docs --project-name automatic-octo-carnival",
-    "preview": "wrangler dev"
+    "deploy": "npm run build && wrangler pages deploy docs --project-name automatic-octo-carnival",
+    "preview": "wrangler dev",
+    "build": "cd website && npm run build && rm -rf ../docs/* && cp -r dist/* ../docs/"
   },
   "keywords": [
     "tezz",
