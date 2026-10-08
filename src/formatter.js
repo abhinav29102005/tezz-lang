@@ -74,7 +74,7 @@ class Formatter {
       }
 
       // Single char operators / punctuation
-      if ('{}()[],;'.includes(ch)) {
+      if ('{}()[],;.'.includes(ch)) {
         tokens.push({ type: 'PUNCTUATION', value: ch });
         i++;
         continue;
@@ -88,7 +88,7 @@ class Formatter {
 
       // Identifiers / numbers / keywords
       let word = '';
-      while (i < len && !/[\s\r\n{}(),;:+\-*/%=!<>"]/.test(source[i])) {
+      while (i < len && !/[\s\r\n{}()[\];,:+*\/%=!<>.&|"]/.test(source[i])) {
         // Stop if comment start
         if (source[i] === '-' && i + 1 < len && source[i + 1] === '-') break;
         word += source[i++];
@@ -152,6 +152,7 @@ class Formatter {
       // Build formatted line content
       let lineText = '';
       for (let t = 0; t < nonWsTokens.length; t++) {
+        const prev = nonWsTokens[t - 1];
         const cur = nonWsTokens[t];
         const next = nonWsTokens[t + 1];
 
@@ -162,6 +163,14 @@ class Formatter {
         // Spacing rules between cur and next:
         const curVal = cur.value;
         const nextVal = next.value;
+
+        // Empty braces or brackets: no space inside (e.g. {} and [])
+        if (curVal === '{' && nextVal === '}') {
+          continue;
+        }
+        if (curVal === '[' && nextVal === ']') {
+          continue;
+        }
 
         // No space after opening paren/bracket: (, [
         if (curVal === '(' || curVal === '[') {
@@ -189,7 +198,12 @@ class Formatter {
           continue;
         }
 
-        // Range operator '..' has no spaces around it
+        // Dot operator: no space around '.' (e.g. obj.prop, 3.14)
+        if (curVal === '.' || nextVal === '.') {
+          continue;
+        }
+
+        // Range operator '..' has no spaces around it (e.g. 1..10)
         if (curVal === '..' || nextVal === '..') {
           continue;
         }
@@ -199,16 +213,27 @@ class Formatter {
           continue;
         }
 
-        // Macro invocation: '!' followed by '(' has no space: log_status!(...)
-        if (curVal.endsWith('!') && nextVal === '(') {
+        // Macro invocation: '!' followed by '(' or '[' has no space: log_status!(...) or vec![...]
+        if (curVal.endsWith('!') && (nextVal === '(' || nextVal === '[')) {
           continue;
         }
 
-        // Operators: 1 space before and after
+        // Unary minus: attach directly to operand if preceded by operator, delimiter, or return
+        const isUnaryMinus = curVal === '-' && (
+          !prev ||
+          prev.type === 'OPERATOR' ||
+          ['(', '[', '{', ',', ':', ';'].includes(prev.value) ||
+          (prev.type === 'WORD' && ['return', 'vapas', 'yield', 'throw', 'case'].includes(prev.value))
+        );
+        if (isUnaryMinus) {
+          continue;
+        }
+
+        // Binary operators: 1 space before and after
         const isCurOp = cur.type === 'OPERATOR';
         const isNextOp = next.type === 'OPERATOR';
 
-        // Check if next is unary negative number or unary minus (e.g. `x = -1` vs `x - 1`)
+        // When next is unary minus after an operator: keep 1 space after cur operator (e.g. `x = -5`)
         if (nextVal === '-' && isCurOp) {
           lineText += ' ';
           continue;
@@ -219,20 +244,26 @@ class Formatter {
           continue;
         }
 
-        // Control flow keywords: 1 space before '(' (e.g. if (x), while (true))
-        const controlKeywords = ['if', 'agar', 'while', 'jabtak', 'for', 'catch', 'pakad', 'switch'];
+        // Control flow keywords: 1 space before '(' (e.g. if (x), agar (x), while (true), har (x))
+        const controlKeywords = [
+          'if', 'agar', 'while', 'jabtak', 'for', 'har',
+          'catch', 'pakad', 'switch', 'koshish'
+        ];
         if (cur.type === 'WORD' && controlKeywords.includes(cur.value) && nextVal === '(') {
           lineText += ' ';
           continue;
         }
 
-        // Function call: no space between name and '('
-        if (cur.type === 'WORD' && nextVal === '(') {
+        // Index access: no space before '[' (e.g. users[0], matrix[i][j], getList()[0])
+        const arrayExprKeywords = ['return', 'vapas', 'in', 'mein', 'case', 'yield', 'typeof'];
+        if ((cur.type === 'WORD' && !arrayExprKeywords.includes(cur.value) && nextVal === '[') ||
+            (curVal === ']' && nextVal === '[') ||
+            (curVal === ')' && nextVal === '[')) {
           continue;
         }
 
-        // Dot operator: no space
-        if (curVal === '.' || nextVal === '.') {
+        // Function call: no space between name and '('
+        if (cur.type === 'WORD' && nextVal === '(') {
           continue;
         }
 
@@ -252,10 +283,25 @@ class Formatter {
         lineText += ' ';
       }
 
-      // Attach control flow braces: e.g. '} else {' or '} catch err {'
+      // Attach control flow braces on same line: e.g. '} else {' or '} catch err {'
       lineText = lineText.replace(/^}\s+(else|warna|catch|pakad)/, '} $1');
 
-      formattedLines.push(indentStr + lineText);
+      // Cuddle control flow braces if previous line was a standalone closing brace '}'
+      let cuddled = false;
+      if (['else', 'warna', 'catch', 'pakad'].includes(firstTok.value)) {
+        if (formattedLines.length > 0 && formattedLines[formattedLines.length - 1] === '') {
+          formattedLines.pop();
+        }
+        if (formattedLines.length > 0 && formattedLines[formattedLines.length - 1].trim() === '}') {
+          const prevLine = formattedLines.pop();
+          formattedLines.push(prevLine + ' ' + lineText);
+          cuddled = true;
+        }
+      }
+
+      if (!cuddled) {
+        formattedLines.push(indentStr + lineText);
+      }
 
       // Adjust indentation for following lines based on braces on this line
       for (const tok of nonWsTokens) {

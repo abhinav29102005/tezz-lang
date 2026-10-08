@@ -108,4 +108,55 @@ try {
 assert(threwError, 'formatSafe must reject invalid syntax');
 console.log('✓ Safety check successfully prevented formatting invalid code\n');
 
+// Test 8: Unary minus vs binary subtraction
+console.log('Test 8: Unary minus vs binary subtraction');
+const mathCode = `
+rakho x = -5
+rakho y = x - 5
+rakho z = calculate(-1, -2)
+`;
+const mathFmt = formatter.formatSafe(mathCode, 'math.tezz');
+assert(mathFmt.includes('rakho x = -5'), 'Unary minus attaches to number');
+assert(mathFmt.includes('rakho y = x - 5'), 'Binary subtraction retains spaces');
+assert(mathFmt.includes('rakho z = calculate(-1, -2)'), 'Function args with unary minus');
+console.log('✓ Unary minus vs binary subtraction verified\n');
+
+// Test 9: Empty collections
+console.log('Test 9: Empty collections ({}, [])');
+const collCode = `
+rakho emptyObj = {}
+rakho emptyArr = []
+`;
+const collFmt = formatter.formatSafe(collCode, 'coll.tezz');
+assert(collFmt.includes('rakho emptyObj = {}'), 'Empty object has no internal space');
+assert(collFmt.includes('rakho emptyArr = []'), 'Empty array has no internal space');
+console.log('✓ Empty collections formatted cleanly\n');
+
+// Test 10: Array indexing and dot member access
+console.log('Test 10: Array indexing and dot navigation');
+const accessCode = `
+rakho first = users [ 0 ]
+rakho nested = matrix [ i ] [ j ]
+rakho name = req . query . name
+`;
+const accessFmt = formatter.formatSafe(accessCode, 'access.tezz');
+assert(accessFmt.includes('rakho first = users[0]'), 'Index access removes outer space');
+assert(accessFmt.includes('rakho nested = matrix[i][j]'), 'Multi-dimensional index formatted');
+assert(accessFmt.includes('rakho name = req.query.name'), 'Dot operator spaces collapsed');
+console.log('✓ Indexing and dot navigation formatted cleanly\n');
+
+// Test 11: Control flow brace cuddling
+console.log('Test 11: Brace cuddling for else / warna / catch / pakad');
+const cuddleCode = `
+if (x > 0) {
+  print("positive")
+}
+else {
+  print("non-positive")
+}
+`;
+const cuddleFmt = formatter.formatSafe(cuddleCode, 'cuddle.tezz');
+assert(cuddleFmt.includes('} else {'), 'Cuddles split else onto closing brace');
+console.log('✓ Brace cuddling verified\n');
+
 console.log('All Formatter Tests PASSED successfully!\n');
