@@ -73,27 +73,52 @@ class Parser {
     }
   }
 
-  // let name = expression
+  // parse type annotation: e.g. int, string, User, string[], int | string
+  parseTypeAnnotation() {
+    const typeParts = [];
+    do {
+      let typeName = this.expect(TokenType.IDENTIFIER).value;
+      while (this.check(TokenType.LBRACKET)) {
+        this.advance();
+        this.expect(TokenType.RBRACKET);
+        typeName += '[]';
+      }
+      typeParts.push(typeName);
+    } while (this.check(TokenType.OR) && this.advance());
+    return typeParts.join(' | ');
+  }
+
+  // let name [: type]? = expression
   parseLetDecl() {
     const line = this.peek().line;
     this.expect(TokenType.LET);
     const name = this.expect(TokenType.IDENTIFIER).value;
+    let typeAnn = null;
+    if (this.check(TokenType.COLON)) {
+      this.advance();
+      typeAnn = this.parseTypeAnnotation();
+    }
     this.expect(TokenType.ASSIGN);
     const value = this.parseExpression();
-    return { type: 'VariableDeclaration', name, value, kind: 'let', line };
+    return { type: 'VariableDeclaration', name, value, kind: 'let', typeAnn, line };
   }
 
-  // const name = expression  OR  pakka name = expression
+  // const name [: type]? = expression  OR  pakka name [: type]? = expression
   parseConstDecl() {
     const line = this.peek().line;
     this.expect(TokenType.CONST);
     const name = this.expect(TokenType.IDENTIFIER).value;
+    let typeAnn = null;
+    if (this.check(TokenType.COLON)) {
+      this.advance();
+      typeAnn = this.parseTypeAnnotation();
+    }
     this.expect(TokenType.ASSIGN);
     const value = this.parseExpression();
-    return { type: 'VariableDeclaration', name, value, kind: 'const', line };
+    return { type: 'VariableDeclaration', name, value, kind: 'const', typeAnn, line };
   }
 
-  // fn name(params) -> returnType { body }
+  // fn name(params) [->|: returnType]? { body }
   parseFnDecl() {
     const line = this.peek().line;
     this.expect(TokenType.FN);
@@ -103,16 +128,16 @@ class Parser {
     this.expect(TokenType.RPAREN);
 
     let returnType = null;
-    if (this.check(TokenType.ARROW)) {
+    if (this.check(TokenType.ARROW) || this.check(TokenType.COLON)) {
       this.advance();
-      returnType = this.expect(TokenType.IDENTIFIER).value;
+      returnType = this.parseTypeAnnotation();
     }
 
     const body = this.parseBlock();
     return { type: 'FunctionDeclaration', name, params, returnType, body, isAsync: false, line };
   }
 
-  // async fn name(params) { body }  OR  baadmein kaam name(params) { body }
+  // async fn name(params) [->|: returnType]? { body }  OR  baadmein kaam name(params) { body }
   parseAsyncFnDecl() {
     const line = this.peek().line;
     this.expect(TokenType.ASYNC);
@@ -123,9 +148,9 @@ class Parser {
     this.expect(TokenType.RPAREN);
 
     let returnType = null;
-    if (this.check(TokenType.ARROW)) {
+    if (this.check(TokenType.ARROW) || this.check(TokenType.COLON)) {
       this.advance();
-      returnType = this.expect(TokenType.IDENTIFIER).value;
+      returnType = this.parseTypeAnnotation();
     }
 
     const body = this.parseBlock();
@@ -140,7 +165,7 @@ class Parser {
       let paramType = null;
       if (this.check(TokenType.COLON)) {
         this.advance();
-        paramType = this.expect(TokenType.IDENTIFIER).value;
+        paramType = this.parseTypeAnnotation();
       }
       params.push({ name, paramType });
     } while (this.check(TokenType.COMMA) && this.advance());
@@ -292,6 +317,7 @@ class Parser {
 
 
   // class Name [extends Super] { method() {} }
+  // class Name [extends Super] { method(params): returnType {} }
   parseClassDeclaration() {
     const line = this.peek().line;
     this.expect(TokenType.CLASS);
@@ -307,14 +333,15 @@ class Parser {
        const mLine = this.peek().line;
        const mName = this.expect(TokenType.IDENTIFIER).value;
        this.expect(TokenType.LPAREN);
-       const params = [];
-       if (!this.check(TokenType.RPAREN)) {
-         do { params.push(this.expect(TokenType.IDENTIFIER).value); }
-         while (this.check(TokenType.COMMA) && this.advance());
-       }
+       const params = this.parseParamList();
        this.expect(TokenType.RPAREN);
+       let returnType = null;
+       if (this.check(TokenType.ARROW) || this.check(TokenType.COLON)) {
+         this.advance();
+         returnType = this.parseTypeAnnotation();
+       }
        const body = this.parseBlock();
-       methods.push({ type: 'MethodDefinition', name: mName, params, body, line: mLine });
+       methods.push({ type: 'MethodDefinition', name: mName, params, returnType, body, line: mLine });
     }
     this.expect(TokenType.RBRACE);
     return { type: 'ClassDeclaration', name, superclass, methods, line };
@@ -348,7 +375,7 @@ class Parser {
     return { type: 'EnumDeclaration', name, variants, line };
   }
 
-  // trait Name { fn method() }
+  // trait Name { fn method(params): returnType }
   parseTraitDecl() {
     const line = this.peek().line;
     this.expect(TokenType.TRAIT);
@@ -359,13 +386,14 @@ class Parser {
       if (this.match(TokenType.FN)) {
         const mName = this.expect(TokenType.IDENTIFIER).value;
         this.expect(TokenType.LPAREN);
-        const params = [];
-        if (!this.check(TokenType.RPAREN)) {
-          do { params.push(this.expect(TokenType.IDENTIFIER).value); }
-          while (this.check(TokenType.COMMA) && this.advance());
-        }
+        const params = this.parseParamList();
         this.expect(TokenType.RPAREN);
-        methods.push({ name: mName, params });
+        let returnType = null;
+        if (this.check(TokenType.ARROW) || this.check(TokenType.COLON)) {
+          this.advance();
+          returnType = this.parseTypeAnnotation();
+        }
+        methods.push({ name: mName, params, returnType });
       } else {
         this.error("Traits can only contain function signatures");
       }
