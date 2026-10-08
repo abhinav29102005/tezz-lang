@@ -1,0 +1,18 @@
+service ChatAPI on 3000 {
+  route GET "/health" {
+    respond 200 { ok: true }
+  }
+
+  socket "/ws" {
+    on connect {
+      print("client connected")
+    }
+    on message(data) {
+      print(data)
+      socket.send(data)
+    }
+    on close {
+      print("client left")
+    }
+  }
+}
