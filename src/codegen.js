@@ -216,7 +216,7 @@ genImport(node) {
     this.line(decl);
     this.indent++;
     for (const m of node.methods) {
-      const params = m.params.join(', ');
+      const params = m.params.map(p => typeof p === 'object' ? p.name : p).join(', ');
       this.line(`${m.name}(${params}) {`);
       this.indent++;
       for (const s of m.body) {
