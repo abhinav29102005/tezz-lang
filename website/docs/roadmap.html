@@ -35,20 +35,28 @@
     </div>
     <div class="npm-container">
       <aside class="npm-sidebar">
-        <div class="npm-nav-group"><h4>Getting Started</h4><ul class="npm-nav-list"><li><a href="/docs/introduction.html" >Introduction</a></li><li><a href="/docs/installation-and-cli.html" >Installation & CLI</a></li></ul></div><div class="npm-nav-group"><h4>Core Language</h4><ul class="npm-nav-list"><li><a href="/docs/syntax.html" >Language Syntax</a></li><li><a href="/docs/hinglish.html" >Hinglish Support</a></li></ul></div><div class="npm-nav-group"><h4>Backend APIs</h4><ul class="npm-nav-list"><li><a href="/docs/services-and-routes.html" >Services & Routes</a></li><li><a href="/docs/deployment.html" >Deployment Guide</a></li></ul></div><div class="npm-nav-group"><h4>Advanced Features</h4><ul class="npm-nav-list"><li><a href="/docs/advanced-types.html" >Types & Enums</a></li><li><a href="/docs/macros.html" >Macros (jadoo)</a></li><li><a href="/docs/concurrency.html" >Goroutines (spawn)</a></li></ul></div><div class="npm-nav-group"><h4>Ecosystem</h4><ul class="npm-nav-list"><li><a href="/docs/ecosystem.html" >Standard Libraries</a></li><li><a href="/docs/roadmap.html" class="active">Roadmap & Contributing</a></li></ul></div><div class="npm-nav-group"><h4>Comparisons</h4><ul class="npm-nav-list"><li><a href="/docs/comparisons.html" >Tezz vs Others</a></li></ul></div>
+        <div class="npm-nav-group"><h4>Getting Started</h4><ul class="npm-nav-list"><li><a href="/docs/introduction.html" >Introduction</a></li><li><a href="/docs/installation-and-cli.html" >Installation & CLI</a></li></ul></div><div class="npm-nav-group"><h4>Core Language</h4><ul class="npm-nav-list"><li><a href="/docs/syntax.html" >Language Syntax</a></li><li><a href="/docs/hinglish.html" >Hinglish Support</a></li></ul></div><div class="npm-nav-group"><h4>Backend APIs</h4><ul class="npm-nav-list"><li><a href="/docs/services-and-routes.html" >Services & Routes</a></li><li><a href="/docs/websockets.html" >WebSockets</a></li><li><a href="/docs/deployment.html" >Deployment Guide</a></li></ul></div><div class="npm-nav-group"><h4>Advanced Features</h4><ul class="npm-nav-list"><li><a href="/docs/advanced-types.html" >Types & Enums</a></li><li><a href="/docs/macros.html" >Macros (jadoo)</a></li><li><a href="/docs/concurrency.html" >Goroutines (spawn)</a></li></ul></div><div class="npm-nav-group"><h4>Ecosystem</h4><ul class="npm-nav-list"><li><a href="/docs/ecosystem.html" >Standard Libraries</a></li><li><a href="/docs/roadmap.html" class="active">Roadmap & Contributing</a></li></ul></div><div class="npm-nav-group"><h4>Comparisons</h4><ul class="npm-nav-list"><li><a href="/docs/comparisons.html" >Tezz vs Others</a></li></ul></div>
       </aside>
       <main class="npm-main">
         <section id="roadmap" class="doc-section">
       <h1 id="roadmap">Roadmap & Future Goals</h1>
       <div style="text-align:center; margin: 2rem 0;"><img src="/docs/assets/pikachu.jpg" style="max-width:400px; border-radius: 8px;"/></div>
       
-      <p>Tezz has rapidly grown from a simple transpiler into a robust ecosystem featuring advanced metaprogramming, OS-level concurrency, and native standard libraries.</p>
+      <p>Tezz has rapidly grown from a simple transpiler into a robust ecosystem featuring advanced metaprogramming, OS-level concurrency, real-time WebSockets, and native standard libraries.</p>
       
-      <p>Our upcoming focus areas include:</p>
+      <h2 id="shipped">Recently Shipped ⚡</h2>
       <ul>
-        <li><strong>Native Database Drivers:</strong> First-class integration for PostgreSQL and Redis with zero-overhead connection pooling.</li>
+        <li><strong>Declarative WebSockets:</strong> Native <code>socket</code> blocks for real-time bidirectional communication on Node.js and Cloudflare Workers.</li>
+        <li><strong>PostgreSQL Driver:</strong> <code>tezz-postgres</code> with automatic connection pooling and parameterized query protection.</li>
+        <li><strong>Redis Driver:</strong> <code>tezz-redis</code> with multiplexed connection reuse and native JSON helpers.</li>
+        <li><strong>Type Annotations:</strong> Optional <code>let x: int = 1</code> and <code>fn foo(): string</code> with compile-time type erasure.</li>
+      </ul>
+
+      <h2>Upcoming Focus Areas</h2>
+      <ul>
+        <li><strong>Static Type Checker:</strong> Non-fatal compile-time type validation across functions and variable assignments.</li>
+        <li><strong>Traits Implementation:</strong> <code>class X implements Trait</code> compile-time contract enforcement.</li>
         <li><strong>Enhanced Type Inference:</strong> Smarter type resolution across complex trait boundaries.</li>
-        <li><strong>WebSockets:</strong> First-class declarative syntax for WebSocket routing, similar to our HTTP <code>service</code> blocks.</li>
       </ul>
 
       <h2 id="contribute">How You Can Help Make Tezz Better</h2>
@@ -62,7 +70,7 @@
       <aside class="npm-toc">
         <h4>In this article</h4>
         <ul>
-          <li><a href="#roadmap">Roadmap</a></li><li><a href="#contribute">How to Contribute</a></li>
+          <li><a href="#roadmap">Roadmap</a></li><li><a href="#shipped">Recently Shipped</a></li><li><a href="#contribute">How to Contribute</a></li>
         </ul>
       </aside>
     </div>

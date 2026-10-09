@@ -1,3 +1,6 @@
+-- Tezz Types Example
+-- Demonstrates explicit typing, enums, traits, and compile-time type erasure
+
 enum Status {
   PENDING,
   ACTIVE,
@@ -5,20 +8,33 @@ enum Status {
 }
 
 trait UserProvider {
-  fn getUser(id)
-  fn saveUser(user)
+  fn getUser(id: int): string
+  fn saveUser(name: string, role: string): bool
 }
 
-macro log_status(status) {
-  print("The current status is:")
-  print(status)
-  return true
+fn calculate_tax(amount: float, rate: float): float {
+  return amount * rate
+}
+
+fn format_greeting(name: string) -> string {
+  return "Hello, " + name + "!"
 }
 
 service TypesApp on 5000 {
   route GET "/" {
+    let app_name: string = "Tezz Types API"
+    let version: float = 0.5
+    let is_running: bool = true
     let s = Status.ACTIVE
-    let success = log_status!(s)
-    respond 200 { status: s, success: success }
+    let tax: float = calculate_tax(100.0, 0.18)
+
+    respond 200 {
+      app: app_name,
+      version: version,
+      status: s,
+      running: is_running,
+      sample_tax: tax,
+      greeting: format_greeting("Tezz Developer")
+    }
   }
 }

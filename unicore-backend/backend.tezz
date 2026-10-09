@@ -1,0 +1,65 @@
+import libsql from "./libsql-wrapper.js"
+
+service UniCoreAPI on 3000 {
+
+  route GET "/health" {
+    respond 200 { status: "healthy", service: "UniCoreAPI" }
+  }
+
+  route GET "/init" {
+    rakho db = libsql.createClient({
+      url: env.TURSO_URL,
+      authToken: env.TURSO_TOKEN
+    })
+    
+    await db.execute("DROP TABLE IF EXISTS students")
+    await db.execute("DROP TABLE IF EXISTS hostels")
+    await db.execute("DROP TABLE IF EXISTS enrollments")
+    await db.execute("DROP TABLE IF EXISTS library")
+
+    await db.execute("CREATE TABLE students (id INTEGER PRIMARY KEY, roll TEXT UNIQUE, name TEXT, department TEXT, year INTEGER, gpa REAL)")
+    await db.execute("CREATE TABLE hostels (id INTEGER PRIMARY KEY, student_roll TEXT, block TEXT, room TEXT, status TEXT)")
+    await db.execute("CREATE TABLE enrollments (id INTEGER PRIMARY KEY, student_roll TEXT, course_name TEXT, grade TEXT)")
+    await db.execute("CREATE TABLE library (id INTEGER PRIMARY KEY, student_roll TEXT, book_title TEXT, due_date TEXT)")
+
+    await db.execute({ sql: "INSERT INTO students (roll, name, department, year, gpa) VALUES (?, ?, ?, ?, ?)", args: ["1024030440", "Abhinav Kumar Singh", "Computer Science", 3, 9.8] })
+    await db.execute({ sql: "INSERT INTO hostels (student_roll, block, room, status) VALUES (?, ?, ?, ?)", args: ["1024030440", "Block M", "Room 405", "Allotted"] })
+    await db.execute({ sql: "INSERT INTO enrollments (student_roll, course_name, grade) VALUES (?, ?, ?)", args: ["1024030440", "Distributed Systems", "A+"] })
+    await db.execute({ sql: "INSERT INTO enrollments (student_roll, course_name, grade) VALUES (?, ?, ?)", args: ["1024030440", "Cloud Computing", "A"] })
+    await db.execute({ sql: "INSERT INTO library (student_roll, book_title, due_date) VALUES (?, ?, ?)", args: ["1024030440", "Designing Data-Intensive Applications", "2026-09-30"] })
+
+    respond 200 { success: true, message: "Database initialized with full seed data!" }
+  }
+
+  route GET "/api/student/:roll/dashboard" {
+    rakho db = libsql.createClient({
+      url: env.TURSO_URL,
+      authToken: env.TURSO_TOKEN
+    })
+    
+    rakho roll = params.roll
+
+    rakho studentRes = await db.execute({ sql: "SELECT * FROM students WHERE roll = ?", args: [roll] })
+    
+    if (studentRes.rows.length == 0) {
+      respond 404 { error: "Student not found" }
+    } else {
+      rakho hostelRes = await db.execute({ sql: "SELECT * FROM hostels WHERE student_roll = ?", args: [roll] })
+      rakho enrollRes = await db.execute({ sql: "SELECT * FROM enrollments WHERE student_roll = ?", args: [roll] })
+      rakho libraryRes = await db.execute({ sql: "SELECT * FROM library WHERE student_roll = ?", args: [roll] })
+      
+      rakho hostelData = null
+      if (hostelRes.rows.length > 0) {
+        hostelData = hostelRes.rows[0]
+      }
+
+      respond 200 { 
+        student: studentRes.rows[0],
+        hostel: hostelData,
+        enrollments: enrollRes.rows,
+        library: libraryRes.rows
+      }
+    }
+  }
+
+}
