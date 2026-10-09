@@ -13,6 +13,7 @@ const { spawn } = require('child_process');
 const { Lexer } = require('../src/lexer');
 const { Parser } = require('../src/parser');
 const { CodeGenerator } = require('../src/codegen');
+const { Formatter } = require('../src/formatter');
 
 const VERSION = '0.2.0';
 
@@ -34,12 +35,14 @@ const HELP = `${BANNER}
     run   <file.tezz>           Compile and run a Tezz file
     dev   <file.tezz>           Run with hot-reload (watches for changes)
     deploy <file.tezz>          Deploy natively to Cloudflare Edge\n    build <file.tezz>           Compile to JavaScript\n    install <pkg>               Install a package (e.g. tezz install database)
+    fmt   <file.tezz|dir>       Format Tezz source code (canonical 2-space style)
     init                        Create a new Tezz project
     repl                        Start the interactive Tezz REPL
 
   \x1b[1mOptions:\x1b[0m
     --target <node|worker>      Output target (default: node)
     --output <file.js>          Output file path
+    --check                     Check formatting without modifying files
     --help, -h                  Show help
     --version, -v               Show version
 
@@ -48,6 +51,8 @@ const HELP = `${BANNER}
     tezz dev app.tezz
     tezz deploy app.tezz
     tezz build app.tezz --target worker
+    tezz fmt app.tezz
+    tezz fmt --check examples/
     tezz install database\n    tezz init
     tezz repl
 `;
@@ -388,6 +393,94 @@ function cmdRepl() {
   });
 }
 
+function cmdFormat(target, options = {}) {
+  const isCheck = !!options.check;
+  const targetPath = path.resolve(target || '.');
+
+  if (!fs.existsSync(targetPath)) {
+    console.error(`\x1b[31m  ✗ File or directory not found: ${target}\x1b[0m`);
+    process.exit(1);
+  }
+
+  function getTezzFiles(dirOrFile) {
+    const stat = fs.statSync(dirOrFile);
+    if (!stat.isDirectory()) {
+      return dirOrFile.endsWith('.tezz') ? [dirOrFile] : [];
+    }
+
+    const results = [];
+    const entries = fs.readdirSync(dirOrFile, { withFileTypes: true });
+    for (const entry of entries) {
+      const full = path.join(dirOrFile, entry.name);
+      if (entry.isDirectory()) {
+        if (['node_modules', '.git', '.tezz'].includes(entry.name)) continue;
+        results.push(...getTezzFiles(full));
+      } else if (entry.isFile() && entry.name.endsWith('.tezz')) {
+        results.push(full);
+      }
+    }
+    return results;
+  }
+
+  const files = getTezzFiles(targetPath);
+
+  if (files.length === 0) {
+    console.log(BANNER);
+    console.log(`  \x1b[90mNo .tezz files found in ${target}\x1b[0m\n`);
+    return;
+  }
+
+  console.log(BANNER);
+  console.log(`  \x1b[93m⚡ Tezz Formatter\x1b[0m ${isCheck ? '(check mode)' : ''}\n`);
+
+  const formatter = new Formatter({ indentSize: 2 });
+  let formattedCount = 0;
+  let alreadyCleanCount = 0;
+  let errorCount = 0;
+
+  for (const file of files) {
+    const relFile = path.relative(process.cwd(), file) || file;
+    try {
+      const source = fs.readFileSync(file, 'utf8');
+      const formatted = formatter.formatSafe(source, relFile);
+
+      if (source !== formatted) {
+        if (isCheck) {
+          console.log(`  \x1b[31m✗ Needs formatting:\x1b[0m ${relFile}`);
+          formattedCount++;
+        } else {
+          fs.writeFileSync(file, formatted, 'utf8');
+          console.log(`  \x1b[32m✓ Formatted:\x1b[0m ${relFile}`);
+          formattedCount++;
+        }
+      } else {
+        if (!isCheck) {
+          console.log(`  \x1b[90m- Clean:\x1b[0m ${relFile}`);
+        }
+        alreadyCleanCount++;
+      }
+    } catch (err) {
+      console.error(`  \x1b[31m! Error in ${relFile}:\x1b[0m ${err.message}`);
+      errorCount++;
+    }
+  }
+
+  console.log();
+  if (isCheck) {
+    if (formattedCount > 0) {
+      console.log(`  \x1b[31m✗ ${formattedCount} file(s) need formatting.\x1b[0m Run 'tezz fmt' to format them.\n`);
+      process.exit(1);
+    } else {
+      console.log(`  \x1b[32m✓ All ${files.length} file(s) are cleanly formatted!\x1b[0m\n`);
+    }
+  } else {
+    console.log(`  \x1b[32m✓ Done.\x1b[0m ${formattedCount} file(s) formatted, ${alreadyCleanCount} already clean.${errorCount > 0 ? ` (${errorCount} errors)` : ''}\n`);
+    if (errorCount > 0) {
+      process.exit(1);
+    }
+  }
+}
+
 // --- Argument Parsing ---
 
 const args = process.argv.slice(2);
@@ -398,7 +491,7 @@ const args = process.argv.slice(2);
 try {
   let targetDir = process.cwd();
   for (let i = 1; i < args.length; i++) {
-    if (!args[i].startsWith('-') && !['run', 'dev', 'deploy', 'build', 'install', 'init', 'repl'].includes(args[i])) {
+    if (!args[i].startsWith('-') && !['run', 'dev', 'deploy', 'build', 'install', 'init', 'repl', 'fmt', 'format'].includes(args[i])) {
       targetDir = require('path').dirname(require('path').resolve(args[i]));
       break;
     }
@@ -445,6 +538,8 @@ for (let i = 1; i < args.length; i++) {
     options.output = args[++i];
   } else if (args[i] === '--static') {
     options.static = true;
+  } else if (args[i] === '--check') {
+    options.check = true;
   } else if (!args[i].startsWith('-')) {
     options.file = options.file || args[i];
   }
@@ -496,6 +591,10 @@ switch (command) {
     break;
   case 'docs':
     printDocs();
+    break;
+  case 'fmt':
+  case 'format':
+    cmdFormat(options.file || '.', options);
     break;
   case 'repl':
     cmdRepl();
