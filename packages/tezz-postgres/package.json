@@ -1,0 +1,14 @@
+{
+  "name": "tezz-postgres",
+  "version": "0.1.0",
+  "description": "Native PostgreSQL client with connection pooling for the Tezz programming language.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test/smoke.js"
+  },
+  "author": "Abhinav",
+  "license": "MIT",
+  "dependencies": {
+    "pg": "^8.13.1"
+  }
+}

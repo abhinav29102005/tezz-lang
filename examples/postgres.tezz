@@ -1,0 +1,49 @@
+-- Tezz PostgreSQL Example
+-- Demonstrates CRUD routes using the tezz-postgres driver with connection pooling
+
+import createClient from "../../packages/tezz-postgres/index.js"
+
+service PostgresAPI on 3001 {
+
+  route GET "/health" {
+    respond 200 { status: "healthy", driver: "tezz-postgres" }
+  }
+
+  route GET "/users" {
+    let db = createClient({
+      url: env.DATABASE_URL || "postgres://postgres:postgres@localhost:5432/testdb"
+    })
+
+    try {
+      let result = await db.query("SELECT id, name, email FROM users ORDER BY id DESC LIMIT 50")
+      respond 200 { success: true, users: result.rows }
+    } catch err {
+      respond 500 { success: false, error: err.message }
+    }
+  }
+
+  route POST "/users" {
+    let body = request.json()
+    let name = body.name
+    let email = body.email
+
+    if !name || !email {
+      respond 400 { success: false, error: "name and email are required" }
+    }
+
+    let db = createClient({
+      url: env.DATABASE_URL || "postgres://postgres:postgres@localhost:5432/testdb"
+    })
+
+    try {
+      let result = await db.query(
+        "INSERT INTO users (name, email) VALUES ($1, $2) RETURNING id, name, email",
+        [name, email]
+      )
+      respond 201 { success: true, user: result.rows[0] }
+    } catch err {
+      respond 500 { success: false, error: err.message }
+    }
+  }
+
+}
