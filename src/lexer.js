@@ -86,7 +86,10 @@ const KEYWORDS = {
   'vikalp': TokenType.ENUM,          // enum = vikalp
   'lakshan': TokenType.TRAIT,        // trait = lakshan
   'jadoo': TokenType.MACRO,          // macro = jadoo
-  'dhancha': TokenType.CLASS, 'naya': TokenType.NEW, 'yeh': TokenType.THIS, 'se_bana': TokenType.EXTENDS,
+  'dhancha': TokenType.CLASS,          // class = dhancha
+  'naya': TokenType.NEW,             // new = naya
+  'yeh': TokenType.THIS,             // this = yeh
+  'se_bana': TokenType.EXTENDS,      // extends = se_bana
 };
 
 class Token {
@@ -155,6 +158,7 @@ class Lexer {
         else { this.addToken(TokenType.DOT, '.'); }
         continue;
       }
+      
       if (ch === ';') { this.addToken(TokenType.SEMICOLON, ';'); continue; }
       if (ch === '*') { this.addToken(TokenType.STAR, '*'); continue; }
       if (ch === '/') { this.addToken(TokenType.SLASH, '/'); continue; }
