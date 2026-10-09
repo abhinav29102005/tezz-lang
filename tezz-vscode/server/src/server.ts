@@ -6,10 +6,11 @@ import {
   ProposedFeatures,
   InitializeParams,
   CompletionItem,
-  CompletionItemKind,
   TextDocumentPositionParams,
   TextDocumentSyncKind,
-  InitializeResult
+  InitializeResult,
+  DocumentFormattingParams,
+  TextEdit
 } from 'vscode-languageserver/node';
 
 import {
@@ -20,31 +21,51 @@ import { tezzKeywords } from './keywords';
 
 let Lexer: any;
 let Parser: any;
-try {
-  const lexerModule = require('../../../src/lexer.js');
-  const parserModule = require('../../../src/parser.js');
-  Lexer = lexerModule.Lexer;
-  Parser = parserModule.Parser;
-} catch (e) {
-  console.error("Failed to load Tezz compiler", e);
+let formatCode: any;
+
+function loadCompiler() {
+  const tryRequire = (relPath: string) => {
+    try {
+      return require(relPath);
+    } catch {
+      return null;
+    }
+  };
+
+  const lexerMod = tryRequire('./compiler/lexer.js') ||
+                   tryRequire('../compiler/lexer.js') ||
+                   tryRequire('../../../src/lexer.js');
+  const parserMod = tryRequire('./compiler/parser.js') ||
+                    tryRequire('../compiler/parser.js') ||
+                    tryRequire('../../../src/parser.js');
+  const formatterMod = tryRequire('./compiler/formatter.js') ||
+                       tryRequire('../compiler/formatter.js') ||
+                       tryRequire('../../../src/formatter.js');
+
+  if (lexerMod) Lexer = lexerMod.Lexer;
+  if (parserMod) Parser = parserMod.Parser;
+  if (formatterMod) formatCode = formatterMod.format;
 }
+
+loadCompiler();
 
 const connection = createConnection(ProposedFeatures.all);
 const documents: TextDocuments<TextDocument> = new TextDocuments(TextDocument);
 
-connection.onInitialize((params: InitializeParams) => {
+connection.onInitialize((_params: InitializeParams): InitializeResult => {
   return {
     capabilities: {
       textDocumentSync: TextDocumentSyncKind.Incremental,
       completionProvider: {
         resolveProvider: true
-      }
+      },
+      documentFormattingProvider: true
     }
   };
 });
 
 connection.onInitialized(() => {
-  connection.console.log('Tezz Language Server with Real Compiler Integration Initialized');
+  connection.console.log('Tezz Language Server with Real Compiler & Formatter Integration Initialized');
 });
 
 documents.onDidChangeContent(change => {
@@ -126,6 +147,23 @@ connection.onCompletionResolve(
     return item;
   }
 );
+
+connection.onDocumentFormatting((params: DocumentFormattingParams): TextEdit[] => {
+  const document = documents.get(params.textDocument.uri);
+  if (!document || !formatCode) return [];
+  const text = document.getText();
+  try {
+    const formatted = formatCode(text);
+    if (formatted === text) return [];
+    const fullRange = {
+      start: { line: 0, character: 0 },
+      end: { line: document.lineCount, character: 0 }
+    };
+    return [TextEdit.replace(fullRange, formatted)];
+  } catch (e) {
+    return [];
+  }
+});
 
 documents.listen(connection);
 connection.listen();

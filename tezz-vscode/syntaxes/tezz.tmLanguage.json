@@ -28,8 +28,8 @@
     "comments": {
       "patterns": [
         {
-          "match": "//.*$",
-          "name": "comment.line.double-slash.tezz"
+          "match": "(--|//).*$",
+          "name": "comment.line.tezz"
         },
         {
           "begin": "/\\*",
@@ -41,11 +41,11 @@
     "keywords": {
       "patterns": [
         {
-          "match": "\\b(let|const|fn|service|route|on|spawn|return|import|from|enum|trait|if|else|for|while|await|async|class|extends|new|this|try|catch|rakho|pakka|agar|warna|jabtak|har|mein|koshish|pakad|dikha|baadmein|ruko|piche_kam|paida_kar|vikalp|lakshan|jadoo|dhancha|naya|yeh|se_bana)\\b",
+          "match": "\\b(let|const|fn|service|route|socket|on|respond|spawn|return|import|export|from|enum|trait|macro|if|else|for|in|while|await|async|background|print|class|extends|new|this|try|catch|rakho|pakka|seva|rasta|jawab|agar|warna|jabtak|har|mein|vapas|sahi|galat|khali|lao|bhejo|koshish|pakad|dikha|baadmein|ruko|piche_kam|paida_kar|vikalp|lakshan|jadoo|dhancha|naya|yeh|se_bana)\\b",
           "name": "keyword.control.tezz"
         },
         {
-          "match": "\\b(GET|POST|PUT|DELETE|PATCH|OPTIONS)\\b",
+          "match": "\\b(GET|POST|PUT|DELETE|PATCH|OPTIONS|HEAD)\\b",
           "name": "keyword.other.http.tezz"
         }
       ]
@@ -106,6 +106,10 @@
     },
     "types": {
       "patterns": [
+        {
+          "match": "\\b(int|string|bool|float|any|void|number|boolean)\\b",
+          "name": "support.type.primitive.tezz"
+        },
         {
           "match": "\\b([A-Z][a-zA-Z0-9_]*)\\b",
           "name": "entity.name.type.tezz"

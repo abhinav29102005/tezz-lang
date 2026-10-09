@@ -2,7 +2,7 @@
   "name": "tezz",
   "displayName": "Tezz Official",
   "description": "Premium syntax highlighting, snippets, and real-time LSP integration for the Tezz programming language.",
-  "version": "0.3.0",
+  "version": "0.4.1",
   "engines": {
     "vscode": "^1.80.0"
   },
@@ -50,10 +50,11 @@
   },
   "main": "./client/out/extension.js",
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "npm run copy-compiler && npm run compile",
     "compile": "tsc -b",
     "watch": "tsc -b -w",
-    "postinstall": "cd client && npm install && cd ../server && npm install && cd .."
+    "postinstall": "cd client && npm install && cd ../server && npm install && cd ..",
+    "copy-compiler": "node scripts/sync-compiler.js"
   },
   "devDependencies": {
     "@types/node": "^26.4.0",

@@ -25,5 +25,62 @@
       "}"
     ],
     "description": "Create a parallel spawn block"
+  },
+  "WebSocket Route": {
+    "prefix": "socket",
+    "body": [
+      "socket \"/${1:ws}\" {",
+      "\ton connect {",
+      "\t\t${2:print(\"Client connected\");}",
+      "\t}",
+      "\ton message(data) {",
+      "\t\t${3:socket.send(data);}",
+      "\t}",
+      "\ton close {",
+      "\t\t${4:print(\"Connection closed\");}",
+      "\t}",
+      "}"
+    ],
+    "description": "Create a real-time WebSocket route handler inside a service"
+  },
+  "PostgreSQL Connection Pool": {
+    "prefix": "postgres",
+    "body": [
+      "import { createPool } from \"tezz-postgres\"",
+      "",
+      "const pool = createPool({",
+      "\turl: ${1:env.DATABASE_URL || \"postgres://postgres:postgres@localhost:5432/testdb\"}",
+      "})"
+    ],
+    "description": "Initialize a Tezz PostgreSQL connection pool"
+  },
+  "Redis Client": {
+    "prefix": "redis",
+    "body": [
+      "import { createClient } from \"tezz-redis\"",
+      "",
+      "const redis = createClient({",
+      "\turl: ${1:env.REDIS_URL || \"redis://127.0.0.1:6379\"}",
+      "})"
+    ],
+    "description": "Initialize a Tezz Redis client"
+  },
+  "Background Job": {
+    "prefix": "background",
+    "body": [
+      "background {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Run an asynchronous background job outside request lifecycle"
+  },
+  "Typed Function": {
+    "prefix": "fnt",
+    "body": [
+      "fn ${1:name}(${2:param}: ${3:string}): ${4:void} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create a typed function definition"
   }
 }

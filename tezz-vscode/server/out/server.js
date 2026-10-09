@@ -5,29 +5,48 @@ const vscode_languageserver_textdocument_1 = require("vscode-languageserver-text
 const keywords_1 = require("./keywords");
 let Lexer;
 let Parser;
-try {
-    const lexerModule = require('../../../src/lexer.js');
-    const parserModule = require('../../../src/parser.js');
-    Lexer = lexerModule.Lexer;
-    Parser = parserModule.Parser;
+let formatCode;
+function loadCompiler() {
+    const tryRequire = (relPath) => {
+        try {
+            return require(relPath);
+        }
+        catch {
+            return null;
+        }
+    };
+    const lexerMod = tryRequire('./compiler/lexer.js') ||
+        tryRequire('../compiler/lexer.js') ||
+        tryRequire('../../../src/lexer.js');
+    const parserMod = tryRequire('./compiler/parser.js') ||
+        tryRequire('../compiler/parser.js') ||
+        tryRequire('../../../src/parser.js');
+    const formatterMod = tryRequire('./compiler/formatter.js') ||
+        tryRequire('../compiler/formatter.js') ||
+        tryRequire('../../../src/formatter.js');
+    if (lexerMod)
+        Lexer = lexerMod.Lexer;
+    if (parserMod)
+        Parser = parserMod.Parser;
+    if (formatterMod)
+        formatCode = formatterMod.format;
 }
-catch (e) {
-    console.error("Failed to load Tezz compiler", e);
-}
+loadCompiler();
 const connection = (0, node_1.createConnection)(node_1.ProposedFeatures.all);
 const documents = new node_1.TextDocuments(vscode_languageserver_textdocument_1.TextDocument);
-connection.onInitialize((params) => {
+connection.onInitialize((_params) => {
     return {
         capabilities: {
             textDocumentSync: node_1.TextDocumentSyncKind.Incremental,
             completionProvider: {
                 resolveProvider: true
-            }
+            },
+            documentFormattingProvider: true
         }
     };
 });
 connection.onInitialized(() => {
-    connection.console.log('Tezz Language Server with Real Compiler Integration Initialized');
+    connection.console.log('Tezz Language Server with Real Compiler & Formatter Integration Initialized');
 });
 documents.onDidChangeContent(change => {
     validateTextDocument(change.document);
@@ -96,6 +115,25 @@ connection.onCompletionResolve((item) => {
         item.documentation = keyword.documentation;
     }
     return item;
+});
+connection.onDocumentFormatting((params) => {
+    const document = documents.get(params.textDocument.uri);
+    if (!document || !formatCode)
+        return [];
+    const text = document.getText();
+    try {
+        const formatted = formatCode(text);
+        if (formatted === text)
+            return [];
+        const fullRange = {
+            start: { line: 0, character: 0 },
+            end: { line: document.lineCount, character: 0 }
+        };
+        return [node_1.TextEdit.replace(fullRange, formatted)];
+    }
+    catch (e) {
+        return [];
+    }
 });
 documents.listen(connection);
 connection.listen();

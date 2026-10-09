@@ -86,6 +86,7 @@ class CodeGenerator {
       case 'TraitDeclaration':     return this.genTrait(node);
       case 'ClassDeclaration':     return this.genClass(node);
       case 'MacroDeclaration':     return this.genMacro(node);
+      case 'EmptyStatement':       return;
 
       default: throw new Error(`[Tezz Codegen] Unknown statement: ${node.type}`);
     }
@@ -199,7 +200,11 @@ genImport(node) {
     if (this.target === 'worker') {
       this.line(`import ${node.name} from '${node.source}';`);
     } else {
-      this.line(`const ${node.name} = require('${node.source}').default || require('${node.source}');`);
+      if (node.isNamed) {
+        this.line(`const ${node.name} = require('${node.source}');`);
+      } else {
+        this.line(`const ${node.name} = require('${node.source}').default || require('${node.source}');`);
+      }
     }
   }
 

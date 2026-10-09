@@ -15,7 +15,10 @@ const { Parser } = require('../src/parser');
 const { CodeGenerator } = require('../src/codegen');
 const { Formatter } = require('../src/formatter');
 
-const VERSION = '0.2.0';
+let VERSION = '0.5.0';
+try {
+  VERSION = require('../package.json').version;
+} catch {}
 
 const ASCII_LOGO = `
   \x1b[1m\x1b[93m  ████████╗███████╗███████╗███████╗\x1b[0m
@@ -325,7 +328,7 @@ function cmdDeploy(file, options) {
 function cmdInit() {
   console.log(BANNER);
 
-  const appContent = `-- Welcome to Tezz v0.2.0!
+  const appContent = `-- Welcome to Tezz v${VERSION}!
 -- Your first Tezz service (Hinglish/English syntax supported)
 
 seva App on 3000 {
@@ -334,7 +337,7 @@ seva App on 3000 {
     rakho message = "Namaste from Tezz! "
     jawab 200 {
       message: message,
-      version: "0.2.0",
+      version: VERSION,
       status: "running"
     }
   }
