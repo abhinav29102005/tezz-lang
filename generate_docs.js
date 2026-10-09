@@ -281,6 +281,59 @@ route POST "/users" { }</code></pre>
     `
   },
   {
+    slug: 'websockets',
+    group: 'Backend APIs',
+    title: 'WebSockets',
+    toc: [
+      { id: 'websockets-header', text: 'Declarative WebSockets' },
+      { id: 'socket-syntax', text: 'The socket Block' },
+      { id: 'socket-events', text: 'Lifecycle Events' },
+      { id: 'runtime-support', text: 'Node.js & Edge Workers' }
+    ],
+    content: `
+      <h1 id="websockets-header">Declarative WebSockets</h1>
+      <p>Tezz makes real-time bidirectional communication as easy as defining an HTTP route. Define full-featured WebSocket servers inside your <code>service</code> blocks with zero boilerplate.</p>
+
+      <h2 id="socket-syntax">The socket Block</h2>
+      <p>Declare a WebSocket endpoint alongside standard HTTP routes using the <code>socket</code> declaration:</p>
+      <pre><code>service ChatAPI on 3000 {
+  route GET "/health" {
+    respond 200 { status: "ok" }
+  }
+
+  socket "/ws" {
+    on connect {
+      print("Client connected!")
+    }
+
+    on message(data) {
+      print("Received: " + data)
+      -- Automatically serializes JSON objects or strings
+      socket.send({ echo: data })
+    }
+
+    on close {
+      print("Client left")
+    }
+  }
+}</code></pre>
+
+      <h2 id="socket-events">Lifecycle Events</h2>
+      <ul>
+        <li><code>on connect { ... }</code>: Invoked when a new client completes the WebSocket upgrade handshake. The <code>socket</code> object is available in scope.</li>
+        <li><code>on message(data) { ... }</code>: Triggered on incoming frames. Automatically parses incoming JSON payloads when applicable.</li>
+        <li><code>on close { ... }</code>: Invoked when the client closes the connection.</li>
+        <li><code>on error(err) { ... }</code>: Captures socket-level communication errors.</li>
+      </ul>
+
+      <h2 id="runtime-support">Node.js & Edge Workers</h2>
+      <ul>
+        <li><strong>Node.js:</strong> Tezz wires into the native HTTP server <code>upgrade</code> event using the battle-tested <code>ws</code> library.</li>
+        <li><strong>Cloudflare Workers:</strong> Automatically intercepts <code>Upgrade: websocket</code> requests and establishes a native <code>WebSocketPair()</code> returning HTTP 101 Switching Protocols.</li>
+      </ul>
+    `
+  },
+  {
     slug: 'deployment',
     group: 'Backend APIs',
     title: 'Deployment Guide',
@@ -311,21 +364,43 @@ node dist/server.js</code></pre>
     title: 'Standard Libraries',
     toc: [
       { id: 'ecosystem-header', text: 'Ecosystem Packages' },
-
       { id: 'tezz-database', text: 'tezz-database' },
+      { id: 'tezz-postgres', text: 'tezz-postgres' },
+      { id: 'tezz-redis', text: 'tezz-redis' },
       { id: 'tezz-jwt', text: 'tezz-jwt' }
     ],
     content: `
       <h1 id="ecosystem-header">Standard Libraries</h1>
       <div style="text-align:center; margin: 2rem 0;"><img src="https://i.imgflip.com/28j0te.jpg" style="max-width:400px; border-radius: 8px;"/></div>
       
-      <h2 id="tezz-database">tezz-database</h2>
+      <h2 id="tezz-database">tezz-database (Turso / libSQL)</h2>
+      <p>Zero-dependency HTTP database client designed for Cloudflare Workers and Edge environments.</p>
       <pre><code>npm install tezz-database</code></pre>
       <pre><code>import createClient from "tezz-database"
-let db = createClient({ url: "YOUR_TURSO_URL", token: "YOUR_TOKEN" })
+let db = createClient({ url: env.TURSO_URL, token: env.TURSO_TOKEN })
 let result = await db.execute("SELECT * FROM users")</code></pre>
 
-      <h2 id="tezz-jwt">tezz-jwt</h2>
+      <h2 id="tezz-postgres">tezz-postgres (PostgreSQL)</h2>
+      <p>Native PostgreSQL client featuring singleton connection pooling and parameterized query protection.</p>
+      <pre><code>npm install tezz-postgres</code></pre>
+      <pre><code>import createClient from "tezz-postgres"
+let db = createClient({ url: env.DATABASE_URL })
+
+-- Parameterized queries ($1, $2, ...) prevent SQL injection
+let result = await db.query("SELECT * FROM users WHERE id = $1", [1])
+print(result.rows)</code></pre>
+
+      <h2 id="tezz-redis">tezz-redis (Redis)</h2>
+      <p>High-performance native Redis client with connection reuse, auto-JSON serialization, and TTL support.</p>
+      <pre><code>npm install tezz-redis</code></pre>
+      <pre><code>import createClient from "tezz-redis"
+let redis = createClient({ url: env.REDIS_URL })
+
+-- Set with 5-minute expiration (TTL in seconds)
+await redis.set("session_key", { user: "Alice" }, 300)
+let cached = await redis.jsonGet("session_key")</code></pre>
+
+      <h2 id="tezz-jwt">tezz-jwt (JSON Web Tokens)</h2>
       <pre><code>npm install tezz-jwt</code></pre>
       <pre><code>import { sign, verify } from "tezz-jwt"
 let token = sign({ user: "abhinav" }, "secret-key")</code></pre>
@@ -337,19 +412,28 @@ let token = sign({ user: "abhinav" }, "secret-key")</code></pre>
     title: 'Roadmap & Contributing',
     toc: [
       { id: 'roadmap', text: 'Roadmap' },
+      { id: 'shipped', text: 'Recently Shipped' },
       { id: 'contribute', text: 'How to Contribute' }
     ],
     content: `
       <h1 id="roadmap">Roadmap & Future Goals</h1>
       <div style="text-align:center; margin: 2rem 0;"><img src="/docs/assets/pikachu.jpg" style="max-width:400px; border-radius: 8px;"/></div>
       
-      <p>Tezz has rapidly grown from a simple transpiler into a robust ecosystem featuring advanced metaprogramming, OS-level concurrency, and native standard libraries.</p>
+      <p>Tezz has rapidly grown from a simple transpiler into a robust ecosystem featuring advanced metaprogramming, OS-level concurrency, real-time WebSockets, and native standard libraries.</p>
       
-      <p>Our upcoming focus areas include:</p>
+      <h2 id="shipped">Recently Shipped ⚡</h2>
       <ul>
-        <li><strong>Native Database Drivers:</strong> First-class integration for PostgreSQL and Redis with zero-overhead connection pooling.</li>
+        <li><strong>Declarative WebSockets:</strong> Native <code>socket</code> blocks for real-time bidirectional communication on Node.js and Cloudflare Workers.</li>
+        <li><strong>PostgreSQL Driver:</strong> <code>tezz-postgres</code> with automatic connection pooling and parameterized query protection.</li>
+        <li><strong>Redis Driver:</strong> <code>tezz-redis</code> with multiplexed connection reuse and native JSON helpers.</li>
+        <li><strong>Type Annotations:</strong> Optional <code>let x: int = 1</code> and <code>fn foo(): string</code> with compile-time type erasure.</li>
+      </ul>
+
+      <h2>Upcoming Focus Areas</h2>
+      <ul>
+        <li><strong>Static Type Checker:</strong> Non-fatal compile-time type validation across functions and variable assignments.</li>
+        <li><strong>Traits Implementation:</strong> <code>class X implements Trait</code> compile-time contract enforcement.</li>
         <li><strong>Enhanced Type Inference:</strong> Smarter type resolution across complex trait boundaries.</li>
-        <li><strong>WebSockets:</strong> First-class declarative syntax for WebSocket routing, similar to our HTTP <code>service</code> blocks.</li>
       </ul>
 
       <h2 id="contribute">How You Can Help Make Tezz Better</h2>
