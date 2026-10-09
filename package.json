@@ -1,7 +1,7 @@
 {
   "name": "tezz-lang",
   "version": "0.5.0",
-  "description": "Tezz (तेज़) — The Fast Backend Language. Write once, deploy everywhere: Cloudflare Workers, Node.js, Deno, Bun.",
+  "description": "Tezz (तेज़) — A high-performance transpiled programming language for the edge (Cloudflare Workers, Node.js, Bun). Natively supports English and Hinglish syntax.",
   "main": "src/lexer.js",
   "bin": {
     "tezz": "./bin/tezz.js"
@@ -18,19 +18,30 @@
     "example:hello": "node bin/tezz.js run examples/hello.tezz",
     "example:api": "node bin/tezz.js run examples/api.tezz",
     "prepublishOnly": "npm test",
-    "build:binaries": "npx pkg . --targets node18-linux-x64,node18-macos-x64,node18-win-x64 --out-path bin-dist/"
+    "build:binaries": "npx pkg . --targets node18-linux-x64,node18-macos-x64,node18-win-x64 --out-path bin-dist/",
+    "deploy": "npm run build && wrangler pages deploy docs --project-name automatic-octo-carnival",
+    "preview": "wrangler dev",
+    "build": "cd website && npm run build && rm -rf ../docs/* && cp -r dist/* ../docs/"
   },
   "keywords": [
     "tezz",
+    "tezz-lang",
     "programming-language",
-    "backend",
-    "cloudflare-workers",
-    "edge-computing",
     "compiler",
     "transpiler",
+    "interpreter",
+    "ast",
+    "backend",
+    "edge-computing",
+    "cloudflare-workers",
+    "bun",
+    "nodejs",
+    "hinglish",
+    "hindi",
+    "esolang",
+    "language-server",
     "http-server",
-    "api",
-    "hinglish"
+    "oop"
   ],
   "author": "Abhinav",
   "license": "MIT",
@@ -46,8 +57,10 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "dotenv": "^17.4.2",
-    "tezz-lang": "^0.5.0",
+"dotenv": "^17.4.2",
     "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.136.1"
   }
 }
