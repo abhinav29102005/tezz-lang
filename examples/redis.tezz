@@ -1,0 +1,62 @@
+-- Tezz Redis Example
+-- Demonstrates caching routes using the tezz-redis driver with connection reuse
+
+import createClient from "../../packages/tezz-redis/index.js"
+
+service CacheAPI on 3002 {
+
+  route GET "/health" {
+    respond 200 { status: "healthy", driver: "tezz-redis" }
+  }
+
+  route GET "/cache/:key" {
+    let redis = createClient({
+      url: env.REDIS_URL || "redis://127.0.0.1:6379"
+    })
+
+    try {
+      let value = await redis.get(params.key)
+      if value {
+        respond 200 { success: true, key: params.key, value: value }
+      }
+      respond 404 { success: false, error: "Key not found" }
+    } catch err {
+      respond 500 { success: false, error: err.message }
+    }
+  }
+
+  route POST "/cache/:key" {
+    let body = request.json()
+    let value = body.value
+
+    if !value {
+      respond 400 { success: false, error: "value is required" }
+    }
+
+    let redis = createClient({
+      url: env.REDIS_URL || "redis://127.0.0.1:6379"
+    })
+
+    try {
+      let ttl = body.ttl || 300
+      await redis.set(params.key, value, ttl)
+      respond 201 { success: true, key: params.key, value: value, ttl: ttl }
+    } catch err {
+      respond 500 { success: false, error: err.message }
+    }
+  }
+
+  route DELETE "/cache/:key" {
+    let redis = createClient({
+      url: env.REDIS_URL || "redis://127.0.0.1:6379"
+    })
+
+    try {
+      await redis.del(params.key)
+      respond 200 { success: true, message: "Key deleted" }
+    } catch err {
+      respond 500 { success: false, error: err.message }
+    }
+  }
+
+}

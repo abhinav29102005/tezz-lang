@@ -1,0 +1,27 @@
+service ServiceA on 5001 {
+  socket "/chat" {
+    on connect {
+      print("A connected")
+    }
+    on message(m) {
+      socket.send(m)
+    }
+    on close {
+      print("A disconnected")
+    }
+  }
+}
+
+service ServiceB on 5002 {
+  socket "/events" {
+    on connect {
+      print("B connected")
+    }
+    on message(data) {
+      socket.send(data)
+    }
+    on close {
+      print("B disconnected")
+    }
+  }
+}

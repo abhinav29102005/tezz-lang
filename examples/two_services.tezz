@@ -1,0 +1,23 @@
+service PureAPI on 4000 {
+  route GET "/ping" {
+    respond 200 { pong: true }
+  }
+}
+
+service ChatAPI on 3001 {
+  route GET "/health" {
+    respond 200 { ok: true }
+  }
+
+  socket "/ws" {
+    on connect {
+      print("connected")
+    }
+    on message(msg) {
+      socket.send(msg)
+    }
+    on close {
+      print("disconnected")
+    }
+  }
+}

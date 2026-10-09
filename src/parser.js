@@ -189,6 +189,8 @@ class Parser {
         routes.push(this.parseRouteDecl());
       } else if (this.check(TokenType.IDENTIFIER) && ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'].includes(this.peek().value.toUpperCase())) {
         routes.push(this.parseRouteDecl(true));
+      } else if (this.check(TokenType.IDENTIFIER) && this.peek().value.toLowerCase() === 'socket') {
+        routes.push(this.parseSocketDecl());
       } else {
         routes.push(this.parseStatement());
       }
@@ -207,6 +209,31 @@ class Parser {
     const path = this.expect(TokenType.STRING).value;
     const body = this.parseBlock();
     return { type: 'RouteDeclaration', method, path, body, line };
+  }
+
+  // socket "/path" { on connect {...} on message(data) {...} on close {...} }
+  parseSocketDecl() {
+    const line = this.peek().line;
+    this.advance(); // consume the 'socket' identifier
+    const path = this.expect(TokenType.STRING).value;
+    this.expect(TokenType.LBRACE);
+    const handlers = [];
+    while (!this.check(TokenType.RBRACE) && !this.isAtEnd()) {
+      this.expect(TokenType.ON);
+      const event = this.expect(TokenType.IDENTIFIER).value; // connect | message | close | error
+      let param = null;
+      if (this.check(TokenType.LPAREN)) {
+        this.advance();
+        if (this.check(TokenType.IDENTIFIER)) {
+          param = this.expect(TokenType.IDENTIFIER).value;
+        }
+        this.expect(TokenType.RPAREN);
+      }
+      const body = this.parseBlock();
+      handlers.push({ event, param, body });
+    }
+    this.expect(TokenType.RBRACE);
+    return { type: 'SocketDeclaration', path, handlers, line };
   }
 
   // respond 200 { key: value }

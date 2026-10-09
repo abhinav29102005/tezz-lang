@@ -31,10 +31,23 @@ class CodeGenerator {
       this.emit('const env = typeof process !== "undefined" ? process.env : {};\n\n');
     }
 
-
     // Collect services for later
     for (const node of this.ast.body) {
       if (node.type === 'ServiceDeclaration') this.services.push(node);
+    }
+
+    // Emit __tezzWrapSocket helper only if at least one service has a socket block
+    const anySocketService = this.services.some(
+      svc => svc.routes.some(r => r.type === 'SocketDeclaration')
+    );
+    if (anySocketService) {
+      this.emit('function __tezzWrapSocket(__raw) {\n');
+      this.emit('  return {\n');
+      this.emit('    send(data) { __raw.send(typeof data === "string" ? data : JSON.stringify(data)); },\n');
+      this.emit('    close(...args) { __raw.close(...args); },\n');
+      this.emit('    raw: __raw,\n');
+      this.emit('  };\n');
+      this.emit('}\n\n');
     }
 
     // Emit non-service top-level code first
@@ -302,6 +315,7 @@ genImport(node) {
   genService(node) {
     const name = node.name;
     const port = this.genExpr(node.port);
+    const hasSockets = node.routes.some(r => r.type === 'SocketDeclaration');
 
     this.emit('\n');
     this.line(`// ─────────────────────────────────────────`);
@@ -309,12 +323,17 @@ genImport(node) {
     this.line(`// ─────────────────────────────────────────`);
     this.emit('\n');
     this.line(`const __tezz_routes_${name} = [];`);
+    if (hasSockets) {
+      this.line(`const __tezz_sockets_${name} = [];`);
+    }
     this.emit('\n');
 
-    // Register each route
+    // Register each route or socket
     for (const route of node.routes) {
       if (route.type === 'RouteDeclaration') {
         this.genRouteReg(route, name);
+      } else if (route.type === 'SocketDeclaration') {
+        this.genSocketReg(route, name);
       } else {
         this.genStmt(route);
       }
@@ -324,9 +343,9 @@ genImport(node) {
 
     // Emit the server
     if (this.target === 'worker') {
-      this.genWorkerServer(name);
+      this.genWorkerServer(name, hasSockets);
     } else {
-      this.genNodeServer(name, port);
+      this.genNodeServer(name, port, hasSockets);
     }
   }
 
@@ -359,8 +378,29 @@ genImport(node) {
     this.emit('\n');
   }
 
+  genSocketReg(node, svcName) {
+    this.line(`__tezz_sockets_${svcName}.push({`);
+    this.indent++;
+    this.line(`path: '${node.path}',`);
+    for (const h of node.handlers) {
+      const params = h.param ? `__ws, ${h.param}` : `__ws`;
+      this.line(`async ${h.event}(${params}) {`);
+      this.indent++;
+      this.line(`const socket = __ws;`);
+      // Note: inRoute is NOT set here — 'respond' doesn't make sense in a WebSocket handler.
+      // Any respond statement would emit a plain return, which is a compile-time mistake
+      // but won't crash the runtime.
+      for (const s of h.body) this.genStmt(s);
+      this.indent--;
+      this.line(`},`);
+    }
+    this.indent--;
+    this.line(`});`);
+    this.emit('\n');
+  }
+
   // --- Node.js Server ---
-  genNodeServer(svcName, port) {
+  genNodeServer(svcName, port, hasSockets) {
     this.line(`const http = require('http');`);
     this.emit('\n');
 
@@ -454,6 +494,35 @@ genImport(node) {
     this.line(`});`);
     this.emit('\n');
 
+    // WebSocket upgrade wiring — only emitted when the service has socket blocks
+    if (hasSockets) {
+      this.line(`const __WebSocketServer_${svcName} = require('ws').WebSocketServer;`);
+      this.line(`const __tezz_wss_${svcName} = new __WebSocketServer_${svcName}({ noServer: true });`);
+      // Note: 'socket' here is Node's raw TCP socket — NOT the Tezz handler variable
+      this.line(`__tezz_server_${svcName}.on('upgrade', (req, socket, head) => {`);
+      this.indent++;
+      this.line(`const __path = new URL(req.url, 'http://localhost').pathname;`);
+      this.line(`const __sockCfg = __tezz_sockets_${svcName}.find(s => s.path === __path);`);
+      this.line(`if (!__sockCfg) { socket.destroy(); return; }`);
+      this.line(`__tezz_wss_${svcName}.handleUpgrade(req, socket, head, (__rawWs) => {`);
+      this.indent++;
+      this.line(`const __ws = __tezzWrapSocket(__rawWs);`);
+      this.line(`if (__sockCfg.connect) __sockCfg.connect(__ws);`);
+      this.line(`__rawWs.on('message', (__data) => {`);
+      this.indent++;
+      this.line(`let __parsed; try { __parsed = JSON.parse(__data.toString()); } catch { __parsed = __data.toString(); }`);
+      this.line(`if (__sockCfg.message) __sockCfg.message(__ws, __parsed);`);
+      this.indent--;
+      this.line(`});`);
+      this.line(`__rawWs.on('close', () => { if (__sockCfg.close) __sockCfg.close(__ws); });`);
+      this.line(`__rawWs.on('error', (__err) => { if (__sockCfg.error) __sockCfg.error(__ws, __err); });`);
+      this.indent--;
+      this.line(`});`);
+      this.indent--;
+      this.line(`});`);
+      this.emit('\n');
+    }
+
     // Listen
     this.line(`__tezz_server_${svcName}.listen(${port}, () => {`);
     this.indent++;
@@ -467,7 +536,7 @@ genImport(node) {
   }
 
   // --- Cloudflare Worker Server ---
-  genWorkerServer(svcName) {
+  genWorkerServer(svcName, hasSockets) {
     this.line(`export default {`);
     this.indent++;
     this.line(`async fetch(req, env, ctx) {`);
@@ -496,6 +565,30 @@ genImport(node) {
     this.line(`const __method = req.method;`);
     this.line(`const __path = __url.pathname;`);
     this.emit('\n');
+
+    // WebSocket upgrade handling for worker target
+    // TODO: Worker target has no 'on error' wiring for WebSocket (WebSocketPair limitation).
+    if (hasSockets) {
+      this.line(`if (req.headers.get('Upgrade') === 'websocket') {`);
+      this.indent++;
+      this.line(`const __sockCfg = __tezz_sockets_${svcName}.find(s => s.path === __path);`);
+      this.line(`if (!__sockCfg) return new Response('Not Found', { status: 404 });`);
+      this.line(`const [__client, __rawServer] = Object.values(new WebSocketPair());`);
+      this.line(`__rawServer.accept();`);
+      this.line(`const __server = __tezzWrapSocket(__rawServer);`);
+      this.line(`if (__sockCfg.connect) __sockCfg.connect(__server);`);
+      this.line(`__rawServer.addEventListener('message', (__evt) => {`);
+      this.indent++;
+      this.line(`let __parsed; try { __parsed = JSON.parse(__evt.data); } catch { __parsed = __evt.data; }`);
+      this.line(`if (__sockCfg.message) __sockCfg.message(__server, __parsed);`);
+      this.indent--;
+      this.line(`});`);
+      this.line(`__rawServer.addEventListener('close', () => { if (__sockCfg.close) __sockCfg.close(__server); });`);
+      this.line(`return new Response(null, { status: 101, webSocket: __client });`);
+      this.indent--;
+      this.line(`}`);
+      this.emit('\n');
+    }
 
     this.line(`for (const __route of __tezz_routes_${svcName}) {`);
     this.indent++;
