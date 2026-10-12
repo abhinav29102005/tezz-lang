@@ -2,12 +2,30 @@
   "name": "tezz",
   "displayName": "Tezz Official",
   "description": "Premium syntax highlighting, snippets, and real-time LSP integration for the Tezz programming language.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "engines": {
     "vscode": "^1.80.0"
   },
   "categories": [
-    "Programming Languages"
+    "Programming Languages",
+    "Snippets",
+    "Formatters",
+    "Linters"
+  ],
+  "keywords": [
+    "tezz",
+    "tezz-lang",
+    "hinglish",
+    "backend",
+    "edge",
+    "cloudflare",
+    "workers",
+    "api",
+    "rest",
+    "transpiler",
+    "hindi",
+    "language",
+    "syntax"
   ],
   "publisher": "abhinav29102005",
   "contributes": {
@@ -48,6 +66,10 @@
     "type": "git",
     "url": "https://github.com/abhinav29102005/tezz-lang.git"
   },
+  "bugs": {
+    "url": "https://github.com/abhinav29102005/tezz-lang/issues"
+  },
+  "homepage": "https://tezz.abhinavkumarsingh.tech",
   "main": "./client/out/extension.js",
   "scripts": {
     "vscode:prepublish": "npm run compile",

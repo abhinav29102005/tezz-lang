@@ -8,14 +8,117 @@
     ],
     "description": "Create a new Tezz service"
   },
+  "Hinglish Service Block": {
+    "prefix": "seva",
+    "body": [
+      "seva ${1:Name} on ${2:8080} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create a new Tezz service (Hinglish)"
+  },
   "Route Block": {
     "prefix": "route",
     "body": [
-      "route ${1|GET,POST,PUT,DELETE|} \"/${2:path}\" {",
+      "route ${1|GET,POST,PUT,DELETE,PATCH,OPTIONS|} \"/${2:path}\" {",
       "\trespond ${3:200} { ${4:message}: \"${5:success}\" }",
       "}"
     ],
     "description": "Create a new HTTP route"
+  },
+  "Hinglish Route Block": {
+    "prefix": "rasta",
+    "body": [
+      "rasta ${1|GET,POST,PUT,DELETE,PATCH,OPTIONS|} \"/${2:path}\" {",
+      "\tjawab ${3:200} { ${4:message}: \"${5:success}\" }",
+      "}"
+    ],
+    "description": "Create a new HTTP route (Hinglish)"
+  },
+  "Function": {
+    "prefix": "fn",
+    "body": [
+      "fn ${1:functionName}(${2:params}) {",
+      "\t${3:return $0}",
+      "}"
+    ],
+    "description": "Create a function"
+  },
+  "Hinglish Function": {
+    "prefix": "kaam",
+    "body": [
+      "kaam ${1:functionName}(${2:params}) {",
+      "\t${3:vapas $0}",
+      "}"
+    ],
+    "description": "Create a function (Hinglish)"
+  },
+  "Arrow Function": {
+    "prefix": "arrow",
+    "body": [
+      "let ${1:name} = (${2:params}) => ${3:expression}"
+    ],
+    "description": "Create an arrow function"
+  },
+  "Class": {
+    "prefix": "class",
+    "body": [
+      "class ${1:ClassName} {",
+      "\tconstructor(${2:params}) {",
+      "\t\t${3:this.property = value}",
+      "\t}",
+      "\t",
+      "\t${4:methodName}() {",
+      "\t\t$0",
+      "\t}",
+      "}"
+    ],
+    "description": "Create a class"
+  },
+  "Hinglish Class": {
+    "prefix": "dhancha",
+    "body": [
+      "dhancha ${1:ClassName} {",
+      "\tconstructor(${2:params}) {",
+      "\t\t${3:yeh.property = value}",
+      "\t}",
+      "\t",
+      "\t${4:methodName}() {",
+      "\t\t$0",
+      "\t}",
+      "}"
+    ],
+    "description": "Create a class (Hinglish)"
+  },
+  "Class with Extends": {
+    "prefix": "classext",
+    "body": [
+      "class ${1:ClassName} extends ${2:BaseClass} {",
+      "\tconstructor(${3:params}) {",
+      "\t\t${4:this.property = value}",
+      "\t}",
+      "\t",
+      "\t${5:methodName}() {",
+      "\t\t$0",
+      "\t}",
+      "}"
+    ],
+    "description": "Create a class with inheritance"
+  },
+  "Hinglish Class with Extends": {
+    "prefix": "dhanchase",
+    "body": [
+      "dhancha ${1:ClassName} se_bana ${2:BaseClass} {",
+      "\tconstructor(${3:params}) {",
+      "\t\t${4:yeh.property = value}",
+      "\t}",
+      "\t",
+      "\t${5:methodName}() {",
+      "\t\t$0",
+      "\t}",
+      "}"
+    ],
+    "description": "Create a class with inheritance (Hinglish)"
   },
   "Spawn Block": {
     "prefix": "spawn",
@@ -25,5 +128,254 @@
       "}"
     ],
     "description": "Create a parallel spawn block"
+  },
+  "Background Block": {
+    "prefix": "background",
+    "body": [
+      "background {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create an asynchronous background task"
+  },
+  "If Statement": {
+    "prefix": "if",
+    "body": [
+      "if (${1:condition}) {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create an if statement"
+  },
+  "Hinglish If Statement": {
+    "prefix": "agar",
+    "body": [
+      "agar (${1:condition}) {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create an if statement (Hinglish)"
+  },
+  "If-Else Statement": {
+    "prefix": "ifelse",
+    "body": [
+      "if (${1:condition}) {",
+      "\t${2}",
+      "} else {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create an if-else statement"
+  },
+  "Hinglish If-Else Statement": {
+    "prefix": "agarwarna",
+    "body": [
+      "agar (${1:condition}) {",
+      "\t${2}",
+      "} warna {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create an if-else statement (Hinglish)"
+  },
+  "For Loop": {
+    "prefix": "for",
+    "body": [
+      "for ${1:i} in ${2:array} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create a for loop"
+  },
+  "For Range Loop": {
+    "prefix": "forrange",
+    "body": [
+      "for ${1:i} in ${2:1}..${3:10} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create a for loop with range"
+  },
+  "Hinglish For Loop": {
+    "prefix": "har",
+    "body": [
+      "har ${1:i} mein ${2:array} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create a for loop (Hinglish)"
+  },
+  "While Loop": {
+    "prefix": "while",
+    "body": [
+      "while (${1:condition}) {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create a while loop"
+  },
+  "Hinglish While Loop": {
+    "prefix": "jabtak",
+    "body": [
+      "jabtak (${1:condition}) {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create a while loop (Hinglish)"
+  },
+  "Try-Catch": {
+    "prefix": "try",
+    "body": [
+      "try {",
+      "\t${1}",
+      "} catch ${2:e} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create a try-catch block"
+  },
+  "Hinglish Try-Catch": {
+    "prefix": "koshish",
+    "body": [
+      "koshish {",
+      "\t${1}",
+      "} pakad ${2:e} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create a try-catch block (Hinglish)"
+  },
+  "Enum": {
+    "prefix": "enum",
+    "body": [
+      "enum ${1:EnumName} {",
+      "\t${2:VALUE1},",
+      "\t${3:VALUE2}",
+      "}"
+    ],
+    "description": "Create an enum"
+  },
+  "Hinglish Enum": {
+    "prefix": "vikalp",
+    "body": [
+      "vikalp ${1:EnumName} {",
+      "\t${2:VALUE1},",
+      "\t${3:VALUE2}",
+      "}"
+    ],
+    "description": "Create an enum (Hinglish)"
+  },
+  "Trait": {
+    "prefix": "trait",
+    "body": [
+      "trait ${1:TraitName} {",
+      "\tfn ${2:methodName}(${3:params})",
+      "}"
+    ],
+    "description": "Create a trait"
+  },
+  "Hinglish Trait": {
+    "prefix": "lakshan",
+    "body": [
+      "lakshan ${1:TraitName} {",
+      "\tkaam ${2:methodName}(${3:params})",
+      "}"
+    ],
+    "description": "Create a trait (Hinglish)"
+  },
+  "Macro": {
+    "prefix": "macro",
+    "body": [
+      "macro ${1:macroName}(${2:params}) {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create a compile-time macro"
+  },
+  "Hinglish Macro": {
+    "prefix": "jadoo",
+    "body": [
+      "jadoo ${1:macroName}(${2:params}) {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create a compile-time macro (Hinglish)"
+  },
+  "Import Statement": {
+    "prefix": "import",
+    "body": [
+      "import ${1:module} from \"${2:package}\""
+    ],
+    "description": "Import a module"
+  },
+  "Let Declaration": {
+    "prefix": "let",
+    "body": [
+      "let ${1:name} = ${2:value}"
+    ],
+    "description": "Declare a variable with let"
+  },
+  "Hinglish Let Declaration": {
+    "prefix": "rakho",
+    "body": [
+      "rakho ${1:name} = ${2:value}"
+    ],
+    "description": "Declare a variable with rakho (Hinglish)"
+  },
+  "Const Declaration": {
+    "prefix": "const",
+    "body": [
+      "const ${1:NAME} = ${2:value}"
+    ],
+    "description": "Declare a constant"
+  },
+  "Hinglish Const Declaration": {
+    "prefix": "pakka",
+    "body": [
+      "pakka ${1:NAME} = ${2:value}"
+    ],
+    "description": "Declare a constant (Hinglish)"
+  },
+  "Print Statement": {
+    "prefix": "print",
+    "body": [
+      "print(${1:message})"
+    ],
+    "description": "Print to console"
+  },
+  "Hinglish Print Statement": {
+    "prefix": "dikha",
+    "body": [
+      "dikha(${1:message})"
+    ],
+    "description": "Print to console (Hinglish)"
+  },
+  "Return Statement": {
+    "prefix": "return",
+    "body": [
+      "return ${1:value}"
+    ],
+    "description": "Return a value"
+  },
+  "Hinglish Return Statement": {
+    "prefix": "vapas",
+    "body": [
+      "vapas ${1:value}"
+    ],
+    "description": "Return a value (Hinglish)"
+  },
+  "Await Expression": {
+    "prefix": "await",
+    "body": [
+      "await ${1:promise}"
+    ],
+    "description": "Await a promise"
+  },
+  "Hinglish Await Expression": {
+    "prefix": "ruko",
+    "body": [
+      "ruko ${1:promise}"
+    ],
+    "description": "Await a promise (Hinglish)"
   }
 }

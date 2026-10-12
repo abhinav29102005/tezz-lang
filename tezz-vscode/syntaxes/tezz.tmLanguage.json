@@ -12,21 +12,34 @@
       "include": "#strings"
     },
     {
+      "include": "#numbers"
+    },
+    {
       "include": "#functions"
     },
     {
       "include": "#macros"
     },
     {
+      "include": "#operators"
+    },
+    {
       "include": "#constants"
     },
     {
       "include": "#types"
+    },
+    {
+      "include": "#punctuation"
     }
   ],
   "repository": {
     "comments": {
       "patterns": [
+        {
+          "match": "--.*$",
+          "name": "comment.line.double-dash.tezz"
+        },
         {
           "match": "//.*$",
           "name": "comment.line.double-slash.tezz"
@@ -41,12 +54,56 @@
     "keywords": {
       "patterns": [
         {
-          "match": "\\b(let|const|fn|service|route|on|spawn|return|import|from|enum|trait|if|else|for|while|await|async|class|extends|new|this|try|catch|rakho|pakka|agar|warna|jabtak|har|mein|koshish|pakad|dikha|baadmein|ruko|piche_kam|paida_kar|vikalp|lakshan|jadoo|dhancha|naya|yeh|se_bana)\\b",
-          "name": "keyword.control.tezz"
+          "match": "\\b(service|seva|route|rasta|on|respond|jawab|background|spawn|params|request)\\b",
+          "name": "keyword.other.service.tezz"
         },
         {
-          "match": "\\b(GET|POST|PUT|DELETE|PATCH|OPTIONS)\\b",
+          "match": "\\b(let|const|rakho|pakka|var)\\b",
+          "name": "keyword.other.declaration.tezz"
+        },
+        {
+          "match": "\\b(fn|kaam|return|vapas)\\b",
+          "name": "keyword.control.function.tezz"
+        },
+        {
+          "match": "\\b(if|else|agar|warna|for|while|jabtak|har|mein|in)\\b",
+          "name": "keyword.control.conditional.tezz"
+        },
+        {
+          "match": "\\b(try|catch|koshish|pakad|throw)\\b",
+          "name": "keyword.control.exception.tezz"
+        },
+        {
+          "match": "\\b(class|dhancha|extends|se_bana|new|naya|this|yeh|constructor|super)\\b",
+          "name": "keyword.other.class.tezz"
+        },
+        {
+          "match": "\\b(enum|vikalp|trait|lakshan)\\b",
+          "name": "keyword.other.type.tezz"
+        },
+        {
+          "match": "\\b(macro|jadoo)\\b",
+          "name": "keyword.other.macro.tezz"
+        },
+        {
+          "match": "\\b(import|from|export|default)\\b",
+          "name": "keyword.control.import.tezz"
+        },
+        {
+          "match": "\\b(async|await|baadmein|ruko|wait)\\b",
+          "name": "keyword.control.async.tezz"
+        },
+        {
+          "match": "\\b(print|dikha|batao|console)\\b",
+          "name": "support.function.builtin.tezz"
+        },
+        {
+          "match": "\\b(GET|POST|PUT|DELETE|PATCH|OPTIONS|HEAD|CONNECT|TRACE)\\b",
           "name": "keyword.other.http.tezz"
+        },
+        {
+          "match": "\\b(break|continue|piche_kam|paida_kar)\\b",
+          "name": "keyword.control.flow.tezz"
         }
       ]
     },
@@ -95,12 +152,72 @@
     "constants": {
       "patterns": [
         {
-          "match": "\\b(true|false|null|undefined)\\b",
+          "match": "\\b(true|false|sahi|galat|null|undefined|nil)\\b",
           "name": "constant.language.tezz"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "match": "\\b0x[0-9a-fA-F]+\\b",
+          "name": "constant.numeric.hex.tezz"
         },
         {
-          "match": "\\b[0-9]+(\\.[0-9]+)?\\b",
+          "match": "\\b0b[01]+\\b",
+          "name": "constant.numeric.binary.tezz"
+        },
+        {
+          "match": "\\b[0-9]+(\\.[0-9]+)?([eE][+-]?[0-9]+)?\\b",
           "name": "constant.numeric.tezz"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "match": "\\.\\.",
+          "name": "keyword.operator.range.tezz"
+        },
+        {
+          "match": "=>",
+          "name": "storage.type.function.arrow.tezz"
+        },
+        {
+          "match": "(\\+\\+|--|\\+|\\-|\\*|\\/|%)",
+          "name": "keyword.operator.arithmetic.tezz"
+        },
+        {
+          "match": "(==|!=|<=|>=|<|>)",
+          "name": "keyword.operator.comparison.tezz"
+        },
+        {
+          "match": "(&&|\\|\\||!)",
+          "name": "keyword.operator.logical.tezz"
+        },
+        {
+          "match": "(=|\\+=|-=|\\*=|\\/=|%=)",
+          "name": "keyword.operator.assignment.tezz"
+        },
+        {
+          "match": "(&|\\||\\^|~|<<|>>)",
+          "name": "keyword.operator.bitwise.tezz"
+        }
+      ]
+    },
+    "punctuation": {
+      "patterns": [
+        {
+          "match": ":",
+          "name": "punctuation.separator.colon.tezz"
+        },
+        {
+          "match": ",",
+          "name": "punctuation.separator.comma.tezz"
+        },
+        {
+          "match": ";",
+          "name": "punctuation.terminator.statement.tezz"
         }
       ]
     },
