@@ -316,11 +316,11 @@
     "description": "Declare a variable with let"
   },
   "Hinglish Let Declaration": {
-    "prefix": "rakho",
+    "prefix": "mano",
     "body": [
-      "rakho ${1:name} = ${2:value}"
+      "mano ${1:name} = ${2:value}"
     ],
-    "description": "Declare a variable with rakho (Hinglish)"
+    "description": "Declare a variable with mano (Hinglish)"
   },
   "Const Declaration": {
     "prefix": "const",

@@ -14,7 +14,7 @@ All notable changes to the Tezz VS Code extension will be documented in this fil
   - Enum: `vikalp` (विकल्प)
   - Trait: `lakshan` (लक्षण)
   - Macro: `jadoo` (जादू)
-  - Let: `rakho` (रखो)
+  - Let: `mano` (मानो)
   - Const: `pakka` (पक्का)
   - If/Else: `agar`/`warna` (अगर/वरना)
   - While: `jabtak` (जबतक)

@@ -40,7 +40,7 @@ Get up to speed immediately with our high-productivity autocompletion templates 
 - `vikalp` — Enum (विकल्प)
 - `lakshan` — Trait (लक्षण)
 - `jadoo` — Macro (जादू)
-- `rakho` — Let declaration (रखो)
+- `mano` — Let declaration (मानो)
 - `pakka` — Const declaration (पक्का)
 - `agar`/`warna` — If/else (अगर/वरना)
 - `jabtak` — While loop (जबतक)
@@ -94,7 +94,7 @@ service HelloAPI on 3000 {
 ```tezz
 seva HelloAPI on 3000 {
   rasta GET "/hello/:name" {
-    rakho name = params.name
+    mano name = params.name
     jawab 200 { 
       message: "Namaste, {name}!",
       powered_by: "Tezz"

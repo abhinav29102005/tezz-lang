@@ -58,7 +58,7 @@
           "name": "keyword.other.service.tezz"
         },
         {
-          "match": "\\b(let|const|rakho|pakka|var)\\b",
+          "match": "\\b(let|const|mano|pakka|var)\\b",
           "name": "keyword.other.declaration.tezz"
         },
         {
