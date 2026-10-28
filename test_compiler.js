@@ -157,4 +157,34 @@ console.log('Test 6: End-to-end execution of compiled JavaScript');
   console.log("✓ V3 Source Map generated and verified");
 }
 
+
+// Test 8: TypeScript .d.ts Generation
+{
+  console.log("Test 8: TypeScript .d.ts Generation");
+  const { generateDts } = require("./src/dts");
+  const src = `
+    trait Greeter {
+      fn greet(name: string) -> string
+    }
+    class Bot implements Greeter {
+      fn greet(name: string) -> string {
+        return "Hello " + name
+      }
+    }
+    fn add(a: int, b: int) -> int {
+      return a + b
+    }
+  `;
+  const lexer = new Lexer(src);
+  const tokens = lexer.tokenize();
+  const parser = new Parser(tokens);
+  const ast = parser.parse();
+  const dts = generateDts(ast);
+
+  assert(dts.includes("export interface Greeter"), "Contains Greeter interface");
+  assert(dts.includes("export declare class Bot"), "Contains Bot class");
+  assert(dts.includes("export declare function add(a: number, b: number): number;"), "Contains typed function signature");
+  console.log("✓ TypeScript .d.ts generated and verified");
+}
+
 console.log('\nAll Compiler Unit Tests PASSED successfully! ⚡');

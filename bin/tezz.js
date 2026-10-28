@@ -14,6 +14,8 @@ const { Lexer } = require('../src/lexer');
 const { Parser } = require('../src/parser');
 const { CodeGenerator } = require('../src/codegen');
 const { Formatter } = require('../src/formatter');
+const crypto = require('crypto');
+const { generateDts } = require('../src/dts');
 
 let VERSION = '0.5.0';
 try {
@@ -48,6 +50,7 @@ const HELP = `${BANNER}
     --check                     Check formatting without modifying files
     --strict                    Enable strict compile-time and runtime type checking
     --source-map                Generate v3 source maps for debugging
+    --dts                       Generate TypeScript .d.ts declaration file
     --help, -h                  Show help
     --version, -v               Show version
 
@@ -101,19 +104,32 @@ if (require.extensions && !require.extensions['.tezz']) {
 
 // --- Compiler Pipeline ---
 
-function compile(source, options = {}) {
-  const lexer = new Lexer(source);
-  const tokens = lexer.tokenize();
+const astCache = new Map();
 
-  const parser = new Parser(tokens);
-  const ast = parser.parse();
+function compile(source, options = {}) {
+  const hash = crypto.createHash("sha256").update(source).digest("hex");
+  let ast;
+
+  if (astCache.has(hash)) {
+    ast = astCache.get(hash);
+  } else {
+    const lexer = new Lexer(source);
+    const tokens = lexer.tokenize();
+    const parser = new Parser(tokens);
+    ast = parser.parse();
+    astCache.set(hash, ast);
+  }
 
   if (options.strict) {
     checkTypes(ast, options);
   }
 
   const codegen = new CodeGenerator(ast, options);
-  return codegen.generate();
+  const res = codegen.generate();
+  if (options.dts) {
+    res.dts = generateDts(ast);
+  }
+  return res;
 }
 
 // --- Commands ---
@@ -194,13 +210,22 @@ function cmdRun(file, options, isDev = false) {
     start();
     
     let debounce;
+    let lastContent = fs.readFileSync(file, "utf-8");
+    let lastHash = crypto.createHash("sha256").update(lastContent).digest("hex");
+
     fs.watch(file, (eventType) => {
-      if (eventType === 'change') {
+      if (eventType === "change") {
         clearTimeout(debounce);
         debounce = setTimeout(() => {
-          if (child) child.kill();
-          start();
-        }, 300);
+          try {
+            const cur = fs.readFileSync(file, "utf-8");
+            const curHash = crypto.createHash("sha256").update(cur).digest("hex");
+            if (curHash === lastHash) return; // avoid duplicate rebuild if unchanged
+            lastHash = curHash;
+            if (child) child.kill();
+            start();
+          } catch (e) {}
+        }, 200);
       }
     });
   } else {
@@ -224,6 +249,7 @@ function cmdBuild(file, options) {
       target,
       strict: !!options.strict,
       sourceMap: !!options.sourceMap,
+      dts: !!options.dts,
       sourceFile: path.basename(file),
       sourceContent: source
     });
@@ -263,6 +289,12 @@ function cmdBuild(file, options) {
     }
 
     fs.writeFileSync(outputFile, jsCode);
+
+    if (options.dts && result.dts) {
+      const dtsFile = outputFile.replace(/\.js$/, ".d.ts");
+      fs.writeFileSync(dtsFile, result.dts);
+      console.log(`\x1b[91m⚡\x1b[0m Type Declarations: \x1b[1m${dtsFile}\x1b[0m`);
+    }
 
     
 
@@ -575,6 +607,8 @@ for (let i = 1; i < args.length; i++) {
     options.strict = true;
   } else if (args[i] === '--source-map') {
     options.sourceMap = true;
+  } else if (args[i] === '--dts') {
+    options.dts = true;
   } else if (!args[i].startsWith('-')) {
     options.file = options.file || args[i];
   }
