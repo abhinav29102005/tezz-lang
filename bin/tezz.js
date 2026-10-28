@@ -46,6 +46,8 @@ const HELP = `${BANNER}
     --target <node|worker>      Output target (default: node)
     --output <file.js>          Output file path
     --check                     Check formatting without modifying files
+    --strict                    Enable strict compile-time and runtime type checking
+    --source-map                Generate v3 source maps for debugging
     --help, -h                  Show help
     --version, -v               Show version
 
@@ -87,6 +89,16 @@ function printError(err, source, file) {
   console.error(`    ${err.message}\n`);
 }
 
+
+// Enable local .tezz module loading
+if (require.extensions && !require.extensions['.tezz']) {
+  require.extensions['.tezz'] = function(module, filename) {
+    const content = fs.readFileSync(filename, 'utf8');
+    const result = compile(content, { target: 'node' });
+    module._compile(typeof result === 'string' ? result : result.code, filename);
+  };
+}
+
 // --- Compiler Pipeline ---
 
 function compile(source, options = {}) {
@@ -95,6 +107,10 @@ function compile(source, options = {}) {
 
   const parser = new Parser(tokens);
   const ast = parser.parse();
+
+  if (options.strict) {
+    checkTypes(ast, options);
+  }
 
   const codegen = new CodeGenerator(ast, options);
   return codegen.generate();
@@ -135,7 +151,7 @@ function cmdRun(file, options, isDev = false) {
 
     try {
       const result = compile(source, { target: 'node' });
-      const jsCode = typeof result === 'string' ? result : result.code;
+      let jsCode = typeof result === 'string' ? result : result.code;
 
       const tmpDir = path.join(path.dirname(path.resolve(file)), '.tezz');
       if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir, { recursive: true });
@@ -204,8 +220,14 @@ function cmdBuild(file, options) {
   const target = options.target || 'node';
 
   try {
-    const result = compile(source, { target });
-    const jsCode = typeof result === 'string' ? result : result.code;
+    const result = compile(source, {
+      target,
+      strict: !!options.strict,
+      sourceMap: !!options.sourceMap,
+      sourceFile: path.basename(file),
+      sourceContent: source
+    });
+    let jsCode = typeof result === "string" ? result : result.code;
 
     
     let outputFile = options.output;
@@ -233,6 +255,12 @@ function cmdBuild(file, options) {
       }
     }
 
+
+    if (options.sourceMap && result.map) {
+      const mapFile = outputFile + ".map";
+      fs.writeFileSync(mapFile, JSON.stringify(result.map, null, 2));
+      jsCode += `\n//# sourceMappingURL=${path.basename(mapFile)}\n`;
+    }
 
     fs.writeFileSync(outputFile, jsCode);
 
@@ -543,6 +571,10 @@ for (let i = 1; i < args.length; i++) {
     options.static = true;
   } else if (args[i] === '--check') {
     options.check = true;
+  } else if (args[i] === '--strict') {
+    options.strict = true;
+  } else if (args[i] === '--source-map') {
+    options.sourceMap = true;
   } else if (!args[i].startsWith('-')) {
     options.file = options.file || args[i];
   }

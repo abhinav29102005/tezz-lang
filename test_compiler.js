@@ -134,4 +134,27 @@ console.log('Test 6: End-to-end execution of compiled JavaScript');
   console.log('✓ Runtime execution smoke test passed');
 }
 
+
+// Test 7: Source Map Generation (V3)
+{
+  console.log("Test 7: V3 Source Map Generation");
+  const src = `
+    let x = 10
+    let y = 20
+    let z = x + y
+  `;
+  const lexer = new Lexer(src);
+  const tokens = lexer.tokenize();
+  const parser = new Parser(tokens);
+  const ast = parser.parse();
+  const cg = new CodeGenerator(ast, { sourceFile: "test_math.tezz", sourceContent: src, sourceMap: true });
+  const res = cg.generate();
+
+  assert(res.map, "Expected source map to be returned");
+  assert.strictEqual(res.map.version, 3, "Source map version must be 3");
+  assert.strictEqual(res.map.sources[0], "test_math.tezz", "Source file name matches");
+  assert(res.map.mappings.length > 0, "Source map has non-empty mappings");
+  console.log("✓ V3 Source Map generated and verified");
+}
+
 console.log('\nAll Compiler Unit Tests PASSED successfully! ⚡');

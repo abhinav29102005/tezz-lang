@@ -48,3 +48,6 @@ coverage/
 .vercel/
 .dev.vars
 *.dev.vars
+
+# VS Code Extension VSIX packages
+*.vsix

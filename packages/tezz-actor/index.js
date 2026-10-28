@@ -1,5 +1,33 @@
-
-const { Channel } = require('../tezz-channels/index.js');
+let Channel;
+try {
+  Channel = require("../tezz-channels/index.js").Channel;
+} catch (e1) {
+  try {
+    Channel = require("tezz-channels").Channel;
+  } catch (e2) {
+    class AsyncChannel {
+      constructor() {
+        this.queue = [];
+        this.resolvers = [];
+      }
+      async push(val) {
+        if (this.resolvers.length > 0) {
+          const resolve = this.resolvers.shift();
+          resolve(val);
+        } else {
+          this.queue.push(val);
+        }
+      }
+      async pop() {
+        if (this.queue.length > 0) {
+          return this.queue.shift();
+        }
+        return new Promise(resolve => this.resolvers.push(resolve));
+      }
+    }
+    Channel = AsyncChannel;
+  }
+}
 
 class Actor {
   constructor(handler) {

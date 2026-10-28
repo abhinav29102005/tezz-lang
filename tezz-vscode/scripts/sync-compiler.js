@@ -11,7 +11,7 @@ const targets = [
 
 for (const targetDir of targets) {
   fs.mkdirSync(targetDir, { recursive: true });
-  for (const file of ['lexer.js', 'parser.js', 'formatter.js']) {
+  for (const file of ['lexer.js', 'parser.js', 'formatter.js', 'typechecker.js', 'codegen.js']) {
     const srcFile = path.join(srcDir, file);
     const destFile = path.join(targetDir, file);
     if (fs.existsSync(srcFile)) {

@@ -1,3 +1,17 @@
+const path = require("path");
+
+const VLQ_BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+function encodeVLQ(val) {
+  let vlq = val < 0 ? ((-val) << 1) | 1 : (val << 1);
+  let str = "";
+  do {
+    let digit = vlq & 31;
+    vlq >>>= 5;
+    if (vlq > 0) digit |= 32;
+    str += VLQ_BASE64[digit];
+  } while (vlq > 0);
+  return str;
+}
 // Tezz Language — Code Generator
 
 // Walks the AST and emits JavaScript code
@@ -15,7 +29,8 @@ class CodeGenerator {
     this.sourceFile = options.sourceFile || 'input.tezz';
     this.sourceContent = options.sourceContent || '';
     this.enableSourceMap = options.sourceMap !== false;
-    this.mappings = []; // { generatedLine, generatedColumn, sourceLine, sourceColumn, sourceName }
+    this.mappings = [];
+    this.strict = !!options.strict; // { generatedLine, generatedColumn, sourceLine, sourceColumn, sourceName }
     this.currentSourceNode = null;
   }
 
@@ -91,13 +106,19 @@ class CodeGenerator {
       this.genService(svc);
     }
 
-    return { code: this.output, stdLibs: Array.from(this.usedStdLibs) };
+    const res = { code: this.output, stdLibs: Array.from(this.usedStdLibs) };
+    if (this.enableSourceMap) {
+      res.map = this.generateSourceMap();
+    }
+    return res;
   }
 
   // === STATEMENTS ===
 
   genStmt(node) {
-    switch (node.type) {
+    if (!node) return;
+    return this.withSourceNode(node, () => {
+      switch (node.type) {
       case 'VariableDeclaration':  return this.genVarDecl(node);
       case 'FunctionDeclaration':  return this.genFnDecl(node);
       case 'ServiceDeclaration':   return this.genService(node);
@@ -120,12 +141,23 @@ class CodeGenerator {
       case 'EmptyStatement':       return;
 
       default: throw new Error(`[Tezz Codegen] Unknown statement: ${node.type}`);
-    }
+      }
+    });
   }
 
   genVarDecl(node) {
     const kind = node.kind || 'let';
     this.line(`${kind} ${node.name} = ${this.genExpr(node.value)};`);
+    if (this.strict && node.typeAnn && typeof node.name === 'string' && /^[a-zA-Z_]\w*$/.test(node.name)) {
+      const t = node.typeAnn.toLowerCase().trim();
+      if (['int', 'float', 'number'].includes(t)) {
+        this.line(`if (typeof ${node.name} !== 'number') throw new TypeError("[Tezz Type Assertion] Expected number for '${node.name}'");`);
+      } else if (t === 'string') {
+        this.line(`if (typeof ${node.name} !== 'string') throw new TypeError("[Tezz Type Assertion] Expected string for '${node.name}'");`);
+      } else if (['bool', 'boolean'].includes(t)) {
+        this.line(`if (typeof ${node.name} !== 'boolean') throw new TypeError("[Tezz Type Assertion] Expected boolean for '${node.name}'");`);
+      }
+    }
   }
 
   genFnDecl(node) {
@@ -133,6 +165,20 @@ class CodeGenerator {
     const asyncPrefix = node.isAsync ? 'async ' : '';
     this.line(`${asyncPrefix}function ${node.name}(${params}) {`);
     this.indent++;
+    if (this.strict) {
+      for (const p of node.params) {
+        if (p.paramType && /^[a-zA-Z_]\w*$/.test(p.name)) {
+          const t = p.paramType.toLowerCase().trim();
+          if (['int', 'float', 'number'].includes(t)) {
+            this.line(`if (typeof ${p.name} !== 'number') throw new TypeError("[Tezz Type Assertion] Expected number for parameter '${p.name}' in function '${node.name}'");`);
+          } else if (t === 'string') {
+            this.line(`if (typeof ${p.name} !== 'string') throw new TypeError("[Tezz Type Assertion] Expected string for parameter '${p.name}' in function '${node.name}'");`);
+          } else if (['bool', 'boolean'].includes(t)) {
+            this.line(`if (typeof ${p.name} !== 'boolean') throw new TypeError("[Tezz Type Assertion] Expected boolean for parameter '${p.name}' in function '${node.name}'");`);
+          }
+        }
+      }
+    }
     for (const s of node.body) this.genStmt(s);
     this.indent--;
     this.line('}');
@@ -810,6 +856,66 @@ genImport(node) {
       return `(${params}) => { ${bodyLines.join('').trim()} }`;
     }
     return `(${params}) => ${this.genExpr(node.body)}`;
+  }
+
+  generateSourceMap(sourceFile = null, generatedFile = null) {
+    const file = generatedFile || path.basename(this.sourceFile).replace(/\.tezz$/, ".js");
+    const source = sourceFile || path.basename(this.sourceFile);
+
+    const sorted = [...this.mappings].sort((a, b) => {
+      if (a.generated.line !== b.generated.line) return a.generated.line - b.generated.line;
+      return a.generated.column - b.generated.column;
+    });
+
+    const lines = this.output.split("\n");
+    let prevGenCol = 0;
+    let prevSrcFile = 0;
+    let prevSrcLine = 0;
+    let prevSrcCol = 0;
+
+    const mappingByLine = new Map();
+    for (const m of sorted) {
+      if (!mappingByLine.has(m.generated.line)) {
+        mappingByLine.set(m.generated.line, []);
+      }
+      mappingByLine.get(m.generated.line).push(m);
+    }
+
+    const encodedLines = [];
+    for (let l = 1; l <= lines.length; l++) {
+      prevGenCol = 0;
+      const lineMappings = mappingByLine.get(l) || [];
+      const segments = [];
+
+      for (const m of lineMappings) {
+        const genCol = m.generated.column;
+        const srcLine = Math.max(0, (m.source.line || 1) - 1);
+        const srcCol = Math.max(0, m.source.column || 0);
+
+        let seg = "";
+        seg += encodeVLQ(genCol - prevGenCol);
+        seg += encodeVLQ(0 - prevSrcFile);
+        seg += encodeVLQ(srcLine - prevSrcLine);
+        seg += encodeVLQ(srcCol - prevSrcCol);
+
+        prevGenCol = genCol;
+        prevSrcFile = 0;
+        prevSrcLine = srcLine;
+        prevSrcCol = srcCol;
+
+        segments.push(seg);
+      }
+      encodedLines.push(segments.join(","));
+    }
+
+    return {
+      version: 3,
+      file,
+      sources: [source],
+      sourcesContent: this.sourceContent ? [this.sourceContent] : undefined,
+      names: [],
+      mappings: encodedLines.join(";")
+    };
   }
 }
 

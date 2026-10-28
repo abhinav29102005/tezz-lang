@@ -363,10 +363,16 @@ class Parser {
     return { type: 'PrintStatement', args, line };
   }
 
-  // import name from "source" OR import { a, b } from "source"
+  // import "source" (side-effect)
+  // import name from "source"
+  // import { a, b } from "source"
   parseImportStmt() {
     const line = this.peek().line;
     this.expect(TokenType.IMPORT);
+    if (this.check(TokenType.STRING)) {
+      const source = this.advance().value;
+      return { type: 'ImportStatement', name: null, source, isNamed: false, isSideEffect: true, specifiers: [], line };
+    }
     let name;
     let isNamed = false;
     let specifiers = [];
@@ -388,7 +394,7 @@ class Parser {
     }
     this.expect(TokenType.FROM);
     const source = this.expect(TokenType.STRING).value;
-    return { type: 'ImportStatement', name, source, isNamed, specifiers, line };
+    return { type: 'ImportStatement', name, source, isNamed, isSideEffect: false, specifiers, line };
   }
 
   // export statement
@@ -407,14 +413,22 @@ class Parser {
     this.expect(TokenType.CLASS);
     const name = this.expect(TokenType.IDENTIFIER).value;
     let superclass = null;
+    let implementsTraits = [];
     if (this.check(TokenType.EXTENDS)) {
       this.advance();
       superclass = this.expect(TokenType.IDENTIFIER).value;
+    }
+    if (this.check(TokenType.IMPLEMENTS)) {
+      this.advance();
+      do {
+        implementsTraits.push(this.expect(TokenType.IDENTIFIER).value);
+      } while (this.check(TokenType.COMMA) && this.advance());
     }
     this.expect(TokenType.LBRACE);
     const methods = [];
     while (!this.check(TokenType.RBRACE) && !this.isAtEnd()) {
        const mLine = this.peek().line;
+       if (this.check(TokenType.FN)) this.advance();
        const mName = this.expect(TokenType.IDENTIFIER).value;
        this.expect(TokenType.LPAREN);
        const params = this.parseParamList();
@@ -428,7 +442,7 @@ class Parser {
        methods.push({ type: 'MethodDefinition', name: mName, params, returnType, body, line: mLine });
     }
     this.expect(TokenType.RBRACE);
-    return { type: 'ClassDeclaration', name, superclass, methods, line };
+    return { type: 'ClassDeclaration', name, superclass, implements: implementsTraits, methods, line };
   }
 
   // { statements }

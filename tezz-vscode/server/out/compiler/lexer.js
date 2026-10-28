@@ -17,7 +17,7 @@ const TokenType = {
   PRINT: 'PRINT', ASYNC: 'ASYNC', AWAIT: 'AWAIT',
   BACKGROUND: 'BACKGROUND', SPAWN: 'SPAWN',
   ENUM: 'ENUM', TRAIT: 'TRAIT', MACRO: 'MACRO',
-  CLASS: 'CLASS', NEW: 'NEW', THIS: 'THIS', EXTENDS: 'EXTENDS',
+  CLASS: 'CLASS', NEW: 'NEW', THIS: 'THIS', EXTENDS: 'EXTENDS', IMPLEMENTS: 'IMPLEMENTS',
 
   // Operators
   PLUS: 'PLUS', MINUS: 'MINUS', STAR: 'STAR', SLASH: 'SLASH', PERCENT: 'PERCENT',
@@ -56,7 +56,7 @@ const KEYWORDS = {
   'enum': TokenType.ENUM,
   'trait': TokenType.TRAIT,
   'macro': TokenType.MACRO,
-  'class': TokenType.CLASS, 'new': TokenType.NEW, 'this': TokenType.THIS, 'extends': TokenType.EXTENDS,
+  'class': TokenType.CLASS, 'new': TokenType.NEW, 'this': TokenType.THIS, 'extends': TokenType.EXTENDS, 'implements': TokenType.IMPLEMENTS,
 
   // Hinglish keywords — same token types, different words
   'rakho': TokenType.LET,        // let = rakho (keep/store)
@@ -89,7 +89,8 @@ const KEYWORDS = {
   'dhancha': TokenType.CLASS,          // class = dhancha
   'naya': TokenType.NEW,             // new = naya
   'yeh': TokenType.THIS,             // this = yeh
-  'se_bana': TokenType.EXTENDS,      // extends = se_bana
+  'se_bana': TokenType.EXTENDS,
+  'lagoo': TokenType.IMPLEMENTS,      // extends = se_bana
 };
 
 class Token {
