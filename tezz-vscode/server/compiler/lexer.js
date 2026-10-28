@@ -31,8 +31,8 @@ const TokenType = {
   LPAREN: 'LPAREN', RPAREN: 'RPAREN',
   LBRACE: 'LBRACE', RBRACE: 'RBRACE',
   LBRACKET: 'LBRACKET', RBRACKET: 'RBRACKET',
-  COMMA: 'COMMA', COLON: 'COLON', DOT: 'DOT', DOT_DOT: 'DOT_DOT', ARROW: 'ARROW',
-  SEMICOLON: 'SEMICOLON',
+  COMMA: 'COMMA', COLON: 'COLON', DOT: 'DOT', DOT_DOT: 'DOT_DOT', DOT_DOT_DOT: 'DOT_DOT_DOT', ARROW: 'ARROW',
+  SEMICOLON: 'SEMICOLON', QUESTION: 'QUESTION', QUESTION_DOT: 'QUESTION_DOT', QUESTION_QUESTION: 'QUESTION_QUESTION',
   EOF: 'EOF',
 };
 
@@ -154,8 +154,12 @@ class Lexer {
       if (ch === ',') { this.addToken(TokenType.COMMA, ','); continue; }
       if (ch === ':') { this.addToken(TokenType.COLON, ':'); continue; }
       if (ch === '.') {
-        if (this.match('.')) { this.addToken(TokenType.DOT_DOT, '..'); }
-        else { this.addToken(TokenType.DOT, '.'); }
+        if (this.match('.')) {
+          if (this.match('.')) { this.addToken(TokenType.DOT_DOT_DOT, '...'); }
+          else { this.addToken(TokenType.DOT_DOT, '..'); }
+        } else {
+          this.addToken(TokenType.DOT, '.');
+        }
         continue;
       }
       
@@ -218,6 +222,13 @@ class Lexer {
       if (ch === '|') {
         if (this.match('|')) { this.addToken(TokenType.OR, '||'); }
         else { this.error("Unexpected '|'. Did you mean '||'?"); }
+        continue;
+      }
+
+      if (ch === '?') {
+        if (this.match('.')) { this.addToken(TokenType.QUESTION_DOT, '?.'); }
+        else if (this.match('?')) { this.addToken(TokenType.QUESTION_QUESTION, '??'); }
+        else { this.addToken(TokenType.QUESTION, '?'); }
         continue;
       }
 

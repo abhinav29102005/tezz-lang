@@ -94,11 +94,38 @@ class Parser {
     return typeParts.join(' | ');
   }
 
+  parseBindingPattern() {
+    if (this.check(TokenType.LBRACE)) {
+      this.advance();
+      const props = [];
+      if (!this.check(TokenType.RBRACE)) {
+        do {
+          const propName = this.expect(TokenType.IDENTIFIER).value;
+          props.push(propName);
+        } while (this.check(TokenType.COMMA) && this.advance());
+      }
+      this.expect(TokenType.RBRACE);
+      return `{ ${props.join(', ')} }`;
+    } else if (this.check(TokenType.LBRACKET)) {
+      this.advance();
+      const elements = [];
+      if (!this.check(TokenType.RBRACKET)) {
+        do {
+          const elemName = this.expect(TokenType.IDENTIFIER).value;
+          elements.push(elemName);
+        } while (this.check(TokenType.COMMA) && this.advance());
+      }
+      this.expect(TokenType.RBRACKET);
+      return `[ ${elements.join(', ')} ]`;
+    }
+    return this.expect(TokenType.IDENTIFIER).value;
+  }
+
   // let name [: type]? = expression
   parseLetDecl() {
     const line = this.peek().line;
     this.expect(TokenType.LET);
-    const name = this.expect(TokenType.IDENTIFIER).value;
+    const name = this.parseBindingPattern();
     let typeAnn = null;
     if (this.check(TokenType.COLON)) {
       this.advance();
@@ -113,7 +140,7 @@ class Parser {
   parseConstDecl() {
     const line = this.peek().line;
     this.expect(TokenType.CONST);
-    const name = this.expect(TokenType.IDENTIFIER).value;
+    const name = this.parseBindingPattern();
     let typeAnn = null;
     if (this.check(TokenType.COLON)) {
       this.advance();
@@ -323,8 +350,14 @@ class Parser {
     this.expect(TokenType.LPAREN);
     const args = [];
     if (!this.check(TokenType.RPAREN)) {
-      do { args.push(this.parseExpression()); }
-      while (this.check(TokenType.COMMA) && this.advance());
+      do {
+        if (this.check(TokenType.DOT_DOT_DOT)) {
+          this.advance();
+          args.push({ type: 'SpreadElement', argument: this.parseExpression() });
+        } else {
+          args.push(this.parseExpression());
+        }
+      } while (this.check(TokenType.COMMA) && this.advance());
     }
     this.expect(TokenType.RPAREN);
     return { type: 'PrintStatement', args, line };
@@ -534,9 +567,9 @@ class Parser {
 
   parseOr() {
     let left = this.parseAnd();
-    while (this.check(TokenType.OR)) {
-      this.advance();
-      left = { type: 'BinaryExpression', operator: '||', left, right: this.parseAnd() };
+    while (this.check(TokenType.OR) || this.check(TokenType.QUESTION_QUESTION)) {
+      const op = this.advance().value;
+      left = { type: 'BinaryExpression', operator: op, left, right: this.parseAnd() };
     }
     return left;
   }
@@ -616,15 +649,25 @@ class Parser {
         this.advance();
         const args = [];
         if (!this.check(TokenType.RPAREN)) {
-          do { args.push(this.parseExpression()); }
-          while (this.check(TokenType.COMMA) && this.advance());
+          do {
+            if (this.check(TokenType.DOT_DOT_DOT)) {
+              this.advance();
+              args.push({ type: 'SpreadElement', argument: this.parseExpression() });
+            } else {
+              args.push(this.parseExpression());
+            }
+          } while (this.check(TokenType.COMMA) && this.advance());
         }
         this.expect(TokenType.RPAREN);
         expr = { type: 'CallExpression', callee: expr, arguments: args };
       } else if (this.check(TokenType.DOT)) {
         this.advance();
         const prop = this.expect(TokenType.IDENTIFIER).value;
-        expr = { type: 'MemberExpression', object: expr, property: prop };
+        expr = { type: 'MemberExpression', object: expr, property: prop, optional: false };
+      } else if (this.check(TokenType.QUESTION_DOT)) {
+        this.advance();
+        const prop = this.expect(TokenType.IDENTIFIER).value;
+        expr = { type: 'MemberExpression', object: expr, property: prop, optional: true };
       } else if (this.check(TokenType.LBRACKET)) {
         this.advance();
         const index = this.parseExpression();
@@ -748,8 +791,14 @@ class Parser {
     this.expect(TokenType.LBRACKET);
     const elements = [];
     if (!this.check(TokenType.RBRACKET)) {
-      do { elements.push(this.parseExpression()); }
-      while (this.check(TokenType.COMMA) && this.advance());
+      do {
+        if (this.check(TokenType.DOT_DOT_DOT)) {
+          this.advance();
+          elements.push({ type: 'SpreadElement', argument: this.parseExpression() });
+        } else {
+          elements.push(this.parseExpression());
+        }
+      } while (this.check(TokenType.COMMA) && this.advance());
     }
     this.expect(TokenType.RBRACKET);
     return { type: 'ArrayLiteral', elements };
@@ -790,6 +839,11 @@ class Parser {
     const properties = [];
     if (!this.check(TokenType.RBRACE)) {
       do {
+        if (this.check(TokenType.DOT_DOT_DOT)) {
+          this.advance();
+          properties.push({ type: 'SpreadElement', argument: this.parseExpression() });
+          continue;
+        }
         // Support identifiers, strings, AND keywords as object keys
         const token = this.peek();
         let key;

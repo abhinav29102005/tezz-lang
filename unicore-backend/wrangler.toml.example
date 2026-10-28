@@ -1,0 +1,7 @@
+name = "unicore-backend"
+main = "src/worker.js"
+compatibility_date = "2024-04-05"
+
+[vars]
+TURSO_URL = "libsql://your-database.turso.io"
+TURSO_TOKEN = "your-token-here"

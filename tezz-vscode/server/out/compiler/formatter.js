@@ -66,9 +66,17 @@ class Formatter {
         continue;
       }
 
+      // 3-char operator
+      const three = source.substring(i, i + 3);
+      if (three === '...') {
+        tokens.push({ type: 'OPERATOR', value: '...' });
+        i += 3;
+        continue;
+      }
+
       // Multi-char operators
       const two = source.substring(i, i + 2);
-      if (['==', '!=', '<=', '>=', '+=', '-=', '->', '=>', '&&', '||', '..'].includes(two)) {
+      if (['==', '!=', '<=', '>=', '+=', '-=', '->', '=>', '&&', '||', '..', '?.', '??'].includes(two)) {
         tokens.push({ type: 'OPERATOR', value: two });
         i += 2;
         continue;
@@ -199,8 +207,13 @@ class Formatter {
           continue;
         }
 
-        // Dot operator: no space around '.' (e.g. obj.prop, 3.14)
-        if (curVal === '.' || nextVal === '.') {
+        // Dot & optional chaining: no space around '.' or '?.'
+        if (curVal === '.' || nextVal === '.' || curVal === '?.' || nextVal === '?.') {
+          continue;
+        }
+
+        // Spread operator: no space after '...'
+        if (curVal === '...') {
           continue;
         }
 

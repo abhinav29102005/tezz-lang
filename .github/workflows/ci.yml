@@ -1,0 +1,50 @@
+name: Tezz CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Test Suite (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Core Test Suite (Compiler, Formatter, Type Erasure)
+        run: npm test
+
+      - name: Run PostgreSQL Driver Smoke Tests
+        run: |
+          cd packages/tezz-postgres
+          npm install
+          node test/smoke.js
+
+      - name: Run Redis Driver Smoke Tests
+        run: |
+          cd packages/tezz-redis
+          npm install
+          node test/smoke.js
+
+      - name: Verify All Examples Compilation
+        run: |
+          for f in examples/*.tezz; do
+            echo "Verifying $f..."
+            node bin/tezz.js build "$f" --output /dev/null
+          done

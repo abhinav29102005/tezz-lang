@@ -14,7 +14,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "test": "node bin/tezz.js build examples/hello.tezz --output /dev/null && echo 'Tests passed'",
+    "test": "node test_compiler.js && node test_formatter.js && node test_type_erasure.js && node bin/tezz.js build examples/hello.tezz --output /dev/null && echo \"All Tezz tests passed!\"",
     "example:hello": "node bin/tezz.js run examples/hello.tezz",
     "example:api": "node bin/tezz.js run examples/api.tezz",
     "prepublishOnly": "npm test",
@@ -57,7 +57,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-"dotenv": "^17.4.2",
+    "dotenv": "^17.4.2",
     "ws": "^8.18.0"
   },
   "devDependencies": {

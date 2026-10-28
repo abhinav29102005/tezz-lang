@@ -5,5 +5,8 @@
   "main": "index.js",
   "type": "module",
   "author": "Abhinav",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "jose": "^5.2.0"
+  }
 }
